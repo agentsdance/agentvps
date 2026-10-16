@@ -10,4 +10,8 @@
 
 - [x] Audit CLI commands and verify a fresh packed installation, remote execution, file transfer, upgrade and disposable uninstall/recovery checks.
 
-- [ ] Publish the tested 0.0.1 release, public source repository, website and npm package. npm authentication currently requires account sign-in.
+- [x] Publish the public source repository and website with manual installation, agent installation, MCP connection, upgrade and uninstall guides.
+
+- [x] Publish the verified [0.0.1 release download](https://github.com/agentsdance/agentvps/releases/tag/v0.0.1), with SHA-256 checksums. The full clean-install GitHub Actions pipeline passed.
+
+- [ ] Publish agentvps@0.0.1 to npm. Registry authentication currently requires account sign-in; the GitHub release provides the installable package meanwhile.
