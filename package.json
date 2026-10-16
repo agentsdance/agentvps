@@ -25,6 +25,7 @@
     "build": "tsc && node scripts/copy-vendor.mjs",
     "start": "node dist/cli.js serve",
     "check": "tsc --noEmit",
+    "pretest": "npm run build",
     "test": "node --import tsx --test --test-concurrency=1 test/*.test.ts",
     "test:e2e": "node --import tsx test/e2e.ts",
     "test:desktop": "node --import tsx test/desktop.ts",
