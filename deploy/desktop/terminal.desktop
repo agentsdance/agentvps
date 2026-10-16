@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Terminal
+Exec=sh -c 'xfce4-terminal --disable-server --working-directory="$AGENTVPS_WORKSPACE" --title="AgentVPS Terminal"'
+Icon=utilities-terminal
+Terminal=false

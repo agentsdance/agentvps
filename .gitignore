@@ -1,0 +1,12 @@
+node_modules/
+dist/
+public/vendor/
+.agentvps/
+.env
+.env.*
+!.env.example
+*.tgz
+test-results/
+.DS_Store
+website/dist/
+.wrangler/

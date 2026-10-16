@@ -1,0 +1,42 @@
+AgentVPS reference and dependency notices
+
+OpenSandbox
+  Repository: https://github.com/opensandbox-group/OpenSandbox
+  Reviewed commit: 861328db18e0e8960583bd73a1874d1b7ad5eb6b
+  Upstream license: Apache License 2.0
+  Reviewed sources: components/execd/pkg/web/router.go,
+    components/execd/pkg/web/command.go, the PTY controller,
+    components/execd/pkg/web/proxy.go, specs/execd-api.yaml,
+    docs/architecture/data-plane/execd.md, sdks/mcp/sandbox/python,
+    examples/chrome, examples/playwright, examples/aio-sandbox.
+  Use: architectural reference for an original TypeScript implementation.
+  No OpenSandbox source files or binaries are copied into this package.
+
+AIO Sandbox
+  Repository: https://github.com/agent-infra/sandbox
+  Reviewed commit: 7f1afaf8d82bd30531a19caeb1a24dfebbc97d8c
+  Upstream license: Apache License 2.0
+  Use: integrated remote workspace, browser, shell, file and MCP experience.
+  No AIO source files, server binaries or images are bundled.
+
+Runtime dependencies are installed as separate npm packages, pinned in
+package.json and npm-shrinkwrap.json. Their license texts and notices remain
+in their respective installed package directories. They include the official
+MCP TypeScript SDK (Apache-2.0), Playwright (Apache-2.0), Express (MIT),
+node-pty (MIT), Zod (MIT), and xterm.js and its fit addon (MIT). Browser-ready
+xterm.js assets are copied without modification into public/vendor during
+build, with their original license texts beside them. Chromium and its bundled third-party software
+carry their own licenses in the downloaded browser distribution.
+
+noVNC 1.7.0 (https://github.com/novnc/noVNC), MPL-2.0:
+  Unmodified browser source modules are shipped under public/vendor/novnc,
+  with AUTHORS, LICENSE.txt and the full docs/LICENSE.* texts. The embedded
+  pako dependency retains its own license. Source remains available in those
+  served modules. The WebSocket backend uses ws 8.22.0 (MIT).
+  TigerVNC, x11vnc, Openbox, tint2, Thunar and Xfce Terminal are separately
+  installed Ubuntu system packages, not copied binaries in this npm package;
+  package license notices remain under /usr/share/doc on the VPS.
+
+If upstream code is copied in a future change, preserve its copyright and
+license notices, include the applicable license text, retain required NOTICE
+content, identify modifications and update this file with the exact source.

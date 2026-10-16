@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Workspace files
+Exec=sh -c 'thunar "$AGENTVPS_WORKSPACE"'
+Icon=system-file-manager
+Terminal=false

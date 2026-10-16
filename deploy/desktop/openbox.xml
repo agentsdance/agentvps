@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openbox_config xmlns="http://openbox.org/3.4/rc">
+  <resistance><strength>10</strength><screen_edge_strength>20</screen_edge_strength></resistance>
+  <focus><focusNew>yes</focusNew><followMouse>no</followMouse><raiseOnFocus>no</raiseOnFocus></focus>
+  <placement><policy>Smart</policy><center>yes</center><monitor>Primary</monitor></placement>
+  <theme><name>AgentVPS</name><titleLayout>NLIMC</titleLayout><keepBorder>yes</keepBorder><font place="ActiveWindow"><name>DejaVu Sans</name><size>10</size><weight>Bold</weight></font></theme>
+  <desktops><number>1</number><firstdesk>1</firstdesk><names><name>AgentVPS</name></names></desktops>
+  <margins><top>18</top><bottom>20</bottom><left>18</left><right>18</right></margins>
+  <keyboard>
+    <keybind key="A-Tab"><action name="NextWindow"/></keybind>
+    <keybind key="A-F4"><action name="Close"/></keybind>
+    <keybind key="W-d"><action name="ToggleShowDesktop"/></keybind>
+    <keybind key="W-e"><action name="Execute"><command>sh -c 'thunar "$AGENTVPS_WORKSPACE"'</command></action></keybind>
+    <keybind key="C-A-t"><action name="Execute"><command>sh -c 'xfce4-terminal --disable-server --working-directory="$AGENTVPS_WORKSPACE" --title="AgentVPS Terminal"'</command></action></keybind>
+    <keybind key="W-b"><action name="Execute"><command>wmctrl -xa chromium</command></action></keybind>
+  </keyboard>
+  <mouse>
+    <dragThreshold>3</dragThreshold><doubleClickTime>500</doubleClickTime>
+    <context name="Frame"><mousebind button="A-Left" action="Drag"><action name="Move"/></mousebind><mousebind button="A-Right" action="Drag"><action name="Resize"/></mousebind></context>
+    <context name="Titlebar"><mousebind button="Left" action="Press"><action name="Focus"/><action name="Raise"/></mousebind><mousebind button="Left" action="Drag"><action name="Move"/></mousebind><mousebind button="Left" action="DoubleClick"><action name="ToggleMaximize"/></mousebind></context>
+    <context name="Client"><mousebind button="Left" action="Press"><action name="Focus"/><action name="Raise"/></mousebind><mousebind button="Right" action="Press"><action name="Focus"/><action name="Raise"/></mousebind></context>
+    <context name="Bottom Right Left BLCorner BRCorner"><mousebind button="Left" action="Drag"><action name="Resize"/></mousebind></context>
+    <context name="Close"><mousebind button="Left" action="Click"><action name="Close"/></mousebind></context>
+    <context name="Maximize"><mousebind button="Left" action="Click"><action name="ToggleMaximize"/></mousebind></context>
+    <context name="Iconify"><mousebind button="Left" action="Click"><action name="Iconify"/></mousebind></context>
+  </mouse>
+  <applications><application class="Xfce4-terminal"><position force="yes"><x>150</x><y>225</y></position></application><application class="Thunar"><position force="yes"><x>680</x><y>160</y></position><size><width>700</width><height>520</height></size></application></applications>
+</openbox_config>

@@ -1,0 +1,79 @@
+{
+  "name": "agentvps",
+  "version": "0.0.1",
+  "description": "A persistent remote workspace and tool server for personal AI agents",
+  "type": "module",
+  "bin": {
+    "agentvps": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "public",
+    "skills",
+    "deploy",
+    "scripts",
+    "README.md",
+    "NOTICE",
+    "npm-shrinkwrap.json",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "tsx src/cli.ts serve",
+    "build": "tsc && node scripts/copy-vendor.mjs",
+    "start": "node dist/cli.js serve",
+    "check": "tsc --noEmit",
+    "test": "node --import tsx --test --test-concurrency=1 test/*.test.ts",
+    "test:e2e": "node --import tsx test/e2e.ts",
+    "test:desktop": "node --import tsx test/desktop.ts",
+    "test:desk": "node --import tsx test/desk.ts",
+    "test:package": "node test/package.mjs",
+    "prepack": "npm run build",
+    "postinstall": "node scripts/fix-pty.mjs",
+    "site:build": "node scripts/build-site.mjs",
+    "test:site": "node test/site.mjs",
+    "test:codex": "node test/codex-mcp.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/node": "2.1.1",
+    "@modelcontextprotocol/server": "2.3.1",
+    "@novnc/novnc": "1.7.0",
+    "@xterm/addon-fit": "0.11.0",
+    "@xterm/xterm": "6.0.0",
+    "express": "5.3.0",
+    "node-pty": "1.1.0",
+    "playwright": "1.64.1",
+    "ws": "8.22.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/client": "2.3.1",
+    "@types/express": "5.0.6",
+    "@types/node": "24.0.0",
+    "@types/ws": "8.18.1",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agentsdance/agentvps.git"
+  },
+  "homepage": "https://agentvps.ai-infra.org",
+  "bugs": {
+    "url": "https://github.com/agentsdance/agentvps/issues"
+  },
+  "keywords": [
+    "agent",
+    "vps",
+    "mcp",
+    "desktop",
+    "codex",
+    "claude"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Browser
+Comment=The browser shared with your agent
+Exec=wmctrl -xa chromium
+Icon=web-browser
+Terminal=false

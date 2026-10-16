@@ -1,0 +1,12 @@
+import fs from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+const root = new URL('../', import.meta.url), target = new URL('../website/dist/', import.meta.url);
+const pkg = JSON.parse(await fs.readFile(new URL('package.json', root), 'utf8'));
+const tarball = new URL(`agentvps-${pkg.version}.tgz`, root);
+const sha = createHash('sha256').update(await fs.readFile(tarball)).digest('hex');
+await fs.rm(target, { recursive: true, force: true });
+await fs.cp(new URL('website/public/', root), target, { recursive: true });
+const installer = new URL('install.sh', target);
+await fs.writeFile(installer, (await fs.readFile(installer, 'utf8')).replace('@PACKAGE_SHA256@', sha));
+await fs.writeFile(new URL('SHA256SUMS', target), `${sha}  agentvps-${pkg.version}.tgz\n`);
+console.log(`Website built for AgentVPS ${pkg.version}; release SHA-256 ${sha}`);
