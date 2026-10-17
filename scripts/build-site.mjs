@@ -8,7 +8,7 @@ const sha = createHash('sha256').update(await fs.readFile(tarball)).digest('hex'
 await fs.rm(target, { recursive: true, force: true });
 await fs.cp(new URL('website/public/', root), target, { recursive: true });
 // Returning visitors must receive new styles/scripts after a deployment.
-for (const asset of ['style.css', 'app.js']) {
+for (const asset of ['style.css', 'app.js', 'favicon.svg']) {
   const digest = createHash('sha256').update(await fs.readFile(new URL(asset, target))).digest('hex').slice(0, 12);
   for (const page of ['index.html', 'zh/index.html']) {
     const file = new URL(page, target);
