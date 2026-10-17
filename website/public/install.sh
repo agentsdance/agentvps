@@ -89,7 +89,7 @@ PY
     fi
   fi
 
-  printf '\nAgentVPS installed. Open your computer:\n  %s\n' "$public_url"
+  printf '\nAgentVPS installed. Access your desktop in your browser:\n  %s\n' "$public_url"
   printf '\nConnect your agent directly to MCP:\n  %s/mcp\n' "${public_url%/}"
   echo 'Transport: Streamable HTTP. Authentication: Bearer token (same as desktop login).'
   echo 'No local AgentVPS client or Node.js installation is needed.'
