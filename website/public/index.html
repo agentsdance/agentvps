@@ -1,28 +1,660 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AgentVPS — Turn any VPS into a personal agent</title><meta name="description" content="Turn any VPS into a personal agent. Connect Codex or Claude Code to a real Linux desktop, browser, terminal and shared files, and watch the work happen."><link rel="canonical" href="https://agentvps.ai-infra.org/"><meta property="og:title" content="AgentVPS — Turn any VPS into a personal agent"><meta property="og:description" content="Turn any VPS into a personal agent. A real desktop and 47 tools, connected to Codex, Claude Code or your preferred agent."><meta property="og:type" content="website"><meta property="og:url" content="https://agentvps.ai-infra.org/"><meta property="og:image" content="https://agentvps.ai-infra.org/desktop.png"><link rel="alternate" hreflang="en" href="https://agentvps.ai-infra.org/"><link rel="alternate" hreflang="zh-Hans" href="https://agentvps.ai-infra.org/zh/"><link rel="alternate" hreflang="x-default" href="https://agentvps.ai-infra.org/"><meta name="theme-color" content="#f5f3e9"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script></head>
-<body>
-<a class="skip" href="#install">Skip to installation</a>
-<header class="header"><a class="brand" href="#">agentvps<span>↗</span></a><nav aria-label="Main"><a href="#computer">The computer</a><a href="#install">Get started</a><a href="#reference">Reference</a></nav><a class="language-link" href="/zh/" lang="zh-Hans" hreflang="zh-Hans" aria-label="切换到中文">中文 <span aria-hidden="true">↗</span></a><a class="source-link" href="https://github.com/agentsdance/agentvps">GitHub <span>↗</span></a></header>
-<main>
-  <section class="hero"><div class="hero-copy"><a class="release" href="https://github.com/agentsdance/agentvps/releases/tag/v0.0.1"><i></i> VERSION 0.0.1 <span>EARLY RELEASE ↗</span></a><h1>Turn any VPS<br>into a <em>personal agent.</em></h1><p>A real Linux desktop on your own VPS.<br>Connect your agent. Watch the work. Take over anytime.</p><div class="hero-actions"><a class="button dark" href="#install">Set up your VPS <span>↗</span></a><a class="text-link" href="#agents" data-go-agent>Let an agent install it →</a></div><div class="compatibility"><span>WORKS WITH</span><b>Codex</b><b>Claude Code</b><b>Any MCP client</b></div></div><aside class="hero-note"><span class="note-index">01 / THE IDEA</span><div class="orbit-mark" aria-hidden="true">↗</div><h2>A place to<br>get things done.</h2><p>Your agent can live anywhere.<br>Its browser, files and code<br>work together right here.</p><div class="note-bottom"><span>YOUR VPS</span><span>YOUR WORKSPACE</span></div></aside></section>
-  <section id="computer" class="computer"><div class="section-caption"><span>ONE COMPUTER. SHARED WITH YOUR AGENT.</span><a href="/desktop.png" target="_blank" rel="noopener">See the full desktop ↗</a></div><div class="screen-frame"><div class="screen-top"><div class="window-dots"><i></i><i></i><i></i></div><span>Your agent’s computer</span><span class="screen-label">ACTUAL VPS DESKTOP</span></div><img src="/desktop.png" alt="AgentVPS Linux desktop with a real Chromium browser, terminal and file manager, operated through Codex MCP" width="1440" height="900" fetchpriority="high"><div class="screen-bottom"><span><i></i> Browser, terminal & files in one workspace</span><span>Watch · Take over · Return control</span></div></div><div class="capabilities"><div><span>01</span><h3>See the work.</h3><p>Stream a full Linux desktop. Move windows, change resolution, go fullscreen, or use the mouse and keyboard yourself.</p></div><div><span>02</span><h3>Bring your agent.</h3><p>Connect Codex, Claude Code or another MCP client. Its tools operate the same browser and files you see on screen.</p></div><div><span>03</span><h3>Keep the workspace.</h3><p>Downloads, code and artifacts share one filesystem. Files and the browser profile stay on your VPS between sessions.</p></div></div></section>
-  <section id="install" class="installation"><div class="section-heading"><div><span class="eyebrow">FROM VPS TO WORKSPACE</span><h2>Make yourself<br><em>at home.</em></h2></div><p>Start with an Ubuntu VPS and an SSH login.<br>The installer takes care of the desktop and tools.</p></div><div class="guide-tabs" role="tablist" aria-label="Installation method"><button id="manual-tab" role="tab" aria-selected="true" aria-controls="manual-guide" data-guide="manual">I’ll install it <span>01</span></button><button id="agent-tab" role="tab" aria-selected="false" aria-controls="agent-guide" data-guide="agent" tabindex="-1">My agent will install it <span>02</span></button></div>
-    <div id="manual-guide" role="tabpanel" aria-labelledby="manual-tab"><div class="requirements"><span>UBUNTU 22.04 / 24.04</span><span>X64 / ARM64</span><span>2 GB+ RAM</span><span>5 GB FREE DISK</span><span>SUDO ACCESS</span></div><div class="step"><div class="step-number">01</div><div><h3>Install on your VPS.</h3><p>SSH into the computer you want your agent to use. Run:</p><div class="code-block"><div><span>VPS TERMINAL</span><button data-copy="vps-install" aria-label="Copy VPS installation commands">Copy</button></div><pre id="vps-install"><code>curl -fsSL https://agentvps.ai-infra.org/install.sh -o install-agentvps.sh
-sudo bash install-agentvps.sh</code></pre></div><p class="small">Installs version 0.0.1: the CLI, service, Chromium, and Linux desktop. The download is checked against a pinned SHA-256. <a href="/install.sh">Read the installer ↗</a></p></div></div><div class="step"><div class="step-number">02</div><div><h3>Open your computer.</h3><p>Allow TCP <strong>8080</strong> in your VPS firewall, then open <code>http://YOUR_VPS_IP:8080</code>. Retrieve your access token locally and paste it into the login screen:</p><div class="code-block"><div><span>VPS TERMINAL</span><button data-copy="vps-token" aria-label="Copy token command">Copy</button></div><pre id="vps-token"><code>sudo cat /var/lib/agentvps/token</code></pre></div><p class="small">Keep this token private. Public IP access uses HTTP; use HTTPS or SSH forwarding for private work. Port 8081 is optional for sharing web previews.</p></div></div><div class="step"><div class="step-number">03</div><div><h3>Connect your agent.</h3><p>On the computer running your agent, install the client with Node.js 22 or newer:</p><div class="code-block"><div><span>AGENT’S COMPUTER</span><button data-copy="client-install" aria-label="Copy client install command">Copy</button></div><pre id="client-install"><code>npm install -g https://github.com/agentsdance/agentvps/releases/download/v0.0.1/agentsdance-agentvps-0.0.1.tgz</code></pre></div><p>Copy the token over SSH, then connect. Replace <code>ubuntu</code> with your SSH username if different:</p><div class="code-block"><div><span>AGENT’S COMPUTER</span><button data-copy="client-connect" aria-label="Copy client connection commands">Copy</button></div><pre id="client-connect"><code>mkdir -p ~/.config/agentvps
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <title>AgentVPS — Turn any VPS into a personal agent</title>
+    <meta
+      content="Turn any VPS into a personal agent. Connect Codex or Claude Code to a real Linux desktop, browser, terminal and shared files, and watch the work happen."
+      name="description"
+    />
+    <link href="https://agentvps.ai-infra.org/" rel="canonical" />
+    <meta
+      content="AgentVPS — Turn any VPS into a personal agent"
+      property="og:title"
+    />
+    <meta
+      content="Turn any VPS into a personal agent. A real desktop and 47 tools, connected to Codex, Claude Code or your preferred agent."
+      property="og:description"
+    />
+    <meta content="website" property="og:type" />
+    <meta content="https://agentvps.ai-infra.org/" property="og:url" />
+    <meta
+      content="https://agentvps.ai-infra.org/desktop.png"
+      property="og:image"
+    />
+    <link href="https://agentvps.ai-infra.org/" hreflang="en" rel="alternate" />
+    <link
+      href="https://agentvps.ai-infra.org/zh/"
+      hreflang="zh-Hans"
+      rel="alternate"
+    />
+    <link
+      href="https://agentvps.ai-infra.org/"
+      hreflang="x-default"
+      rel="alternate"
+    />
+    <meta content="#fbfaf8" name="theme-color" />
+    <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
+    <link href="/style.css" rel="stylesheet" />
+    <script defer="" src="/app.js"></script>
+    <link
+      as="font"
+      crossorigin=""
+      href="/fonts/manrope-latin.woff2"
+      rel="preload"
+      type="font/woff2"
+    />
+  </head>
+  <body>
+    <a class="skip" href="#install">Skip to installation</a>
+    <header class="header wrap">
+      <a aria-label="AgentVPS" class="brand" href="#"
+        ><span class="brand-mark"
+          ><svg
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.6"
+            viewBox="0 0 24 24"
+          >
+            <rect height="13" rx="2" width="18" x="3" y="4"></rect>
+            <path d="M8 21h8m-4-4v4M7 8l3 2-3 2m6 0h4"></path></svg></span
+        ><span>agentvps<span class="brand-dot">.</span></span></a
+      >
+      <nav aria-label="Main">
+        <a href="#computer">The computer</a><a href="#install">Get started</a
+        ><a href="#reference">Documentation</a>
+      </nav>
+      <div class="header-actions">
+        <a
+          aria-label="切换到中文"
+          class="language-link"
+          href="/zh/"
+          hreflang="zh-Hans"
+          lang="zh-Hans"
+          >中文</a
+        ><a class="source-link" href="https://github.com/agentsdance/agentvps"
+          >GitHub <span aria-hidden="true">↗</span></a
+        >
+      </div>
+    </header>
+    <main>
+      <section class="hero wrap">
+        <div class="hero-copy">
+          <span class="eyebrow"
+            ><i class="status-dot"></i>YOUR AGENT’S NEXT COMPUTER</span
+          >
+          <h1>Turn any VPS<br />into a personal<br /><em>agent.</em></h1>
+          <p>
+            A real desktop. Your own server. Give your agent a place to browse,
+            code, and get things done — with you in control.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#install"
+              >Set up your VPS<svg
+                aria-hidden="true"
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.6"
+                viewBox="0 0 24 24"
+              >
+                <path d="M4 12h16m-6-6 6 6-6 6"></path></svg></a
+            ><a class="text-link" data-go-agent="" href="#agents"
+              >Let your agent install it <span aria-hidden="true">↗</span></a
+            >
+          </div>
+          <div class="release-line">
+            <span>Open source</span><span>Self-hosted</span
+            ><a
+              href="https://github.com/agentsdance/agentvps/releases/tag/v0.0.1"
+              >v0.0.1 · Early release</a
+            >
+          </div>
+        </div>
+        <div class="hero-stage" id="computer">
+          <div class="stage-index">
+            <span>AGENTVPS / DESKTOP</span><span>47 MCP TOOLS</span>
+          </div>
+          <div class="screen-frame">
+            <div class="screen-top">
+              <span><i class="status-dot"></i>Your agent’s workspace</span
+              ><a
+                aria-label="Explore the desktop"
+                data-open-desktop=""
+                href="/desktop.png"
+                rel="noopener"
+                target="_blank"
+                ><svg
+                  aria-hidden="true"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.6"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6"></path></svg
+              ></a>
+            </div>
+            <a
+              aria-label="Explore the desktop"
+              class="desktop-image"
+              data-open-desktop=""
+              href="/desktop.png"
+              rel="noopener"
+              target="_blank"
+              ><img
+                alt="A real screenshot from an AgentVPS workspace, operated through Codex MCP."
+                fetchpriority="high"
+                height="900"
+                src="/desktop.png"
+                width="1440"
+            /></a>
+            <div class="screen-bottom">
+              <span
+                ><svg
+                  aria-hidden="true"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.6"
+                  viewBox="0 0 24 24"
+                >
+                  <rect height="16" rx="2" width="18" x="3" y="4"></rect>
+                  <path d="M3 9h18M7 6.5h.01m3 0h.01m3 0h.01"></path></svg
+                >Browser</span
+              ><span
+                ><svg
+                  aria-hidden="true"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.6"
+                  viewBox="0 0 24 24"
+                >
+                  <rect height="16" rx="2" width="18" x="3" y="4"></rect>
+                  <path d="m7 9 3 3-3 3m6 0h4"></path></svg
+                >Terminal</span
+              ><span
+                ><svg
+                  aria-hidden="true"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.6"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M3 6a2 2 0 0 1 2-2h4l2 3h8a2 2 0 0 1 2 2v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Z"
+                  ></path>
+                  <path d="M3 10h18"></path></svg
+                >Files</span
+              >
+            </div>
+          </div>
+          <div class="stage-caption">
+            <div>
+              <strong>Watch the work. Take over anytime.</strong>
+              <p>The same browser, terminal, and files your agent uses.</p>
+            </div>
+            <span class="capture-label">ACTUAL DESKTOP CAPTURE</span>
+          </div>
+        </div>
+      </section>
+      <section aria-label="Compatible agents" class="compatibility wrap">
+        <span>BRING YOUR FAVORITE AGENT</span>
+        <div>
+          <b><span class="client-symbol">⌘</span>Codex</b
+          ><b
+            ><span aria-hidden="true" class="claude-symbol">✳</span>Claude
+            Code</b
+          ><b
+            ><svg
+              aria-hidden="true"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.6"
+              viewBox="0 0 24 24"
+            >
+              <path d="M8 3v5m8-5v5M6 8h12v3a6 6 0 0 1-12 0Zm6 9v4"></path></svg
+            >Any MCP client</b
+          >
+        </div>
+      </section>
+      <section class="benefits wrap">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">01 / A COMPUTER YOU SHARE</span>
+            <h2>It works there.<br /><span>You see it here.</span></h2>
+          </div>
+          <p>Your agent gets the tools. You get a front-row seat.</p>
+        </div>
+        <div class="feature-grid">
+          <article>
+            <div class="feature-top">
+              <svg
+                aria-hidden="true"
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.6"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"
+                ></path>
+                <circle cx="12" cy="12" r="3"></circle></svg
+              ><span>01</span>
+            </div>
+            <h3>A real desktop, in your browser.</h3>
+            <p>
+              Watch Chromium and native apps as your agent works. Resize the
+              desktop, go fullscreen, or take over with your own mouse and
+              keyboard.
+            </p>
+          </article>
+          <article>
+            <div class="feature-top">
+              <svg
+                aria-hidden="true"
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.6"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M3 6a2 2 0 0 1 2-2h4l2 3h8a2 2 0 0 1 2 2v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Z"
+                ></path>
+                <path d="M3 10h18"></path></svg
+              ><span>02</span>
+            </div>
+            <h3>Everything in the same place.</h3>
+            <p>
+              Downloads, code, and finished work share one filesystem. Files and
+              browser profiles stay on your VPS between sessions.
+            </p>
+          </article>
+          <article>
+            <div class="feature-top">
+              <svg
+                aria-hidden="true"
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.6"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M8 3v5m8-5v5M6 8h12v3a6 6 0 0 1-12 0Zm6 9v4"
+                ></path></svg
+              ><span>03</span>
+            </div>
+            <h3>Your agent. Your choice.</h3>
+            <p>
+              Connect Codex, Claude Code, or another MCP client. Keep the agent
+              you like, and give its tools a computer of their own.
+            </p>
+          </article>
+        </div>
+      </section>
+      <section class="workflow wrap">
+        <div class="workflow-copy">
+          <span class="eyebrow">ONE WORKSPACE. ALL THE TOOLS.</span>
+          <h2>Less moving files.<br />More getting things done.</h2>
+          <p>
+            From a browser download to a Python script to a finished dashboard.
+            Every step happens on your VPS.
+          </p>
+        </div>
+        <div class="flow-diagram">
+          <div class="flow-agent">
+            <svg
+              aria-hidden="true"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.6"
+              viewBox="0 0 24 24"
+            >
+              <path d="M8 3v5m8-5v5M6 8h12v3a6 6 0 0 1-12 0Zm6 9v4"></path></svg
+            ><strong>Your agent</strong><span>Codex / Claude Code / …</span>
+          </div>
+          <div class="flow-connector">
+            <span>MCP / CLI</span
+            ><svg
+              aria-hidden="true"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.6"
+              viewBox="0 0 24 24"
+            >
+              <path d="M4 12h16m-6-6 6 6-6 6"></path>
+            </svg>
+          </div>
+          <div class="flow-vps">
+            <div>
+              <svg
+                aria-hidden="true"
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.6"
+                viewBox="0 0 24 24"
+              >
+                <rect height="13" rx="2" width="18" x="3" y="4"></rect>
+                <path d="M8 21h8m-4-4v4M7 8l3 2-3 2m6 0h4"></path></svg
+              ><strong>Your VPS</strong>
+            </div>
+            <div class="flow-tools">
+              <span>Browser</span><span>Shell</span><span>Files</span
+              ><span>Code</span>
+            </div>
+            <span class="flow-footer">47 tools · one shared workspace</span>
+          </div>
+        </div>
+      </section>
+      <div class="setup-area">
+        <div class="wrap">
+          <section class="installation" id="install">
+            <div class="section-heading install-heading">
+              <span class="eyebrow">02 / MAKE IT YOURS</span>
+              <h2>
+                Your next workspace.<br /><span>Ready when you are.</span>
+              </h2>
+              <p>
+                Start with an Ubuntu VPS and SSH access. Choose to install it
+                yourself or hand the setup to your agent.
+              </p>
+              <div class="system-note">
+                <svg
+                  aria-hidden="true"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.6"
+                  viewBox="0 0 24 24"
+                >
+                  <rect height="13" rx="2" width="18" x="3" y="4"></rect>
+                  <path d="M8 21h8m-4-4v4M7 8l3 2-3 2m6 0h4"></path></svg
+                ><span
+                  >Ubuntu 22.04 / 24.04<br />x64 or ARM64 · 2 GB+ RAM · 5 GB
+                  free disk<br />Sudo access required</span
+                >
+              </div>
+              <a class="text-link" href="/agent-guide.md"
+                >Documentation
+                <svg
+                  aria-hidden="true"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.6"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M4 12h16m-6-6 6 6-6 6"></path></svg
+              ></a>
+            </div>
+            <div
+              aria-label="Installation method"
+              class="guide-tabs"
+              role="tablist"
+            >
+              <button
+                aria-controls="manual-guide"
+                aria-selected="true"
+                data-guide="manual"
+                id="manual-tab"
+                role="tab"
+              >
+                Install it myself</button
+              ><button
+                aria-controls="agent-guide"
+                aria-selected="false"
+                data-guide="agent"
+                id="agent-tab"
+                role="tab"
+                tabindex="-1"
+              >
+                Let my agent do it
+              </button>
+            </div>
+            <div aria-labelledby="manual-tab" id="manual-guide" role="tabpanel">
+              <details class="step" data-step="install" open="">
+                <summary>
+                  <span class="step-number">01</span>
+                  <h3>Install on your VPS.</h3>
+                  <span aria-hidden="true" class="step-toggle">+</span>
+                </summary>
+                <div class="step-content">
+                  <p>SSH into the computer you want your agent to use. Run:</p>
+                  <div class="code-block">
+                    <div>
+                      <span>VPS TERMINAL</span
+                      ><button
+                        aria-label="Copy VPS installation commands"
+                        data-copy="vps-install"
+                      >
+                        Copy
+                      </button>
+                    </div>
+                    <pre
+                      id="vps-install"
+                    ><code>curl -fsSL https://agentvps.ai-infra.org/install.sh -o install-agentvps.sh
+sudo bash install-agentvps.sh</code></pre>
+                  </div>
+                  <p class="small">
+                    Installs version 0.0.1: the CLI, service, Chromium, and
+                    Linux desktop. The download is checked against a pinned
+                    SHA-256. <a href="/install.sh">Read the installer ↗</a>
+                  </p>
+                </div>
+              </details>
+              <details class="step" data-step="desktop">
+                <summary>
+                  <span class="step-number">02</span>
+                  <h3>Open your computer.</h3>
+                  <span aria-hidden="true" class="step-toggle">+</span>
+                </summary>
+                <div class="step-content">
+                  <p>
+                    Allow TCP <strong>8080</strong> in your VPS firewall, then
+                    open <code>http://YOUR_VPS_IP:8080</code>. Retrieve your
+                    access token locally and paste it into the login screen:
+                  </p>
+                  <div class="code-block">
+                    <div>
+                      <span>VPS TERMINAL</span
+                      ><button
+                        aria-label="Copy token command"
+                        data-copy="vps-token"
+                      >
+                        Copy
+                      </button>
+                    </div>
+                    <pre
+                      id="vps-token"
+                    ><code>sudo cat /var/lib/agentvps/token</code></pre>
+                  </div>
+                  <p class="small">
+                    Keep this token private. Public IP access uses HTTP; use
+                    HTTPS or SSH forwarding for private work. Port 8081 is
+                    optional for sharing web previews.
+                  </p>
+                </div>
+              </details>
+              <details class="step" data-step="connect">
+                <summary>
+                  <span class="step-number">03</span>
+                  <h3>Connect your agent.</h3>
+                  <span aria-hidden="true" class="step-toggle">+</span>
+                </summary>
+                <div class="step-content">
+                  <p>
+                    On the computer running your agent, install the client with
+                    Node.js 22 or newer:
+                  </p>
+                  <div class="code-block">
+                    <div>
+                      <span>AGENT’S COMPUTER</span
+                      ><button
+                        aria-label="Copy client install command"
+                        data-copy="client-install"
+                      >
+                        Copy
+                      </button>
+                    </div>
+                    <pre
+                      id="client-install"
+                    ><code>npm install -g https://github.com/agentsdance/agentvps/releases/download/v0.0.1/agentsdance-agentvps-0.0.1.tgz</code></pre>
+                  </div>
+                  <p>
+                    Copy the token over SSH, then connect. Replace
+                    <code>ubuntu</code> with your SSH username if different:
+                  </p>
+                  <div class="code-block">
+                    <div>
+                      <span>AGENT’S COMPUTER</span
+                      ><button
+                        aria-label="Copy client connection commands"
+                        data-copy="client-connect"
+                      >
+                        Copy
+                      </button>
+                    </div>
+                    <pre id="client-connect"><code>mkdir -p ~/.config/agentvps
 umask 077
 ssh ubuntu@YOUR_VPS_IP 'sudo cat /var/lib/agentvps/token' &gt; ~/.config/agentvps/vps.token
 agentvps connect --url http://YOUR_VPS_IP:8080 --token-file ~/.config/agentvps/vps.token
 agentvps status
-codex mcp add agentvps -- agentvps mcp</code></pre></div><p class="small">The last line registers Codex. For Claude Code or another MCP client, use command <code>agentvps</code> with arguments <code>["mcp"]</code>. <a href="#mcp">See the connection config ↓</a></p></div></div></div>
-    <div id="agent-guide" role="tabpanel" aria-labelledby="agent-tab" hidden><div class="agent-intro"><span class="eyebrow">A SMALL PROMPT. A REAL COMPUTER.</span><h3>Hand this to your agent.</h3><p>Give your agent your VPS hostname and SSH username. Use an existing SSH key; keep private keys and access tokens out of chat.</p></div><div class="code-block agent-prompt"><div><span>COPY INTO CODEX, CLAUDE CODE, OR YOUR AGENT</span><button data-copy="agent-prompt" aria-label="Copy agent installation prompt">Copy prompt</button></div><pre id="agent-prompt"><code>Install AgentVPS on my VPS: &lt;SSH_USER&gt;@&lt;VPS_HOST&gt;.
+codex mcp add agentvps -- agentvps mcp</code></pre>
+                  </div>
+                  <p class="small">
+                    The last line registers Codex. For Claude Code or another
+                    MCP client, use command <code>agentvps</code> with arguments
+                    <code>["mcp"]</code>.
+                    <a href="#mcp">See the connection config ↓</a>
+                  </p>
+                </div>
+              </details>
+            </div>
+            <div
+              aria-labelledby="agent-tab"
+              hidden=""
+              id="agent-guide"
+              role="tabpanel"
+            >
+              <div class="agent-intro">
+                <span class="eyebrow">A SMALL PROMPT. A REAL COMPUTER.</span>
+                <h3>Hand this to your agent.</h3>
+                <p>
+                  Give your agent your VPS hostname and SSH username. Use an
+                  existing SSH key; keep private keys and access tokens out of
+                  chat.
+                </p>
+              </div>
+              <div class="code-block agent-prompt">
+                <div>
+                  <span>COPY INTO CODEX, CLAUDE CODE, OR YOUR AGENT</span
+                  ><button
+                    aria-label="Copy agent installation prompt"
+                    data-copy="agent-prompt"
+                  >
+                    Copy prompt
+                  </button>
+                </div>
+                <pre
+                  id="agent-prompt"
+                ><code>Install AgentVPS on my VPS: &lt;SSH_USER&gt;@&lt;VPS_HOST&gt;.
 
 Follow https://agentvps.ai-infra.org/agent-guide.md
 Use my existing SSH access. Keep credentials private.
 Verify the desktop and MCP by performing a harmless operation
 and showing it on the live desktop. Return the desktop URL,
-connection instructions and verification results.</code></pre></div><div class="agent-download"><a class="button dark" href="/agent-guide.md">Read the full agent guide ↗</a><a class="text-link" href="https://raw.githubusercontent.com/agentsdance/agentvps/main/skills/agentvps/SKILL.md">Get the agent skill →</a></div><div class="agent-contract"><div><b>It checks the target.</b><p>Confirms the OS, architecture, permissions and intended VPS before installing.</p></div><div><b>It proves the connection.</b><p>Calls MCP, operates native apps and checks the resulting files on the same computer.</p></div><div><b>It gives you a handoff.</b><p>Your desktop URL and connection instructions, with no credentials in the reply.</p></div></div></div>
-  </section>
-  <section id="mcp" class="mcp-section"><div><span class="eyebrow">ONE ENDPOINT. 47 TOOLS.</span><h2>Meet your agent<br><em>where it works.</em></h2><p>The local MCP bridge forwards operations to your VPS. Direct Streamable HTTP MCP is also available at <code>http://YOUR_VPS_IP:8080/mcp</code> with bearer authentication.</p><a class="text-link" href="https://github.com/agentsdance/agentvps#connect-claude-code-or-codex">Full connection guide ↗</a></div><div class="code-block"><div><span>STDIO MCP CONFIG</span><button data-copy="mcp-config" aria-label="Copy MCP configuration">Copy</button></div><pre id="mcp-config"><code>{
+connection instructions and verification results.</code></pre>
+              </div>
+              <div class="agent-download">
+                <a class="button dark" href="/agent-guide.md"
+                  >Read the full agent guide ↗</a
+                ><a
+                  class="text-link"
+                  href="https://raw.githubusercontent.com/agentsdance/agentvps/main/skills/agentvps/SKILL.md"
+                  >Get the agent skill →</a
+                >
+              </div>
+              <div class="agent-contract">
+                <div>
+                  <b>It checks the target.</b>
+                  <p>
+                    Confirms the OS, architecture, permissions and intended VPS
+                    before installing.
+                  </p>
+                </div>
+                <div>
+                  <b>It proves the connection.</b>
+                  <p>
+                    Calls MCP, operates native apps and checks the resulting
+                    files on the same computer.
+                  </p>
+                </div>
+                <div>
+                  <b>It gives you a handoff.</b>
+                  <p>
+                    Your desktop URL and connection instructions, with no
+                    credentials in the reply.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="mcp-section" id="mcp">
+            <div>
+              <span class="eyebrow">03 / CONNECT YOUR AGENT</span>
+              <h2>
+                A familiar interface.<br /><span>A whole new computer.</span>
+              </h2>
+              <p>
+                The local MCP bridge forwards operations to your VPS. Direct
+                Streamable HTTP MCP is also available at
+                <code>http://YOUR_VPS_IP:8080/mcp</code> with bearer
+                authentication.
+              </p>
+              <a
+                class="text-link"
+                href="https://github.com/agentsdance/agentvps#connect-claude-code-or-codex"
+                >Full connection guide ↗</a
+              >
+            </div>
+            <div class="code-block">
+              <div>
+                <span>STDIO MCP CONFIG</span
+                ><button
+                  aria-label="Copy MCP configuration"
+                  data-copy="mcp-config"
+                >
+                  Copy
+                </button>
+              </div>
+              <pre id="mcp-config"><code>{
   "mcpServers": {
     "agentvps": {
       "command": "agentvps",
@@ -33,11 +665,248 @@ connection instructions and verification results.</code></pre></div><div class="
       }
     }
   }
-}</code></pre></div></section>
-  <section id="reference" class="reference"><div class="section-heading"><div><span class="eyebrow">THE EVERYDAY BITS</span><h2>Simple to run.<br><em>Simple to keep.</em></h2></div><a class="text-link" href="https://github.com/agentsdance/agentvps#cli-command-reference">Complete CLI reference ↗</a></div><div class="reference-grid"><article><span class="reference-number">01 / CHECK</span><h3>Know it’s ready.</h3><div class="code-block"><div><span>VPS</span><button data-copy="check-commands" aria-label="Copy health checks">Copy</button></div><pre id="check-commands"><code>sudo agentvps status
-sudo agentvps call health_check '{"browser":true}'</code></pre></div><p>Check the workspace identity and each capability. A running service alone doesn’t prove the browser or desktop works.</p></article><article><span class="reference-number">02 / UPGRADE</span><h3>Keep your files.</h3><p>Download the next release package, then run:</p><div class="code-block"><div><span>VPS</span><button data-copy="upgrade-command" aria-label="Copy upgrade command">Copy</button></div><pre id="upgrade-command"><code>sudo agentvps upgrade ./agentsdance-agentvps-VERSION.tgz</code></pre></div><p>Files, browser profile and configuration stay. Live commands and app windows close during the restart. For an early unscoped installation, <a href="#install">rerun the installer</a> to migrate first.</p></article><article><span class="reference-number">03 / UNINSTALL</span><h3>Leave on your terms.</h3><div class="code-block"><div><span>VPS</span><button data-copy="uninstall-commands" aria-label="Copy uninstall commands">Copy</button></div><pre id="uninstall-commands"><code>agentvps uninstall --dry-run
-sudo agentvps uninstall</code></pre></div><p>Your data stays by default. Add <code>--purge</code> only to permanently delete the workspace and credentials.</p></article></div></section>
-  <section class="faq"><div><span class="eyebrow">GOOD TO KNOW</span><h2>A few details.</h2></div><div><details><summary>Is this already an autonomous personal agent?</summary><p>Version 0.0.1 supplies the remote computer and tool layer. Bring Codex, Claude Code, or another agent to operate it. Built-in conversations and a model-driven agent loop are planned.</p></details><details><summary>Can I watch everything my agent does?</summary><p>Browser and native desktop actions appear live on the desktop. Background shell jobs appear in Commands, and API terminal sessions appear in Remote desk. Ask your agent to use a native terminal when you want to watch commands being typed.</p></details><details><summary>What happens when I take over?</summary><p>Your mouse and keyboard control the desktop. New agent browser and desktop mutations are blocked until you return control. Background jobs and actions already in progress continue.</p></details><details><summary>What survives a restart?</summary><p>Workspace files, notes, schedules, finished job receipts and the Chromium profile persist. Live commands, terminal sessions, app windows and preview links do not. Disconnecting the viewer alone leaves the remote apps running.</p></details><details><summary>Is this isolated from the rest of my VPS?</summary><p>AgentVPS runs as one unprivileged Linux user. It is a single-owner computer, not a multi-tenant sandbox. Commands have that OS user’s permissions. Authentication is required for tools and desktop access.</p></details><details><summary>Something didn’t start. Where do I look?</summary><p>Run <code>sudo systemctl status agentvps</code> and <code>sudo journalctl -u agentvps -n 50</code>. Check cloud firewall access to port 8080, then run the health check above. <a href="https://github.com/agentsdance/agentvps/issues">Report an issue</a> with version and error details, without your token.</p></details></div></section>
-  <section class="last-call"><span>YOUR TOOLS. YOUR COMPUTER. YOUR PACE.</span><a href="#install">Give your agent a place to work. <b>↗</b></a></section>
-</main><footer><a class="brand" href="#">agentvps<span>↗</span></a><p>Made by <a href="https://github.com/agentsdance">AgentsDance</a> · MIT licensed</p><div><a href="https://github.com/agentsdance/agentvps">Source</a><a href="https://github.com/agentsdance/agentvps/releases/tag/v0.0.1">0.0.1 release</a><a href="/llms.txt">llms.txt</a></div></footer><div id="copy-status" class="copy-status" role="status" aria-live="polite"></div>
-</body></html>
+}</code></pre>
+            </div>
+          </section>
+        </div>
+      </div>
+      <div class="wrap">
+        <section class="reference" id="reference">
+          <div class="section-heading">
+            <div>
+              <span class="eyebrow">04 / KEEP IT RUNNING</span>
+              <h2>Yours to run.<br /><span>Easy to maintain.</span></h2>
+            </div>
+            <a
+              class="text-link"
+              href="https://github.com/agentsdance/agentvps#cli-command-reference"
+              >Complete CLI reference ↗</a
+            >
+          </div>
+          <div class="reference-grid">
+            <article>
+              <span class="reference-number">01 / CHECK</span>
+              <h3>Know it’s ready.</h3>
+              <div class="code-block">
+                <div>
+                  <span>VPS</span
+                  ><button
+                    aria-label="Copy health checks"
+                    data-copy="check-commands"
+                  >
+                    Copy
+                  </button>
+                </div>
+                <pre id="check-commands"><code>sudo agentvps status
+sudo agentvps call health_check '{"browser":true}'</code></pre>
+              </div>
+              <p>
+                Check the workspace identity and each capability. A running
+                service alone doesn’t prove the browser or desktop works.
+              </p>
+            </article>
+            <article>
+              <span class="reference-number">02 / UPGRADE</span>
+              <h3>Keep your files.</h3>
+              <p>Download the next release package, then run:</p>
+              <div class="code-block">
+                <div>
+                  <span>VPS</span
+                  ><button
+                    aria-label="Copy upgrade command"
+                    data-copy="upgrade-command"
+                  >
+                    Copy
+                  </button>
+                </div>
+                <pre
+                  id="upgrade-command"
+                ><code>sudo agentvps upgrade ./agentsdance-agentvps-VERSION.tgz</code></pre>
+              </div>
+              <p>
+                Files, browser profile and configuration stay. Live commands and
+                app windows close during the restart. For an early unscoped
+                installation, <a href="#install">rerun the installer</a> to
+                migrate first.
+              </p>
+            </article>
+            <article>
+              <span class="reference-number">03 / UNINSTALL</span>
+              <h3>Leave on your terms.</h3>
+              <div class="code-block">
+                <div>
+                  <span>VPS</span
+                  ><button
+                    aria-label="Copy uninstall commands"
+                    data-copy="uninstall-commands"
+                  >
+                    Copy
+                  </button>
+                </div>
+                <pre id="uninstall-commands"><code>agentvps uninstall --dry-run
+sudo agentvps uninstall</code></pre>
+              </div>
+              <p>
+                Your data stays by default. Add <code>--purge</code> only to
+                permanently delete the workspace and credentials.
+              </p>
+            </article>
+          </div>
+        </section>
+        <section class="faq">
+          <div>
+            <span class="eyebrow">THE DETAILS</span>
+            <h2>Good questions.</h2>
+          </div>
+          <div>
+            <details>
+              <summary>Is this already an autonomous personal agent?</summary>
+              <p>
+                Version 0.0.1 supplies the remote computer and tool layer. Bring
+                Codex, Claude Code, or another agent to operate it. Built-in
+                conversations and a model-driven agent loop are planned.
+              </p>
+            </details>
+            <details>
+              <summary>Can I watch everything my agent does?</summary>
+              <p>
+                Browser and native desktop actions appear live on the desktop.
+                Background shell jobs appear in Commands, and API terminal
+                sessions appear in Remote desk. Ask your agent to use a native
+                terminal when you want to watch commands being typed.
+              </p>
+            </details>
+            <details>
+              <summary>What happens when I take over?</summary>
+              <p>
+                Your mouse and keyboard control the desktop. New agent browser
+                and desktop mutations are blocked until you return control.
+                Background jobs and actions already in progress continue.
+              </p>
+            </details>
+            <details>
+              <summary>What survives a restart?</summary>
+              <p>
+                Workspace files, notes, schedules, finished job receipts and the
+                Chromium profile persist. Live commands, terminal sessions, app
+                windows and preview links do not. Disconnecting the viewer alone
+                leaves the remote apps running.
+              </p>
+            </details>
+            <details>
+              <summary>Is this isolated from the rest of my VPS?</summary>
+              <p>
+                AgentVPS runs as one unprivileged Linux user. It is a
+                single-owner computer, not a multi-tenant sandbox. Commands have
+                that OS user’s permissions. Authentication is required for tools
+                and desktop access.
+              </p>
+            </details>
+            <details>
+              <summary>Something didn’t start. Where do I look?</summary>
+              <p>
+                Run <code>sudo systemctl status agentvps</code> and
+                <code>sudo journalctl -u agentvps -n 50</code>. Check cloud
+                firewall access to port 8080, then run the health check above.
+                <a href="https://github.com/agentsdance/agentvps/issues"
+                  >Report an issue</a
+                >
+                with version and error details, without your token.
+              </p>
+            </details>
+          </div>
+        </section>
+      </div>
+      <section class="last-call">
+        <div class="wrap">
+          <div>
+            <span class="eyebrow">YOUR COMPUTER. YOUR POSSIBILITIES.</span>
+            <h2>Give your agent<br />a place to work.</h2>
+            <p>Bring a VPS. Connect an agent. See what happens next.</p>
+            <a class="button light" href="#install"
+              >Get started<svg
+                aria-hidden="true"
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.6"
+                viewBox="0 0 24 24"
+              >
+                <path d="M4 12h16m-6-6 6 6-6 6"></path></svg
+            ></a>
+          </div>
+          <div aria-hidden="true" class="closing-mark">
+            <svg
+              aria-hidden="true"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.6"
+              viewBox="0 0 24 24"
+            >
+              <rect height="13" rx="2" width="18" x="3" y="4"></rect>
+              <path d="M8 21h8m-4-4v4M7 8l3 2-3 2m6 0h4"></path></svg
+            ><span>YOUR NEXT COMPUTER_</span>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="wrap">
+      <div>
+        <a aria-label="AgentVPS" class="brand" href="#"
+          ><span class="brand-mark"
+            ><svg
+              aria-hidden="true"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.6"
+              viewBox="0 0 24 24"
+            >
+              <rect height="13" rx="2" width="18" x="3" y="4"></rect>
+              <path d="M8 21h8m-4-4v4M7 8l3 2-3 2m6 0h4"></path></svg></span
+          ><span>agentvps<span class="brand-dot">.</span></span></a
+        >
+        <p>A computer of your own, for an agent of your choice.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/agentsdance/agentvps">Source code ↗</a
+        ><a href="https://github.com/agentsdance/agentvps/releases/tag/v0.0.1"
+          >Release 0.0.1</a
+        ><a href="/llms.txt">llms.txt</a>
+      </div>
+      <div class="footer-bottom">
+        <span
+          >An open-source project by
+          <a href="https://github.com/agentsdance">AgentsDance</a></span
+        ><span>MIT licensed</span>
+      </div>
+    </footer>
+    <dialog aria-labelledby="preview-title" class="preview-dialog">
+      <div class="preview-header">
+        <h2 id="preview-title">The AgentVPS desktop</h2>
+        <button aria-label="Close preview" data-close-desktop="">×</button>
+      </div>
+      <img
+        alt="A real screenshot from an AgentVPS workspace, operated through Codex MCP."
+        height="900"
+        loading="lazy"
+        src="/desktop.png"
+        width="1440"
+      />
+      <p>
+        A real screenshot from an AgentVPS workspace, operated through Codex
+        MCP.
+      </p>
+    </dialog>
+    <div
+      aria-live="polite"
+      class="copy-status"
+      id="copy-status"
+      role="status"
+    ></div>
+  </body>
+</html>

@@ -29,5 +29,12 @@ changes. Shared styling and copy/tab interactions live in `style.css` and
 `app.js`. The header language link works on desktop and mobile; it never
 automatically redirects visitors. Tests cover both languages and copy actions.
 
+The design uses a warm neutral canvas, orange actions, a real desktop preview,
+and native expandable setup steps. The full-size desktop preview uses a native
+dialog with keyboard dismissal; its link still opens the image without JavaScript.
+Manrope and IBM Plex Mono are self-hosted Latin WOFF2 fonts. Their SIL Open Font
+License notices are in `public/fonts/`; Chinese uses the reader's system CJK font.
+Keep the fonts and their notices together when distributing the website.
+
 `public/desktop.png` is a real screenshot of the product, with controlled demo
 content only. Do not publish private workspaces, access tokens or browser logins.
