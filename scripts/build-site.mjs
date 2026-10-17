@@ -7,6 +7,14 @@ const tarball = new URL(filename, root);
 const sha = createHash('sha256').update(await fs.readFile(tarball)).digest('hex');
 await fs.rm(target, { recursive: true, force: true });
 await fs.cp(new URL('website/public/', root), target, { recursive: true });
+// Returning visitors must receive new styles/scripts after a deployment.
+for (const asset of ['style.css', 'app.js']) {
+  const digest = createHash('sha256').update(await fs.readFile(new URL(asset, target))).digest('hex').slice(0, 12);
+  for (const page of ['index.html', 'zh/index.html']) {
+    const file = new URL(page, target);
+    await fs.writeFile(file, (await fs.readFile(file, 'utf8')).replaceAll(`/${asset}"`, `/${asset}?v=${digest}"`));
+  }
+}
 const installer = new URL('install.sh', target);
 await fs.writeFile(installer, (await fs.readFile(installer, 'utf8')).replace('@PACKAGE_SHA256@', sha));
 await fs.writeFile(new URL('SHA256SUMS', target), `${sha}  ${filename}\n`);
