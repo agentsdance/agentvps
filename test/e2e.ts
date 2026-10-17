@@ -4,7 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { randomBytes } from 'node:crypto';
 import { chromium } from 'playwright';
-import { remoteClient } from '../src/client.js';
+import { remoteClient } from './http-fixture.js';
 import { startServer } from '../src/server.js';
 import { Client, StreamableHTTPClientTransport } from '@modelcontextprotocol/client';
 
@@ -17,7 +17,17 @@ if (!process.env.AGENTVPS_URL) {
   process.env.AGENTVPS_URL = local.url; process.env.AGENTVPS_TOKEN = token;
 }
 const client = await remoteClient();
-const call = async (name: string, args: unknown = {}): Promise<any> => client.call(name, args);
+const token = process.env.AGENTVPS_TOKEN || (await fs.readFile(process.env.AGENTVPS_TOKEN_FILE!, 'utf8')).trim();
+const mcp = new Client({ name: 'workflow-acceptance', version: '1' });
+await mcp.connect(new StreamableHTTPClientTransport(new URL(client.url + '/mcp'), { requestInit: { headers: { Authorization: `Bearer ${token}` } } }));
+const call = async (name: string, args: Record<string, unknown> = {}): Promise<any> => {
+  const result = await mcp.callTool({ name, arguments: args });
+  const content = result.content as any[];
+  const text = content.find(c => c.type === 'text')?.text;
+  if (result.isError) throw new Error(text);
+  const data = JSON.parse(text), image = content.find(c => c.type === 'image');
+  return image ? { ...data, image: image.data } : data;
+};
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 const folder = `acceptance/${stamp}`, output = path.resolve(process.env.AGENTVPS_TEST_OUTPUT || 'test-results');
 await fs.mkdir(output, { recursive: true });
@@ -85,6 +95,7 @@ Path(${JSON.stringify(folder + '/dashboard.html')}).write_text(html)\nprint(json
 } finally {
   if (tab) await call('browser_close', { id: tab.id }).catch(() => {});
   if (serverJob) await call('shell_cancel', { id: serverJob.id }).catch(() => {});
+  await mcp.close();
   if (local) await local.close();
   if (temp) await fs.rm(temp, { recursive: true, force: true });
 }

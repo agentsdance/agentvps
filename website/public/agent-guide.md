@@ -1,9 +1,9 @@
-# Install AgentVPS 0.0.1 for your user
+# Install AgentVPS 0.0.2 for your user
 
 Source: https://github.com/agentsdance/agentvps
 Human guide: https://agentvps.ai-infra.org/#install
 Chinese guide: https://agentvps.ai-infra.org/zh/agent-guide.md
-Package: `@agentsdance/agentvps@0.0.1`; the CLI command remains `agentvps`.
+Package: `@agentsdance/agentvps@0.0.2`; the CLI command remains `agentvps`.
 
 ## 1. Confirm the target
 
@@ -44,26 +44,33 @@ Do not print it in chat, logs, screenshots or generated files. Copy it into a
 mode-0600 local file over SSH when configuring a local agent. Have the user
 paste their token into the desktop login themselves. Never put it in a URL.
 
-## 4. Install the client and connect MCP
+## 4. Connect the agent directly to remote MCP
 
-Install Node 22 or newer on the agent's computer, then install the release client:
+Do not install AgentVPS or Node.js on the agent's computer. Configure the agent's
+native Streamable HTTP MCP connection:
+
+- URL: `http://YOUR_VPS_IP:8080/mcp`
+- Authentication: `Authorization: Bearer <token>`
+- Token: the same token used by the desktop login
+
+Use the agent's secure credential settings when available. For Codex CLI, set
+`AGENTVPS_TOKEN` in the process environment from the protected token file or SSH
+without printing it, then register:
 
 ```sh
-npm install -g https://github.com/agentsdance/agentvps/releases/download/v0.0.1/agentsdance-agentvps-0.0.1.tgz
-agentvps connect --url http://YOUR_VPS_IP:8080 --token-file /absolute/path/to/token
-agentvps status
+codex mcp add agentvps --url http://YOUR_VPS_IP:8080/mcp --bearer-token-env-var AGENTVPS_TOKEN
 ```
 
-For Codex, with the client connection saved:
+Launch Codex from the environment containing that variable. For Claude Code,
+merge a remote server into `.mcp.json`:
 
-```sh
-codex mcp add agentvps -- agentvps mcp
+```json
+{"mcpServers":{"agentvps":{"type":"http","url":"http://YOUR_VPS_IP:8080/mcp","headers":{"Authorization":"Bearer ${AGENTVPS_TOKEN}"}}}}
 ```
 
-For Claude Code or another stdio MCP client, configure command `agentvps` with
-arguments `["mcp"]`. Use an absolute executable path if necessary. The bridge
-runs locally and forwards every operation to the VPS. Direct Streamable HTTP
-MCP is also available at http://YOUR_VPS_IP:8080/mcp with Bearer authentication.
+Launch Claude Code with `AGENTVPS_TOKEN` set. Preserve existing MCP servers.
+Replace any previous AgentVPS stdio registration; no forwarding process is used.
+See https://github.com/agentsdance/agentvps#connect-claude-code-or-codex for examples.
 
 ## 5. Verify the real path
 

@@ -1,6 +1,6 @@
 {
   "name": "@agentsdance/agentvps",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A persistent remote workspace and tool server for personal AI agents",
   "type": "module",
   "bin": {
@@ -22,7 +22,7 @@
   },
   "scripts": {
     "dev": "tsx src/cli.ts serve",
-    "build": "tsc && node scripts/copy-vendor.mjs",
+    "build": "node scripts/clean-build.mjs && tsc && node scripts/copy-vendor.mjs",
     "start": "node dist/cli.js serve",
     "check": "tsc --noEmit",
     "pretest": "npm run build",

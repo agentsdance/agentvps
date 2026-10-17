@@ -24,7 +24,7 @@ if [[ "$purge" == true ]]; then
 else
   echo 'KEEP: /var/lib/agentvps, /etc/agentvps and the agentvps OS account. Reinstalling will reuse them.'
 fi
-echo 'System packages, cloud firewall rules, backups and clients on other computers are left in place.'
+echo 'System packages, cloud firewall rules, and backups are left in place.'
 if [[ "$dry_run" == true ]]; then echo 'Dry run: no changes made.'; exit 0; fi
 if [[ -f /etc/systemd/system/agentvps.service ]]; then
   systemctl stop agentvps.service

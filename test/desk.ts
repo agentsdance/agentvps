@@ -5,7 +5,7 @@ import path from 'node:path';
 import { randomBytes } from 'node:crypto';
 import { chromium } from 'playwright';
 import { Client, StreamableHTTPClientTransport } from '@modelcontextprotocol/client';
-import { remoteClient } from '../src/client.js';
+import { remoteClient } from './http-fixture.js';
 import { startServer } from '../src/server.js';
 
 let local: Awaited<ReturnType<typeof startServer>> | undefined, temp: string | undefined;

@@ -90,6 +90,9 @@ PY
   fi
 
   printf '\nAgentVPS installed. Open your computer:\n  %s\n' "$public_url"
+  printf '\nConnect your agent directly to MCP:\n  %s/mcp\n' "${public_url%/}"
+  echo 'Transport: Streamable HTTP. Authentication: Bearer token (same as desktop login).'
+  echo 'No local AgentVPS client or Node.js installation is needed.'
   if [[ $show_token != never && -t 1 && -s $token_file ]]; then
     printf '\nAccess token (paste into the login screen; keep private):\n  '
     cat "$token_file"
@@ -107,7 +110,7 @@ agentvps_install() {
   if [[ ${EUID} -ne 0 ]]; then echo 'Run: sudo bash install-agentvps.sh' >&2; exit 1; fi
   local show_token=auto
   if [[ ${1:-} == --no-show-token ]]; then show_token=never; shift; fi
-  if [[ $# -gt 0 ]]; then echo 'Usage: sudo bash install-agentvps.sh [--no-show-token] (installs AgentVPS 0.0.1)' >&2; return 1; fi
+  if [[ $# -gt 0 ]]; then echo 'Usage: sudo bash install-agentvps.sh [--no-show-token] (installs AgentVPS 0.0.2)' >&2; return 1; fi
   source /etc/os-release
   if [[ ${ID} != ubuntu || ( ${VERSION_ID} != 22.04 && ${VERSION_ID} != 24.04 ) ]]; then echo 'AgentVPS supports Ubuntu 22.04 and 24.04.' >&2; exit 1; fi
   case $(uname -m) in x86_64|aarch64) ;; *) echo 'Use a 64-bit x64 or ARM64 VPS.' >&2; exit 1 ;; esac
@@ -115,7 +118,7 @@ agentvps_install() {
   trap 'rm -rf "$task_tmp"' EXIT
   export DEBIAN_FRONTEND=noninteractive
   if ! command -v curl >/dev/null; then apt-get update -qq; apt-get install -y --no-install-recommends curl ca-certificates; fi
-  version=0.0.1
+  version=0.0.2
   package_sha=@PACKAGE_SHA256@
   package_url=https://github.com/agentsdance/agentvps/releases/download/v${version}/agentsdance-agentvps-${version}.tgz
   curl --fail --location --retry 3 "$package_url" -o "$task_tmp/package.tgz"

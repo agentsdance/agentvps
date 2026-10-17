@@ -6,7 +6,6 @@ import os from 'node:os';
 import { randomBytes } from 'node:crypto';
 import http from 'node:http';
 import { Client, StreamableHTTPClientTransport } from '@modelcontextprotocol/client';
-import { StdioClientTransport } from '@modelcontextprotocol/client/stdio';
 import { startServer } from '../src/server.js';
 import type { Config } from '../src/config.js';
 import { delay } from '../src/util.js';
@@ -107,7 +106,7 @@ test('real PTY preserves shell state and reports terminal capabilities', async (
   await call('terminal_resize', { id: t.id, cols: 120, rows: 40 }); await call('terminal_close', { id: t.id });
 });
 
-test('MCP HTTP and stdio bridge expose and invoke the same remote tools', async () => {
+test('direct HTTP MCP exposes tools, workspace identity and tool errors', async () => {
   const httpClient = new Client({ name: 'integration-test', version: '1' });
   await httpClient.connect(new StreamableHTTPClientTransport(new URL(service.url + '/mcp'), { requestInit: { headers: { Authorization: `Bearer ${config.token}` } } }));
   try {
@@ -115,11 +114,7 @@ test('MCP HTTP and stdio bridge expose and invoke the same remote tools', async 
     const result = await httpClient.callTool({ name: 'workspace_info', arguments: {} }); assert.equal(result.isError, undefined); assert.match((result.content as any)[0].text, /test-vps/);
     const bad = await httpClient.callTool({ name: 'file_read', arguments: { path: 'does-not-exist' } }); assert.equal(bad.isError, true);
   } finally { await httpClient.close(); }
-  const tokenFile = path.join(root, 'client-token'); await fs.writeFile(tokenFile, config.token, { mode: 0o600 });
-  const client = new Client({ name: 'stdio-test', version: '1' });
-  await client.connect(new StdioClientTransport({ command: process.execPath, args: ['dist/cli.js', 'mcp'], cwd: process.cwd(), env: { PATH: process.env.PATH!, AGENTVPS_URL: service.url, AGENTVPS_TOKEN_FILE: tokenFile } }));
-  try { const result = await client.callTool({ name: 'file_read', arguments: { path: 'answer.txt' } }); assert.match((result.content as any)[0].text, /42/); }
-  finally { await client.close(); }
+
 });
 
 test('preview gateway requires its capability, strips API authorization and revokes access', async () => {

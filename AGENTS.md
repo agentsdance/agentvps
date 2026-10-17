@@ -12,7 +12,7 @@ buying another hosted personal-agent service subscription. AgentVPS itself is fr
 and open source; VPS and agent/model provider fees and limits still apply.
 Mention Dots, Muse, Grok Bot and Cue as optional services, not required dependencies.
 Do not claim those services always require a separate paid subscription or that
-AgentVPS 0.0.1 already matches their full autonomous-agent capabilities.
+AgentVPS already matches their full autonomous-agent capabilities.
 Preserve published release bytes. The original unscoped 0.0.1 GitHub tarball and
 the scoped npm tarball have distinct filenames and checksums.
 
@@ -24,7 +24,7 @@ This file records the user's requirements and the design discussion so future wo
 
 - Provide remote access to **code execution, shell, files, and browser use** on a VPS.
 - Provide a user-facing remote desk to see and operate the same files, shell sessions and browser used by the agent. The user explicitly requires a real streamed Linux desktop, with native browser, terminal and file-manager windows, adjustable display, watch/takeover, and MCP activity visibly occurring on that desktop. A web desk alone does not satisfy this requirement.
-- Support access through MCP and CLI tooling, with skills explaining how agents should use those tools.
+- Agents connect directly through authenticated Streamable HTTP MCP. Do not ship or require a local AgentVPS client or stdio bridge. The user explicitly removed that client. Keep the CLI for VPS-side installation, administration, upgrade and uninstall, with skills explaining remote MCP use.
 - Make these capabilities cooperate within a shared remote workspace. Files downloaded by the browser must be available to shell commands and code execution, and generated artifacts must be accessible to the agent and user.
 - Use [AIO Sandbox](https://github.com/agent-infra/sandbox) as a reference for the integrated agent working environment.
 - Refer to the actual [OpenSandbox source code](https://github.com/opensandbox-group/OpenSandbox) when implementing the process that runs inside the VPS.
@@ -37,7 +37,7 @@ This file records the user's requirements and the design discussion so future wo
 ```text
 Agent running locally or remotely
   |
-  | MCP tools or CLI requests
+  | Remote HTTP MCP
   v
 AgentVPS interface on the VPS
   |-- Execution service: commands, terminals, and code
@@ -51,7 +51,7 @@ This is a logical design. It does not prescribe a programming language, transpor
 Keep these distinctions explicit:
 
 - **MCP exposes operations as tools.** Its adapter may run beside the agent or remotely, but execution must reach the intended VPS.
-- **A CLI invokes remote operations** through an API, SSH, or another deliberately selected transport.
+- **The CLI manages the service on the VPS.** It is not a local remote-control client; agents connect to the VPS MCP URL directly.
 - **Skills provide instructions.** A skill alone does not move execution to the VPS.
 - Execution location is determined by the tool implementation. Calling an unrelated local shell still executes locally.
 - Workspace paths, running processes, browser profiles, cookies, and downloads belong to the remote environment. Local files and browser logins require an explicit transfer or setup step.
@@ -111,7 +111,7 @@ Current deployment:
 1. **Target:** the user provided a Tencent Lighthouse VPS and authorized installation/testing, including OS reinstall if necessary. Keep connection details outside this public repository. Ubuntu 22.04 x64 was retained.
 2. **Runtime:** systemd service `agentvps`, unprivileged OS user `agentvps`, data in `/var/lib/agentvps`, releases under `/opt/agentvps`. This is direct OS-user execution, not per-task container isolation.
 3. **Network:** API/console/MCP on `0.0.0.0:8080`; separate preview gateway on `0.0.0.0:8081`. Tencent's firewall allows those TCP ports. The existing Nginx HTTPS site was disabled with a configuration backup under `/var/backups/agentvps`.
-4. **Clients:** Streamable HTTP MCP and a local stdio bridge; CLI requests use the same authenticated REST tools. The current runtime does not call a model API or run its own agent loop. Do not describe that missing agent layer as implemented.
+4. **Connections:** direct authenticated Streamable HTTP MCP. Version 0.0.2 removes the local stdio bridge and remote-client commands. VPS administrative commands use the local service. The current runtime does not call a model API or run its own agent loop. Do not describe that missing agent layer as implemented.
 5. **Durability:** files, notes, schedules, browser profile and completed receipts persist. Live jobs, PTYs, browser tabs and preview links do not survive daemon restart. Browser downloads persist as files.
 
 Still open: the built-in agent's engine and authentication, a future isolated OpenSandbox backend, multi-user tenancy, durable interpreter sessions, TLS for the private VPS console, and a Rust execution core. The user asked whether Rust would be a good choice; no rewrite was requested. Do not present these as implemented.
@@ -148,10 +148,10 @@ Use controlled fixture data for repeatable testing. Verify that all steps use th
 
 ## Implementation status
 
-The runtime, CLI, MCP transports, web console, Ubuntu installer and bundled `skills/agentvps` instructions are implemented. Dependencies are pinned in `npm-shrinkwrap.json`. Local integration checks cover authentication, process lifecycle, binary files, path restrictions, code, real PTYs, both MCP transports, preview access and restart recovery. The browser-download → Python → dashboard → screenshot acceptance workflow has passed on the actual VPS through its public IP, including intact file and MCP image return paths. A real recurring task has also produced a successful execution receipt on the VPS.
+The runtime, VPS CLI, remote HTTP MCP, web console, Ubuntu installer and bundled `skills/agentvps` instructions are implemented. Dependencies are pinned in `npm-shrinkwrap.json`. Local integration checks cover authentication, process lifecycle, binary files, path restrictions, code, real PTYs, remote HTTP MCP, preview access and restart recovery. The browser-download → Python → dashboard → screenshot acceptance workflow has passed on the actual VPS through its public IP, including intact file and MCP image return paths. A real recurring task has also produced a successful execution receipt on the VPS.
 
 The public MCP endpoint has returned 47 tools and executed a remote shell command through the official MCP client; unauthenticated requests are rejected. The system-wide VPS CLI and its upgrade command have been exercised on the VPS. Service restart checks confirmed persistent workspace identity, files, notes, schedules and browser storage, with live terminals ending as documented. Built-in conversational sessions, model-driven background goals and notifications remain unfinished requirements.
 
 Run `npm run check`, `npm run build`, `npm test`, `npm run test:e2e`, and `npm run test:package` as appropriate to changes. Remote acceptance uses `AGENTVPS_URL`, `AGENTVPS_TOKEN_FILE`, and `AGENTVPS_EXPECT_PLATFORM=linux`. Test evidence is under ignored `test-results/`; keep credentials out of the repository. Do not claim that reference runtimes themselves were deployed: this installation runs AgentVPS's original implementation.
 
-Release 0.0.1 adds a real streamed Linux desktop with visible shared Chromium, native terminal and file manager, four live resolutions, fullscreen, clipboard and watch/takeover coordination. Server-side watch-only input rejection and exclusive takeover were verified. Codex's registered app-server MCP connection operated that desktop and created a shared file in the visible native terminal; this did not start a model turn. All 11 CLI subcommands are documented and package-tested; destructive uninstall and failed-upgrade recovery checks run only in disposable containers. The public website source is under `website/`, with manual and agent installation guides. Keep public documentation separate from the authenticated VPS console.
+Release 0.0.1 adds a real streamed Linux desktop with visible shared Chromium, native terminal and file manager, four live resolutions, fullscreen, clipboard and watch/takeover coordination. Server-side watch-only input rejection and exclusive takeover were verified. Codex's registered app-server MCP connection operated that desktop and created a shared file in the visible native terminal; this did not start a model turn. The original release had 11 CLI commands; 0.0.2 retains seven VPS-side commands and removes connect, mcp, upload and download. All retained commands must be package-tested; destructive uninstall and failed-upgrade recovery checks run only in disposable containers. The public website source is under `website/`, with manual and agent installation guides. Keep public documentation separate from the authenticated VPS console.

@@ -72,7 +72,8 @@ fi
         output = self.run_setup()
         self.assertEqual(self.calls.read_text().splitlines(),
                          ['status', 'allow 8080/tcp comment AgentVPS desktop'])
-        self.assertIn('http://8.8.4.4:8080', output)
+        self.assertIn('http://8.8.4.4:8080/mcp', output)
+        self.assertIn('No local AgentVPS client', output)
         self.assertIn('cloud provider firewall', output)
         self.assertNotIn(TOKEN, output)
 

@@ -20,7 +20,7 @@ The current release supplies tools and a persistent workspace for an agent runni
 | Memory | Explicit persistent notes, keyed lookup and text search |
 | Schedules | Recurring shell commands, status, pause/resume and removal |
 | Previews | Expiring links to workspace web services through a separate HTTP/WebSocket gateway |
-| Clients | Authenticated REST, Streamable HTTP MCP, CLI, stdio MCP bridge, web console, bundled agent skill |
+| Clients | Authenticated Streamable HTTP MCP, REST, VPS administration CLI, web console, bundled agent skill |
 | Linux desktop | Streamed Openbox desktop, visible shared Chromium, native terminal and file manager, watch/takeover, live resolution changes |
 | Remote desk | Shared file explorer/editor, interactive xterm.js terminal, live Chromium view with mouse/keyboard input |
 
@@ -70,8 +70,8 @@ npm ci
 npm run check
 npm test
 npm pack
-scp agentsdance-agentvps-0.0.1.tgz deploy/install.sh ubuntu@YOUR_VPS:~/
-ssh ubuntu@YOUR_VPS 'sudo bash ~/install.sh ~/agentsdance-agentvps-0.0.1.tgz'
+scp agentsdance-agentvps-0.0.2.tgz deploy/install.sh ubuntu@YOUR_VPS:~/
+ssh ubuntu@YOUR_VPS 'sudo bash ~/install.sh ~/agentsdance-agentvps-0.0.2.tgz'
 ```
 
 The installer supports Ubuntu 22.04/24.04 on x64 or ARM64. It installs checksum-verified Node **22.23.3**, Python, the Linux desktop packages, Chromium's system dependencies, the pinned package, and a systemd service running as the unprivileged `agentvps` user. It uses separate release directories and retains the workspace/token during upgrades. Dependencies are locked by `npm-shrinkwrap.json`; browser builds follow pinned Playwright **1.64.1**.
@@ -100,7 +100,7 @@ sudo systemctl status agentvps
 sudo journalctl -u agentvps -n 50
 ```
 
-The installer also places a CLI at `/usr/local/bin/agentvps`, using the bundled Node runtime. On the VPS, `sudo agentvps status` and `sudo agentvps call health_check '{"browser":true}'` read the service token automatically. A non-root client can instead use `agentvps connect` with its own readable token file.
+The installer also places a CLI at `/usr/local/bin/agentvps`, using the bundled Node runtime. On the VPS, `sudo agentvps status` and `sudo agentvps call health_check '{"browser":true}'` read the service token automatically. These commands manage the service on that VPS; agents connect directly through HTTP MCP.
 
 ## Upgrade or uninstall on the VPS
 
@@ -112,10 +112,10 @@ npm ci
 npm run check
 npm test
 npm pack
-scp agentsdance-agentvps-0.0.1.tgz ubuntu@YOUR_VPS:~/
+scp agentsdance-agentvps-0.0.2.tgz ubuntu@YOUR_VPS:~/
 
 # VPS
-sudo agentvps upgrade ~/agentsdance-agentvps-0.0.1.tgz
+sudo agentvps upgrade ~/agentsdance-agentvps-0.0.2.tgz
 sudo agentvps status
 sudo agentvps call health_check '{"browser":true}'
 ```
@@ -125,7 +125,7 @@ Use the new version's filename when the version changes. Upgrade extracts and ru
 If upgrading an early unscoped `agentvps` installation, or one without the system CLI, upload the new release’s `deploy/install.sh` as `~/install.sh`, then run it directly:
 
 ```sh
-sudo bash ~/install.sh ~/agentsdance-agentvps-0.0.1.tgz
+sudo bash ~/install.sh ~/agentsdance-agentvps-0.0.2.tgz
 ```
 
 Uninstall the runtime while retaining your data:
@@ -143,119 +143,106 @@ To **permanently delete the data as well**, use the explicit purge option:
 sudo agentvps uninstall --purge
 ```
 
-Purge additionally removes `/var/lib/agentvps`, `/etc/agentvps` and the `agentvps` OS account. Back up any needed files before using it. Neither option removes CLI installations or copied token files from your other computers.
-
-For a CLI installed with `npm install -g` on another computer, upgrade with `npm install -g ./NEW_PACKAGE.tgz` and uninstall with `npm uninstall -g @agentsdance/agentvps`. Remove its client configuration/token separately only if no longer needed.
+Purge additionally removes `/var/lib/agentvps`, `/etc/agentvps` and the `agentvps` OS account. Back up any needed files before using it.
 
 ## CLI command reference
+
+Run these commands **on the VPS**. There is no AgentVPS client to install on your computer.
 
 | Command | Purpose |
 | --- | --- |
 | `serve` | VPS daemon; systemd runs this automatically |
-| `connect` | Verify a URL/token file, then save it; failed verification preserves existing settings |
-| `status` | Remote identity, workspace, job counts and desktop readiness |
+| `status` | This VPS's identity, workspace and desktop readiness |
 | `tools` | Discover tool names and JSON schemas |
-| `call TOOL [JSON or @FILE]` | Complete access to remote capabilities without duplicating every tool as a CLI command |
-| `exec [--detach] 'COMMAND'` | Convenient remote execution with completion and exit status |
-| `upload LOCAL REMOTE` | Binary-safe upload, maximum 20 MiB |
-| `download REMOTE LOCAL` | Binary-safe download without overwriting a local file |
-| `mcp` | Stdio bridge for clients that cannot connect directly to HTTP MCP |
-| `upgrade PACKAGE.tgz` | Update the managed Linux installation; run with sudo |
-| `uninstall [--purge] [--dry-run]` | Remove the managed Linux installation, keeping data by default |
+| `call TOOL [JSON or @FILE]` | Call a tool on this VPS for administration and diagnostics |
+| `exec [--detach] 'COMMAND'` | Execute in this VPS workspace; preserve completion and exit status |
+| `upgrade PACKAGE.tgz` | Update the managed installation; run with sudo |
+| `uninstall [--purge] [--dry-run]` | Remove the installation, keeping data by default |
 
-Each command supports `--help`; `--version` reports the installed version. Initial installation uses the installer because the CLI does not exist yet. The shortcuts above cover common shell workflows; `call` handles less frequent operations without dozens of redundant subcommands.
-
-## Connect the CLI
-
-Install the release locally with Node 22 or later. The client does not need a local Chromium installation:
-
-```sh
-npm install -g https://github.com/agentsdance/agentvps/releases/download/v0.0.1/agentsdance-agentvps-0.0.1.tgz
-umask 077
-mkdir -p ~/.config/agentvps
-chmod 700 ~/.config/agentvps
-ssh ubuntu@YOUR_VPS 'sudo cat /var/lib/agentvps/token' > ~/.config/agentvps/vps.token
-chmod 600 ~/.config/agentvps/vps.token
-agentvps connect --url http://YOUR_VPS:8080 --token-file ~/.config/agentvps/vps.token
-agentvps status
-agentvps call health_check '{"browser":true}'
-agentvps exec 'pwd; python3 --version'
-```
-
-The connection is saved in `~/.config/agentvps/client.json`. Override it with `AGENTVPS_URL`, `AGENTVPS_TOKEN_FILE`, or `AGENTVPS_CLIENT_CONFIG`. `AGENTVPS_TOKEN` is also accepted; prefer a token file to keep secrets out of command arguments.
-
-For SSH transport, keep a tunnel running and point the client at its local port:
-
-```sh
-ssh -N -L 18080:127.0.0.1:8080 -L 18081:127.0.0.1:8081 ubuntu@YOUR_VPS
-```
-
-In another terminal, use `agentvps connect --url http://127.0.0.1:18080 --token-file ~/.config/agentvps/vps.token`. Open the console on that address. Preview URLs need port `18081` when viewed through this tunnel.
+Each command supports `--help`; `--version` reports the installed version. The installed wrapper loads `/etc/agentvps/environment`, so administrative commands follow the configured service port and data directory. They read the local service token and use loopback. Initial installation uses the installer because the CLI does not exist yet.
 
 ## Connect Claude Code or Codex
 
-After `agentvps connect`, register the local stdio bridge:
+Connect your agent **directly** to the VPS. No local AgentVPS package or Node.js installation is needed for this connection.
+
+- URL: `http://YOUR_VPS_IP:8080/mcp`
+- Transport: **Streamable HTTP**
+- Authentication: **Bearer token**, using the same token as the desktop login
+
+Use a client that supports authenticated Streamable HTTP. OAuth and legacy SSE are not implemented. Use HTTPS or SSH forwarding for private work.
+
+For agents with a connection settings screen, enter the URL and token there. For the CLI examples below, read the token over SSH into the agent's environment without printing it or putting the secret in shell history:
 
 ```sh
-claude mcp add --transport stdio agentvps -- agentvps mcp
-codex mcp add agentvps -- agentvps mcp
+export AGENTVPS_TOKEN="$(ssh ubuntu@YOUR_VPS_IP 'sudo cat /var/lib/agentvps/token')"
 ```
 
-Use an absolute executable path if the client cannot find `agentvps`. The bridge runs locally but forwards every tool call to the configured VPS. It never runs shell commands in the client's workspace.
+Replace the SSH username and IP as needed. Launch the agent from the same terminal so it inherits the variable. Do not paste the token into chat or commit it to a repository.
 
-Both transports use the same tool catalog. Clients supporting authenticated Streamable HTTP can also connect directly to `http://YOUR_VPS:8080/mcp`, with `Authorization: Bearer <token>`. This initial server uses bearer authentication; OAuth and legacy SSE transports are not implemented.
-
-For a direct Codex connection, register the URL and the name of a token environment variable, then launch Codex from a shell where that variable is set:
+**Codex**
 
 ```sh
-export AGENTVPS_TOKEN="$(cat ~/.config/agentvps/vps.token)"
-codex mcp add agentvps --url http://YOUR_VPS:8080/mcp --bearer-token-env-var AGENTVPS_TOKEN
+codex mcp add agentvps --url http://YOUR_VPS_IP:8080/mcp --bearer-token-env-var AGENTVPS_TOKEN
 codex
 ```
 
-Choose either the direct connection or the stdio bridge for the `agentvps` entry. The bridge reads the saved token file without requiring a token environment variable in the agent process.
+Equivalent entry in `~/.codex/config.toml`:
 
-After registering the server, start a new agent session and ask:
+```toml
+[mcp_servers.agentvps]
+url = "http://YOUR_VPS_IP:8080/mcp"
+bearer_token_env_var = "AGENTVPS_TOKEN"
+```
 
-> Use AgentVPS. First call workspace_info and report the hostname and workspace. Then use shell_run to run `hostname; pwd; id -un` on that VPS, and check the exit code.
+**Claude Code**
 
-This should return your VPS hostname, workspace `/var/lib/agentvps/workspace`, and OS user `agentvps`. This confirms the location of execution; unrelated tools in the agent still use their own execution environments.
-
-For generic stdio clients:
+Add this entry to your project's `.mcp.json`, merging with existing servers:
 
 ```json
 {
   "mcpServers": {
     "agentvps": {
-      "command": "/absolute/path/to/agentvps",
-      "args": ["mcp"],
-      "env": {
-        "AGENTVPS_URL": "http://YOUR_VPS:8080",
-        "AGENTVPS_TOKEN_FILE": "/absolute/path/to/vps.token"
+      "type": "http",
+      "url": "http://YOUR_VPS_IP:8080/mcp",
+      "headers": {
+        "Authorization": "Bearer ${AGENTVPS_TOKEN}"
       }
     }
   }
 }
 ```
 
-Client syntax was checked against the installed CLIs. See the official [Codex MCP documentation](https://learn.chatgpt.com/docs/extend/mcp?surface=cli) for client configuration and authentication options.
+Then run `claude` from the terminal where `AGENTVPS_TOKEN` is set. Claude Code expands the variable at runtime; the configuration above contains no secret.
 
-Install the bundled instructions by copying `skills/agentvps` into the skill directory used by your agent. For project-scoped skills, use `.agents/skills/agentvps` for Codex or `.claude/skills/agentvps` for Claude Code. A skill explains the tools; it does not establish a network connection or move unrelated agent tools onto the VPS.
+After connecting, start a new session and ask:
+
+> Use AgentVPS. First call workspace_info and report the hostname and workspace. Then use shell_run to run `hostname; pwd; id -un` on that VPS, and check the exit code.
+
+The hostname must match your VPS. The default workspace is `/var/lib/agentvps/workspace` and the OS user is `agentvps`. Unrelated tools in the agent keep their own execution locations.
+
+For SSH forwarding, keep `ssh -N -L 18080:127.0.0.1:8080 ubuntu@YOUR_VPS_IP` running and use `http://127.0.0.1:18080/mcp` in the agent instead. The desktop is available at `http://127.0.0.1:18080`. This uses your existing SSH program; no AgentVPS client is needed.
+
+See the official [Codex MCP documentation](https://learn.chatgpt.com/docs/extend/mcp?surface=cli) and [Claude Code MCP documentation](https://code.claude.com/docs/en/mcp) for client-specific configuration.
+
+**Migrating from 0.0.1:** replace the old `command: agentvps` / `args: ["mcp"]` registration with a remote URL and bearer authentication. Once direct access works, you may remove the old local package with `npm uninstall -g @agentsdance/agentvps` (or `agentvps` for an early unscoped install). Do not uninstall the VPS service. Version 0.0.2 removes the `connect`, `mcp`, `upload` and `download` CLI commands; file operations remain available through MCP and the web desktop.
+
+The bundled `skills/agentvps` instructions describe the remote tools. Copy them into your agent's skill directory if wanted. Skills do not establish a connection or move unrelated tools onto the VPS.
 
 ## Use the tools
 
+Agents use the connected MCP tools directly. For diagnostics while logged into the VPS:
+
 ```sh
-agentvps tools
-agentvps call workspace_info
-agentvps call shell_run '{"command":"python3 -m http.server 3000 --bind 127.0.0.1","waitMs":0,"timeoutMs":86400000}'
-agentvps call shell_status '{"id":"JOB_ID","waitMs":1000}'
-agentvps call preview_open '{"port":3000}'
-agentvps upload ./input.csv data/input.csv
-agentvps call code_execute '{"language":"python","code":"from pathlib import Path\nprint(Path(\"data/input.csv\").read_text())"}'
-agentvps download artifacts/report.png ./report.png
+sudo agentvps tools
+sudo agentvps call workspace_info
+sudo agentvps exec 'pwd; python3 --version'
+sudo agentvps call shell_status '{"id":"JOB_ID","waitMs":1000}'
+sudo agentvps call preview_open '{"port":3000}'
 ```
 
-`agentvps call TOOL @arguments.json` avoids shell-escaping complex arguments. `exec` waits for completion, returns a job receipt and exits with the remote command’s exit code. Use `exec --detach` to return a running job ID immediately, then poll `shell_status`. Interrupting the local waiting client leaves the remote job running; use `shell_cancel` to stop it. `download` refuses to overwrite an existing local file.
+`agentvps call TOOL @arguments.json` avoids shell-escaping complex arguments. `exec` waits for completion and preserves the command's exit code. Use `exec --detach` to return a running job ID, then poll `shell_status`. Interrupting the waiting CLI leaves the job running; use `shell_cancel` to stop it.
+
+Transfer files through the web desktop, MCP `file_write`/`file_read` (base64 for binary data), or your existing SSH tools.
 
 Tool families are `workspace_*`, `health_*`, `shell_*`, `code_*`, `file_*`, `terminal_*`, `browser_*`, `desktop_*`, `preview_*`, `memory_*`, and `schedule_*`. The canonical schemas are in `src/tools.ts`, available at authenticated `GET /api/tools` and through MCP `tools/list`.
 
@@ -320,10 +307,10 @@ AGENTVPS_TEST_OUTPUT=test-results/vps \
 npm run test:e2e
 ```
 
-This creates controlled CSV data through the remote API, downloads it with the VPS browser, processes it with remote Python, serves a dashboard, captures a screenshot, checks binary/MCP image integrity, opens the preview from the client, and tests the desktop/mobile console. Results go into the ignored `test-results` directory. Set `AGENTVPS_KEEP_DEMO=1` to retain the demo server for up to a day.
+This creates controlled CSV data through remote HTTP MCP, downloads it with the VPS browser, processes it with remote Python, serves a dashboard, captures a screenshot, checks binary/MCP image integrity, opens the preview from the client, and tests the desktop/mobile console. Results go into the ignored `test-results` directory. Set `AGENTVPS_KEEP_DEMO=1` to retain the demo server for up to a day.
 
 ## References and provenance
 
 AgentVPS uses an original TypeScript execution service with Playwright and the official MCP SDK. OpenSandbox's execution daemon was reviewed for command lifecycle, cancellation, PTYs, file operations and the separation between execution and provisioning. AIO Sandbox informed the shared-workspace experience. Their server implementations are not bundled or claimed as dependencies. See [NOTICE](NOTICE) for reviewed commits and source paths.
 
-Managed Docker/Kubernetes lifecycle, multi-user tenancy and notebook kernels are future options. Built-in conversations and an autonomous agent loop are unfinished product requirements. Until that layer is implemented, existing agents supply reasoning and orchestration through MCP or the CLI.
+Managed Docker/Kubernetes lifecycle, multi-user tenancy and notebook kernels are future options. Built-in conversations and an autonomous agent loop are unfinished product requirements. Until that layer is implemented, existing agents supply reasoning and orchestration through remote HTTP MCP.

@@ -1,8 +1,8 @@
-# 为用户安装 AgentVPS 0.0.1
+# 为用户安装 AgentVPS 0.0.2
 
 源代码：https://github.com/agentsdance/agentvps
 手动安装指南：https://agentvps.ai-infra.org/zh/#install
-npm 包：`@agentsdance/agentvps@0.0.1`，命令仍为 `agentvps`。
+npm 包：`@agentsdance/agentvps@0.0.2`，命令仍为 `agentvps`。
 
 ## 1. 确认目标 VPS
 
@@ -30,23 +30,28 @@ sudo agentvps call health_check '{"browser":true}'
 
 令牌位于 `/var/lib/agentvps/token`，只有 root 和服务用户可读取。不要将它输出到聊天、日志、截图或生成的文档中。配置本地智能体时，通过 SSH 复制到权限为 `0600` 的本地文件。让用户自行将令牌粘贴到桌面登录界面；不要放入 URL。
 
-## 4. 安装客户端并连接 MCP
+## 4. 智能体直接连接远程 MCP
 
-在运行智能体的电脑上准备 Node.js 22 或更新版本，然后安装客户端：
+无需在智能体所在电脑安装 AgentVPS 或 Node.js。使用智能体自带的远程 MCP 配置：
 
-```sh
-npm install -g https://github.com/agentsdance/agentvps/releases/download/v0.0.1/agentsdance-agentvps-0.0.1.tgz
-agentvps connect --url http://YOUR_VPS_IP:8080 --token-file /absolute/path/to/token
-agentvps status
-```
+- 地址：`http://YOUR_VPS_IP:8080/mcp`
+- 传输方式：Streamable HTTP
+- 认证：`Authorization: Bearer <token>`，与桌面登录使用同一个令牌
 
-将示例 IP 和令牌文件路径替换为实际值。保存连接设置后，注册 Codex：
+优先使用智能体提供的凭据设置。对于 Codex CLI，从受保护的文件或 SSH 将令牌读入 `AGENTVPS_TOKEN` 环境变量，不要打印，然后注册：
 
 ```sh
-codex mcp add agentvps -- agentvps mcp
+codex mcp add agentvps --url http://YOUR_VPS_IP:8080/mcp --bearer-token-env-var AGENTVPS_TOKEN
 ```
 
-Claude Code 或其他 stdio MCP 客户端使用命令 `agentvps`，参数为 `["mcp"]`，必要时使用可执行文件的绝对路径。本地桥接程序会将所有操作转发到 VPS。也可以通过 `http://YOUR_VPS_IP:8080/mcp` 直接连接 Streamable HTTP MCP，使用 Bearer 令牌认证。
+从设置了该变量的终端启动 Codex。对于 Claude Code，将以下远程服务合并到 `.mcp.json`，保留其他服务配置：
+
+```json
+{"mcpServers":{"agentvps":{"type":"http","url":"http://YOUR_VPS_IP:8080/mcp","headers":{"Authorization":"Bearer ${AGENTVPS_TOKEN}"}}}}
+```
+
+从设置了 `AGENTVPS_TOKEN` 的终端启动 Claude Code。替换旧的 AgentVPS stdio 配置，不再启动本地转发进程。
+完整示例：https://github.com/agentsdance/agentvps#connect-claude-code-or-codex
 
 ## 5. 验证真实操作路径
 

@@ -84,11 +84,27 @@ try {
       chinese ? "已复制到剪贴板" : "Copied to clipboard",
     );
     await page.locator('[data-step="connect"] > summary').click();
-    await page.locator('[data-copy="client-install"]').click();
+    await page.locator('[data-copy="mcp-url"]').click();
     assert.equal(
       await page.evaluate(() => navigator.clipboard.readText()),
-      "npm install -g https://github.com/agentsdance/agentvps/releases/download/v0.0.1/agentsdance-agentvps-0.0.1.tgz",
+      "http://YOUR_VPS_IP:8080/mcp",
     );
+    assert.equal(await page.locator('[data-copy="client-install"]').count(), 0);
+    await page.locator('[data-copy="codex-mcp"]').click();
+    assert.match(
+      await page.evaluate(() => navigator.clipboard.readText()),
+      /bearer_token_env_var = "AGENTVPS_TOKEN"/,
+    );
+    await page.locator('[data-copy="mcp-config"]').click();
+    const mcpConfig = JSON.parse(
+      await page.evaluate(() => navigator.clipboard.readText()),
+    );
+    assert.equal(mcpConfig.mcpServers.agentvps.type, "http");
+    assert.equal(
+      mcpConfig.mcpServers.agentvps.url,
+      "http://YOUR_VPS_IP:8080/mcp",
+    );
+    assert.equal(mcpConfig.mcpServers.agentvps.command, undefined);
     await page.locator("#agent-tab").click();
     assert.equal(await page.locator("#manual-guide").isVisible(), false);
     await page.locator('[data-copy="agent-prompt"]').click();

@@ -2,7 +2,7 @@
 # Install a built AgentVPS npm tarball on Ubuntu 22.04/24.04. Run with sudo.
 set -euo pipefail
 if [[ ${EUID} -ne 0 || $# -ne 1 ]]; then
-  echo 'Usage: sudo bash deploy/install.sh /absolute/path/agentvps-0.0.1.tgz' >&2
+  echo 'Usage: sudo bash deploy/install.sh /absolute/path/agentvps-0.0.2.tgz' >&2
   exit 1
 fi
 package=$(realpath "$1")
@@ -72,10 +72,7 @@ cat > /usr/local/bin/agentvps <<WRAPPER
 #!/bin/sh
 # AgentVPS managed wrapper
 export PATH="${node_dir}/bin:\$PATH"
-if [ -z "\${AGENTVPS_TOKEN_FILE:-}" ] && [ -z "\${AGENTVPS_TOKEN:-}" ] && [ -r /var/lib/agentvps/token ]; then
-  export AGENTVPS_TOKEN_FILE=/var/lib/agentvps/token
-fi
-exec ${node_dir}/bin/node /opt/agentvps/current/node_modules/.bin/agentvps "\$@"
+exec ${node_dir}/bin/node --env-file-if-exists=/etc/agentvps/environment /opt/agentvps/current/node_modules/.bin/agentvps "\$@"
 WRAPPER
 chmod 755 /usr/local/bin/agentvps
 cat > /etc/systemd/system/agentvps.service <<UNIT

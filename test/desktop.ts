@@ -4,7 +4,7 @@ import path from 'node:path';
 import { chromium } from 'playwright';
 import { Client, StreamableHTTPClientTransport } from '@modelcontextprotocol/client';
 import { WebSocket } from 'ws';
-import { remoteClient } from '../src/client.js';
+import { remoteClient } from './http-fixture.js';
 
 if (!process.env.AGENTVPS_URL || !process.env.AGENTVPS_TOKEN_FILE) throw new Error('Run against a Linux desktop VPS with AGENTVPS_URL and AGENTVPS_TOKEN_FILE.');
 const client = await remoteClient(), token = (await fs.readFile(process.env.AGENTVPS_TOKEN_FILE, 'utf8')).trim();
