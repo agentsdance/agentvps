@@ -815,23 +815,47 @@ connection instructions and verification results.</code></pre>
           <section class="mcp-section" id="mcp">
             <div>
               <span class="eyebrow">03 / CONNECT YOUR AGENT</span>
-              <h2>One address.<br /><span>Connected to your VPS.</span></h2>
+              <h2>One address.<br /><span>Connect directly to your VPS.</span></h2>
               <p>
-                Your agent calls the VPS tools directly over remote MCP. Set
-                <code>AGENTVPS_TOKEN</code> to your access token in the
-                environment that launches your agent, then use its configuration
-                below.
+                Use your VPS’s browser, terminal and files from Codex or Claude
+                Code through MCP. Set up the connection on the computer running
+                your agent.
               </p>
+              <ol class="mcp-steps">
+                <li>
+                  <strong>Set your access token.</strong>
+                  <p>
+                    Set the <code>AGENTVPS_TOKEN</code> environment variable to
+                    the token printed by the installer. Use the same token as
+                    your desktop login.
+                  </p>
+                </li>
+                <li>
+                  <strong>Save your agent’s configuration.</strong>
+                  <p>
+                    Copy the matching example into the file shown. Replace
+                    <code>YOUR_VPS_IP</code> with your VPS’s public IP. Keep any
+                    existing MCP servers.
+                  </p>
+                </li>
+                <li>
+                  <strong>Start your agent.</strong>
+                  <p>
+                    Launch <code>codex</code> or <code>claude</code> from the
+                    terminal where you set the token. Ask it to use AgentVPS.
+                  </p>
+                </li>
+              </ol>
               <a
                 class="text-link"
                 href="https://github.com/agentsdance/agentvps#connect-claude-code-or-codex"
-                >Connection and token setup guide ↗</a
+                >Step-by-step token and connection setup ↗</a
               >
             </div>
-            <div>
+            <div class="mcp-configs">
               <div class="code-block">
                 <div>
-                  <span>CODEX · ~/.codex/config.toml</span
+                  <span>CODEX · ADD TO ~/.codex/config.toml</span
                   ><button
                     aria-label="Copy Codex MCP configuration"
                     data-copy="codex-mcp"
@@ -845,7 +869,7 @@ bearer_token_env_var = "AGENTVPS_TOKEN"</code></pre>
               </div>
               <div class="code-block">
                 <div>
-                  <span>CLAUDE CODE · .mcp.json</span
+                  <span>CLAUDE CODE · .mcp.json IN YOUR PROJECT FOLDER</span
                   ><button
                     aria-label="Copy Claude Code MCP configuration"
                     data-copy="mcp-config"
