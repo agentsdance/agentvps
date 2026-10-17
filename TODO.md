@@ -14,4 +14,4 @@
 
 - [x] Publish the verified [0.0.1 release download](https://github.com/agentsdance/agentvps/releases/tag/v0.0.1), with SHA-256 checksums. The full clean-install GitHub Actions pipeline passed.
 
-- [ ] Publish @agentsdance/agentvps@0.0.1 to npm and verify a fresh registry installation.
+- [ ] Publish @agentsdance/agentvps@0.0.1 to npm and verify a fresh registry installation. Account and AgentsDance ownership are verified; publication still needs the user's authenticator challenge. Scoped package and Linux/fresh-install checks passed; the verified GitHub download is available.

@@ -169,7 +169,7 @@ Each command supports `--help`; `--version` reports the installed version. Initi
 Install the release locally with Node 22 or later. The client does not need a local Chromium installation:
 
 ```sh
-npm install -g @agentsdance/agentvps@0.0.1
+npm install -g https://github.com/agentsdance/agentvps/releases/download/v0.0.1/agentsdance-agentvps-0.0.1.tgz
 umask 077
 mkdir -p ~/.config/agentvps
 chmod 700 ~/.config/agentvps

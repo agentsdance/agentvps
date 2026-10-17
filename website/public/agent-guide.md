@@ -2,6 +2,8 @@
 
 Source: https://github.com/agentsdance/agentvps
 Human guide: https://agentvps.ai-infra.org/#install
+Chinese guide: https://agentvps.ai-infra.org/zh/agent-guide.md
+Package: `@agentsdance/agentvps@0.0.1`; the CLI command remains `agentvps`.
 
 ## 1. Confirm the target
 
@@ -42,7 +44,7 @@ paste their token into the desktop login themselves. Never put it in a URL.
 Install Node 22 or newer on the agent's computer, then install the release client:
 
 ```sh
-npm install -g https://github.com/agentsdance/agentvps/releases/download/v0.0.1/agentvps-0.0.1.tgz
+npm install -g https://github.com/agentsdance/agentvps/releases/download/v0.0.1/agentsdance-agentvps-0.0.1.tgz
 agentvps connect --url http://YOUR_VPS_IP:8080 --token-file /absolute/path/to/token
 agentvps status
 ```
@@ -84,7 +86,9 @@ it does not yet contain a built-in model-driven chat/agent loop.
 ## Maintain
 
 Rerun the versioned installer to upgrade; it preserves workspace data and restarts
-the service. Or use `sudo agentvps upgrade /path/to/agentvps-VERSION.tgz`.
+the service. Or use `sudo agentvps upgrade /path/to/agentsdance-agentvps-VERSION.tgz`.
+For an early unscoped `agentvps` installation, use the website installer or the
+incoming package's `deploy/install.sh` directly to migrate while retaining data.
 `agentvps uninstall --dry-run` shows the plan. `sudo agentvps uninstall` retains
 data. `sudo agentvps uninstall --purge` permanently deletes it: only use purge
 when the user explicitly requests that data deletion. Do not uninstall a user's

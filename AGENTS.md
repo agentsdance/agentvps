@@ -4,6 +4,12 @@
 
 The project name is **AgentVPS**, with `agentvps` as its lowercase identifier. Use this name in new documentation, packages, commands, and configuration.
 
+The npm package is **`@agentsdance/agentvps`**; the executable remains **`agentvps`**.
+The public website has English (`/`) and Simplified Chinese (`/zh/`) pages and
+installation guides. Its headline is “Turn any VPS into a personal agent”.
+Preserve published release bytes. The original unscoped 0.0.1 GitHub tarball and
+the scoped npm tarball have distinct filenames and checksums.
+
 AgentVPS makes a VPS the working computer for an AI agent. The agent can run locally or in another service while its code execution, shell commands, file operations, and browser activity run on the VPS.
 
 This file records the user's requirements and the design discussion so future work can continue consistently. Recommendations and unresolved choices below are not approved implementation decisions.

@@ -1,10 +1,13 @@
 const status = document.getElementById('copy-status'); let noticeTimer;
+const labels = document.documentElement.lang.startsWith('zh')
+  ? { copied: '已复制 ✓', notice: '已复制到剪贴板', failed: '请选中文本并手动复制。' }
+  : { copied: 'Copied ✓', notice: 'Copied to clipboard', failed: 'Select and copy the text manually.' };
 async function copy(text) {
   try { await navigator.clipboard.writeText(text); }
-  catch { const field = document.createElement('textarea'); field.value = text; field.setAttribute('readonly', ''); document.body.append(field); field.select(); const copied = document.execCommand('copy'); field.remove(); if (!copied) throw new Error('Select and copy the text manually.'); }
+  catch { const field = document.createElement('textarea'); field.value = text; field.setAttribute('readonly', ''); document.body.append(field); field.select(); const copied = document.execCommand('copy'); field.remove(); if (!copied) throw new Error(labels.failed); }
 }
 document.querySelectorAll('[data-copy]').forEach(button => button.addEventListener('click', async () => {
-  try { await copy(document.getElementById(button.dataset.copy).textContent.trim()); const label = button.textContent; button.textContent = 'Copied ✓'; setTimeout(() => { button.textContent = label; }, 1800); status.textContent = 'Copied to clipboard'; }
+  try { await copy(document.getElementById(button.dataset.copy).textContent.trim()); const label = button.dataset.originalLabel ||= button.textContent; button.textContent = labels.copied; setTimeout(() => { button.textContent = label; }, 1800); status.textContent = labels.notice; }
   catch (error) { status.textContent = error.message; }
   clearTimeout(noticeTimer); noticeTimer = setTimeout(() => { status.textContent = ''; }, 3000);
 }));

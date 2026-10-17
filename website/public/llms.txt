@@ -5,6 +5,7 @@ It provides a real Linux desktop, visible Chromium, shell, code, files, MCP and 
 The built-in conversational agent loop is planned, not implemented.
 
 - [Agent installation guide](https://agentvps.ai-infra.org/agent-guide.md)
+- [中文安装指南](https://agentvps.ai-infra.org/zh/agent-guide.md)
 - [Manual installation](https://agentvps.ai-infra.org/#install)
 - [Source and complete reference](https://github.com/agentsdance/agentvps)
 - [Release 0.0.1](https://github.com/agentsdance/agentvps/releases/tag/v0.0.1)
