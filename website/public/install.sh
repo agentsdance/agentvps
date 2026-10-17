@@ -7,6 +7,14 @@ set -euo pipefail
 agentvps_finish_setup() {
   local show_token=${1:-auto} config_file=${2:-/etc/agentvps/environment} token_file=${3:-/var/lib/agentvps/token}
   local settings service_port service_host public_url public_ip ufw_status
+  local bold='' green='' cyan='' yellow='' reset=''
+  if [[ -t 1 && ${TERM:-} != dumb && -z ${NO_COLOR:-} ]]; then
+    bold=$'\033[1m'
+    green=$'\033[1;32m'
+    cyan=$'\033[1;36m'
+    yellow=$'\033[1;33m'
+    reset=$'\033[0m'
+  fi
   settings=$(python3 - "$config_file" <<'PY'
 import ipaddress
 import sys
@@ -89,19 +97,29 @@ PY
     fi
   fi
 
-  printf '\nAgentVPS installed. Access your desktop in your browser:\n  %s\n' "$public_url"
-  printf '\nConnect your agent directly to MCP:\n  %s/mcp\n' "${public_url%/}"
-  echo 'Transport: Streamable HTTP. Authentication: Bearer token (same as desktop login).'
-  echo 'No local AgentVPS client or Node.js installation is needed.'
+  printf '\n%sAgentVPS installed.%s\n' "$green" "$reset"
+  printf '\n%s1. Access your desktop.%s\n' "$bold" "$reset"
+  echo 'Open this address in your browser:'
+  printf '  %s%s%s\n' "$cyan" "$public_url" "$reset"
+
+  printf '\n%s2. Access token%s\n' "$bold" "$reset"
+  echo 'Paste into the desktop login. Keep this token private.'
   if [[ $show_token != never && -t 1 && -s $token_file ]]; then
-    printf '\nAccess token (paste into the login screen; keep private):\n  '
+    printf '  %s' "$yellow"
     cat "$token_file"
-    printf '\n'
+    printf '%s\n' "$reset"
   else
-    echo 'Read your login token in your own SSH terminal: sudo cat /var/lib/agentvps/token'
+    echo 'Read your token in your own SSH terminal:'
+    printf '  %ssudo cat /var/lib/agentvps/token%s\n' "$cyan" "$reset"
   fi
+
+  printf '\n%s3. Connect your agent directly to MCP.%s\n' "$bold" "$reset"
+  printf '  %s%s/mcp%s\n' "$cyan" "${public_url%/}" "$reset"
+  echo 'Transport: Streamable HTTP'
+  echo 'Authentication: Bearer token (use the access token above).'
+  echo 'No local AgentVPS client or Node.js installation is needed.'
   if [[ $service_host == 0.0.0.0 || $service_host == :: ]]; then
-    printf '\nIf the page is unreachable, allow TCP %s in your cloud provider firewall/security group.\n' "$service_port"
+    printf '\nIf the page is unreachable, allow %sTCP %s%s in your cloud provider firewall/security group.\n' "$yellow" "$service_port" "$reset"
     echo 'Cloud firewall rules cannot be changed without access to your provider account.'
   fi
 }
