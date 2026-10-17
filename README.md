@@ -53,8 +53,7 @@ The same token protects desktop, desk APIs and MCP; no additional public ports a
 On your Ubuntu VPS:
 
 ```sh
-curl -fsSL https://agentvps.ai-infra.org/install.sh -o install-agentvps.sh
-sudo bash install-agentvps.sh
+curl -fsSL https://agentvps.ai-infra.org/install.sh -o install-agentvps.sh && sudo bash install-agentvps.sh
 sudo agentvps call health_check '{"browser":true}'
 ```
 

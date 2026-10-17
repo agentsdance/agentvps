@@ -19,8 +19,7 @@ live-tested configuration. Do not reinstall the OS or remove unrelated services.
 Run these commands on the intended VPS, after verifying it is the user's target:
 
 ```sh
-curl -fsSL https://agentvps.ai-infra.org/install.sh -o install-agentvps.sh
-sudo bash install-agentvps.sh
+curl -fsSL https://agentvps.ai-infra.org/install.sh -o install-agentvps.sh && sudo bash install-agentvps.sh
 sudo agentvps status
 sudo agentvps call health_check '{"browser":true}'
 ```

@@ -15,8 +15,7 @@ npm 包：`@agentsdance/agentvps@0.0.1`，命令仍为 `agentvps`。
 确认连接的是用户指定的 VPS 后，在该 VPS 上运行：
 
 ```sh
-curl -fsSL https://agentvps.ai-infra.org/install.sh -o install-agentvps.sh
-sudo bash install-agentvps.sh
+curl -fsSL https://agentvps.ai-infra.org/install.sh -o install-agentvps.sh && sudo bash install-agentvps.sh
 sudo agentvps status
 sudo agentvps call health_check '{"browser":true}'
 ```
