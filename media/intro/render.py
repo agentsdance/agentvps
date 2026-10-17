@@ -1,6 +1,6 @@
 """Render the 1080p Chinese product introduction from owned artwork and real screenshots.
 
-Requires macOS say, FFmpeg, Python 3, Pillow and NumPy. Prepared font/icon assets
+Requires FFmpeg, Python 3, Pillow and NumPy. Prepared font/icon assets
 come from the website's licensed originals; see README.md for reproducible setup.
 """
 from pathlib import Path
@@ -253,10 +253,10 @@ def make_audio():
     OUT.mkdir(parents=True,exist_ok=True)
     all_samples=[]
     for scene in SCENES:
-        aiff=OUT/(scene['id']+'.aiff'); wav=OUT/(scene['id']+'.wav')
-        if not aiff.exists():
-            subprocess.run(['say','-v','Tingting','-r','215','-o',str(aiff),scene['voice']],check=True)
-        subprocess.run(['ffmpeg','-v','error','-y','-i',str(aiff),'-ar',str(SR),'-ac','1',str(wav)],check=True)
+        source=OUT/(scene['id']+'-kokoro.wav'); wav=OUT/(scene['id']+'.wav')
+        if not source.exists():
+            raise FileNotFoundError('Run media/intro/narrate.py before rendering')
+        subprocess.run(['ffmpeg','-v','error','-y','-i',str(source),'-ar',str(SR),'-ac','1',str(wav)],check=True)
         with wave.open(str(wav)) as f:
             voice=np.frombuffer(f.readframes(f.getnframes()),dtype=np.int16).astype(np.float32)/32768
         duration=len(voice)/SR
@@ -296,6 +296,7 @@ TOTAL=sum(s['duration'] for s in SCENES)
 if __name__=='__main__':
     parser=argparse.ArgumentParser()
     parser.add_argument('--stills',action='store_true')
+    parser.add_argument('--audio-only',action='store_true',help='Replace narration in an already rendered video')
     args=parser.parse_args()
     OUT.mkdir(parents=True,exist_ok=True)
     subtitles()
@@ -309,6 +310,14 @@ if __name__=='__main__':
         raise SystemExit(0)
     make_audio()
     dest=OUT/'agentvps-intro-zh-CN.mp4'
+    if args.audio_only:
+        replacement=OUT/'agentvps-intro-remux.mp4'
+        subprocess.run(['ffmpeg','-v','error','-y','-i',str(dest),'-i',str(OUT/'narration.wav'),
+                        '-map','0:v:0','-map','1:a:0','-c:v','copy','-c:a','aac','-b:a','160k',
+                        '-t',str(TOTAL),'-movflags','+faststart',str(replacement)],check=True)
+        replacement.replace(dest)
+        print(dest,flush=True)
+        raise SystemExit(0)
     cmd=['ffmpeg','-hide_banner','-loglevel','warning','-y','-f','rawvideo','-pix_fmt','rgb24','-s',f'{W}x{H}','-r',str(FPS),'-i','-',
          '-i',str(OUT/'narration.wav'),'-c:v','libx264','-preset','medium','-crf','20','-pix_fmt','yuv420p','-c:a','aac','-b:a','160k',
          '-t',str(TOTAL),'-movflags','+faststart','-metadata','title=AgentVPS — 你的个人助理工作空间',str(dest)]

@@ -12,7 +12,7 @@ await fs.copyFile(new URL('docs/install-compatibility-report.md', root), new URL
 await fs.copyFile(new URL('docs/install-compatibility-report.zh-CN.md', root), new URL('zh/install-compatibility-report.md', target));
 await buildCompatibilityPages(root, target);
 // Returning visitors must receive new styles/scripts after a deployment.
-for (const asset of ['style.css', 'compatibility.css', 'video.css', 'app.js', 'video.js', 'favicon.svg']) {
+for (const asset of ['style.css', 'compatibility.css', 'video.css', 'app.js', 'video.js', 'favicon.svg', 'media/agentvps-intro-zh-CN.mp4', 'media/agentvps-intro-poster.jpg', 'media/agentvps-intro.zh-CN.srt']) {
   const digest = createHash('sha256').update(await fs.readFile(new URL(asset, target))).digest('hex').slice(0, 12);
   for (const page of ['index.html', 'zh/index.html', 'compatibility/index.html', 'zh/compatibility/index.html', 'video/index.html', 'zh/video/index.html']) {
     const file = new URL(page, target);
