@@ -1,36 +1,13 @@
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
-import http from "node:http";
 import path from "node:path";
 import { chromium } from "playwright";
+import { createSiteServer } from './site-server.mjs';
 const folder = path.resolve("website/dist");
 let server,
   url = process.env.AGENTVPS_SITE_URL;
 if (!url) {
-  server = http.createServer(async (req, res) => {
-    try {
-      const pathname = new URL(req.url, "http://localhost").pathname;
-      const file = path.join(
-        folder,
-        pathname.endsWith("/") ? pathname + "index.html" : pathname,
-      );
-      if (!file.startsWith(folder + "/")) {
-        res.writeHead(403).end();
-        return;
-      }
-      const types = {
-        ".html": "text/html",
-        ".js": "application/javascript",
-        ".css": "text/css",
-        ".svg": "image/svg+xml",
-        ".png": "image/png",
-      };
-      res.setHeader("Content-Type", types[path.extname(file)] || "text/plain");
-      res.end(await fs.readFile(file));
-    } catch {
-      res.writeHead(404).end("Not found");
-    }
-  });
+  server = createSiteServer(folder);
   await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
   url = `http://127.0.0.1:${server.address().port}`;
 }
@@ -187,6 +164,22 @@ try {
     await page.locator('.language-link').click();
     await page.waitForURL(url + (chinese ? '/' : '/zh/') + 'compatibility/');
     assert.equal(await page.locator('html').getAttribute('lang'), chinese ? 'en' : 'zh-Hans');
+    await page.goto(url + route + 'video/');
+    await page.waitForFunction(() => document.querySelector('video').readyState > 0);
+    assert.equal(await page.locator('video').evaluate(video => video.duration), 45);
+    assert.equal(await page.locator('video').evaluate(video => video.videoWidth), 1920);
+    await page.locator('[data-seek="18.0"]').click();
+    await page.waitForFunction(() => {
+      const video = document.querySelector('video');
+      return video.currentTime >= 18 && video.currentTime < 22 && !video.paused;
+    });
+    await page.locator('video').evaluate(video => video.pause());
+    for (const width of [1440, 768, 390, 320]) {
+      await page.setViewportSize({ width, height: 900 });
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, locale + ' video overflow at ' + width);
+    }
+    await page.locator('.language-link').click();
+    await page.waitForURL(url + (chinese ? '/' : '/zh/') + 'video/');
   }
   assert.deepEqual(errors, []);
   console.log(

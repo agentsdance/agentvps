@@ -9,6 +9,7 @@ AgentVPS 免费开源；VPS 和所选智能体、模型服务的费用及额度�
 智能体通过 /mcp 直接连接经过认证的 Streamable HTTP MCP，无需在本机安装 AgentVPS 客户端或 Node.js。CLI 仅用于 VPS 运维。
 
 - [系统兼容性与完整测试报告](https://agentvps.ai-infra.org/zh/compatibility/)
+- [45 秒中文介绍视频与文稿](https://agentvps.ai-infra.org/zh/video/)
 - [智能体安装指南](https://agentvps.ai-infra.org/zh/agent-guide.md)
 - [手动安装](https://agentvps.ai-infra.org/zh/#install)
 - [English agent guide](https://agentvps.ai-infra.org/agent-guide.md)

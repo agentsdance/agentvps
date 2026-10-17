@@ -1,0 +1,9 @@
+[
+  {"id":"intro","duration":5.5,"label":"YOUR VPS. YOUR AGENT.","voice":"把已有的服务器，变成个人助理的工作电脑。","caption":"把已有的服务器，变成个人助理的工作电脑。"},
+  {"id":"install","duration":6.5,"label":"01 / INSTALL","voice":"一行命令，安装桌面、浏览器和工具。","caption":"一行命令，安装桌面、浏览器和工具。"},
+  {"id":"connect","duration":6.0,"label":"02 / CONNECT","voice":"通过 M C P，直接连接你已经在用的智能体。","caption":"通过 MCP，直接连接你已经在用的智能体。"},
+  {"id":"desktop","duration":8.0,"label":"03 / WORK TOGETHER","voice":"浏览器、终端和文件，共享同一个工作空间。随时查看，也能接管。","caption":"浏览器、终端和文件，共享同一个工作空间。随时查看，也能接管。"},
+  {"id":"workflow","duration":8.0,"label":"04 / GET THINGS DONE","voice":"下载数据，用 Python 处理，再生成网页。整个流程，都在你的服务器。","caption":"下载数据 → Python 处理 → 生成网页。整个流程，都在你的服务器。"},
+  {"id":"linux","duration":5.5,"label":"05 / VERIFIED LINUX","voice":"哪些系统已验证，官网报告写得清清楚楚。","caption":"哪些系统已验证，官网报告写得清清楚楚。"},
+  {"id":"outro","duration":5.5,"label":"START WITH WHAT YOU HAVE","voice":"免费开源。用自己的服务器，现在开始。","caption":"免费开源。用自己的服务器，现在开始。"}
+]

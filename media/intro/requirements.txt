@@ -1,0 +1,4 @@
+Pillow==11.2.1
+numpy==2.2.6
+fonttools[woff]==4.60.1
+CairoSVG==2.8.2

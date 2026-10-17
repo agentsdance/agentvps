@@ -10,6 +10,7 @@ AgentVPS is free and open source. VPS and chosen agent/model provider fees and l
 Agents connect directly to authenticated Streamable HTTP MCP at /mcp. No local AgentVPS client or Node.js installation is required. The CLI is for VPS administration only.
 
 - [Linux compatibility and complete test report](https://agentvps.ai-infra.org/compatibility/)
+- [45-second introduction video and English transcript](https://agentvps.ai-infra.org/video/)
 - [Agent installation guide](https://agentvps.ai-infra.org/agent-guide.md)
 - [中文安装指南](https://agentvps.ai-infra.org/zh/agent-guide.md)
 - [Manual installation](https://agentvps.ai-infra.org/#install)

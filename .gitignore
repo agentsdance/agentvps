@@ -10,3 +10,8 @@ test-results/
 .DS_Store
 website/dist/
 .wrangler/
+media/intro/output/
+media/intro/assets/*.ttf
+media/intro/assets/codex.png
+media/intro/assets/claude-code.png
+media/intro/assets/cursor.png

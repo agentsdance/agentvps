@@ -201,6 +201,18 @@ svg {
 .text-link:hover {
   color: var(--accent-dark);
 }
+.hero-video-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 24px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.hero-video-link > span { color: var(--accent-dark); font-size: 22px; line-height: 1; }
+.hero-video-link small { font-size: 10px; color: var(--muted); font-weight: 400; }
+.hero-video-link:hover { color: var(--accent-dark); }
 .header {
   height: 90px;
   display: flex;
