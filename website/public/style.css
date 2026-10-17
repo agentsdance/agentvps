@@ -1026,6 +1026,9 @@ code {
   overflow: hidden;
 }
 .reference-grid article {
+  display: grid;
+  grid-row: span 4;
+  grid-template-rows: subgrid;
   min-width: 0;
   padding: 29px;
 }
@@ -2050,6 +2053,7 @@ body:has(.preview-dialog[open]) {
     display: block;
   }
   .reference-grid article {
+    display: block;
     padding: 26px;
   }
   .reference-grid article + article {
