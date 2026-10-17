@@ -455,7 +455,8 @@
                   </div>
                   <p class="small">
                     安装 0.0.1 版本，包含 CLI、后台服务、Chromium 和 Linux
-                    桌面。下载的安装包会通过预设 SHA-256 校验。
+                    桌面。自动在已启用的 UFW 中放行桌面端口，并在当前终端显示
+                    桌面地址和访问令牌。下载的安装包会通过预设 SHA-256 校验。
                     <a href="/install.sh">查看安装脚本 ↗</a>
                   </p>
                 </div>
@@ -468,24 +469,13 @@
                 </summary>
                 <div class="step-content">
                   <p>
-                    在 VPS 防火墙中放行 TCP <strong>8080</strong> 端口，然后打开
-                    <code>http://YOUR_VPS_IP:8080</code>。在 VPS
-                    终端读取访问令牌，粘贴到登录界面：
+                    打开安装完成后显示的桌面地址，将终端中的访问令牌粘贴到登录界面，即可使用。
                   </p>
-                  <div class="code-block">
-                    <div>
-                      <span>VPS 终端</span
-                      ><button
-                        aria-label="复制令牌读取命令"
-                        data-copy="vps-token"
-                      >
-                        复制
-                      </button>
-                    </div>
-                    <pre
-                      id="vps-token"
-                    ><code>sudo cat /var/lib/agentvps/token</code></pre>
-                  </div>
+                  <p>
+                    如果页面无法打开，请在云服务商的防火墙或安全组中放行 TCP
+                    <strong>8080</strong>。安装脚本会处理 VPS 上的
+                    UFW；云端防火墙需在服务商控制台单独设置。
+                  </p>
                   <p class="small">
                     请妥善保管令牌。公网 IP 访问使用
                     HTTP；处理私人内容时，请使用 HTTPS 或 SSH

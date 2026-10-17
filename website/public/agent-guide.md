@@ -19,7 +19,7 @@ live-tested configuration. Do not reinstall the OS or remove unrelated services.
 Run these commands on the intended VPS, after verifying it is the user's target:
 
 ```sh
-curl -fsSL https://agentvps.ai-infra.org/install.sh -o install-agentvps.sh && sudo bash install-agentvps.sh
+curl -fsSL https://agentvps.ai-infra.org/install.sh -o install-agentvps.sh && sudo bash install-agentvps.sh --no-show-token
 sudo agentvps status
 sudo agentvps call health_check '{"browser":true}'
 ```
@@ -27,11 +27,17 @@ sudo agentvps call health_check '{"browser":true}'
 The bootstrap verifies the pinned package's SHA-256 before running its installer.
 The service runs as agentvps, binds 0.0.0.0:8080, and keeps its workspace at
 /var/lib/agentvps/workspace. The separate preview gateway uses port 8081.
-Allow TCP 8080 in the host/cloud firewall for direct access; allow 8081 when
-preview links are required. Do not disable the firewall. Alternatively use an
+The bootstrap opens the desktop port in active UFW and prints the desktop URL;
+it does not enable or disable a firewall. If external access is blocked, allow
+TCP 8080 in the provider firewall/security group; allow 8081 only for preview
+links. Other host firewalls need configuration appropriate to that system. Alternatively use an
 SSH tunnel. Direct public-IP access is HTTP; use TLS or SSH for private work.
 
 ## 3. Handle authentication without leaking it
+
+Always use `--no-show-token` when installing as an agent, including over a PTY,
+so the token cannot appear in tool output. Manual installs show it in an
+interactive SSH terminal; redirected or captured output omits it.
 
 The token is /var/lib/agentvps/token, readable only by root/the service user.
 Do not print it in chat, logs, screenshots or generated files. Copy it into a

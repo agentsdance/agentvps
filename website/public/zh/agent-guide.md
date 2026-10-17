@@ -15,16 +15,18 @@ npm 包：`@agentsdance/agentvps@0.0.1`，命令仍为 `agentvps`。
 确认连接的是用户指定的 VPS 后，在该 VPS 上运行：
 
 ```sh
-curl -fsSL https://agentvps.ai-infra.org/install.sh -o install-agentvps.sh && sudo bash install-agentvps.sh
+curl -fsSL https://agentvps.ai-infra.org/install.sh -o install-agentvps.sh && sudo bash install-agentvps.sh --no-show-token
 sudo agentvps status
 sudo agentvps call health_check '{"browser":true}'
 ```
 
 引导脚本会先校验安装包的预设 SHA-256，再运行安装程序。服务以 `agentvps` 用户运行，监听 `0.0.0.0:8080`，工作空间为 `/var/lib/agentvps/workspace`。独立的网页预览网关使用 8081 端口。
 
-直接访问时，在主机与云防火墙中放行 TCP 8080；需要预览链接时再开放 8081。不要关闭整个防火墙。也可以使用 SSH 隧道。公网 IP 直连使用 HTTP，处理私人内容时应使用 TLS 或 SSH。
+安装脚本会在已启用的 UFW 中放行桌面端口，并输出桌面地址；不会启用或关闭防火墙。若无法从外部访问，在云服务商防火墙或安全组中放行 TCP 8080；需要预览链接时再开放 8081。其他主机防火墙需按实际配置处理。也可以使用 SSH 隧道。公网 IP 直连使用 HTTP，处理私人内容时应使用 TLS 或 SSH。
 
 ## 3. 妥善处理认证信息
+
+智能体运行安装命令时始终使用 `--no-show-token`，包括通过 PTY 运行时，以免令牌出现在工具输出中。用户手动在 SSH 终端安装时，默认会显示令牌；被重定向或捕获的输出不会显示令牌。
 
 令牌位于 `/var/lib/agentvps/token`，只有 root 和服务用户可读取。不要将它输出到聊天、日志、截图或生成的文档中。配置本地智能体时，通过 SSH 复制到权限为 `0600` 的本地文件。让用户自行将令牌粘贴到桌面登录界面；不要放入 URL。
 

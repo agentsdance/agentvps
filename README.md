@@ -57,7 +57,7 @@ curl -fsSL https://agentvps.ai-infra.org/install.sh -o install-agentvps.sh && su
 sudo agentvps call health_check '{"browser":true}'
 ```
 
-Open `http://YOUR_VPS_IP:8080` after allowing TCP 8080 in your cloud firewall. Read the login token locally with `sudo cat /var/lib/agentvps/token`; keep it private. The [agent guide](https://agentvps.ai-infra.org/agent-guide.md) provides the same workflow for an agent using your SSH access.
+The same command opens the desktop port in active UFW, detects your public IP (or uses your configured public URL), and displays the desktop URL and access token in your terminal. Open that URL and paste the token to log in. If the page is unreachable, allow TCP 8080 in your cloud provider’s firewall/security group. The installer does not enable or disable a firewall or change cloud rules. For a saved token, run `sudo cat /var/lib/agentvps/token` locally; keep it private. Captured output omits the token; agents should pass `--no-show-token` even when using a PTY. The [agent guide](https://agentvps.ai-infra.org/agent-guide.md) provides the same workflow for an agent using your SSH access.
 
 To build and install from source instead:
 
@@ -74,7 +74,7 @@ ssh ubuntu@YOUR_VPS 'sudo bash ~/install.sh ~/agentsdance-agentvps-0.0.1.tgz'
 
 The installer supports Ubuntu 22.04/24.04 on x64 or ARM64. It installs checksum-verified Node **22.23.3**, Python, the Linux desktop packages, Chromium's system dependencies, the pinned package, and a systemd service running as the unprivileged `agentvps` user. It uses separate release directories and retains the workspace/token during upgrades. Dependencies are locked by `npm-shrinkwrap.json`; browser builds follow pinned Playwright **1.64.1**.
 
-The service binds **0.0.0.0:8080**, with the preview gateway on **0.0.0.0:8081**. Allow these TCP ports in your cloud firewall for public access. `/healthz` and the login page are public; all execution/file/MCP endpoints require a bearer token. The generated token is stored in `/var/lib/agentvps/token`, mode `0600`.
+The service binds **0.0.0.0:8080**, with the preview gateway on **0.0.0.0:8081**. The website installer allows the desktop port in active UFW. Cloud firewall rules are separate; allow TCP 8080 there if needed, and 8081 only when using preview links. `/healthz` and the login page are public; all execution/file/MCP endpoints require a bearer token. The generated token is stored in `/var/lib/agentvps/token`, mode `0600`.
 
 Direct public-IP access uses HTTP. Authentication does not encrypt network traffic. For confidential workloads, add a TLS reverse proxy or use SSH forwarding. Set `AGENTVPS_HOST=127.0.0.1` if you want tunnel-only access.
 

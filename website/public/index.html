@@ -463,8 +463,10 @@
                   </div>
                   <p class="small">
                     Installs version 0.0.1: the CLI, service, Chromium, and
-                    Linux desktop. The download is checked against a pinned
-                    SHA-256. <a href="/install.sh">Read the installer ↗</a>
+                    Linux desktop. It opens the desktop port in active UFW and
+                    displays your desktop URL and access token in this terminal.
+                    The download is checked against a pinned SHA-256.
+                    <a href="/install.sh">Read the installer ↗</a>
                   </p>
                 </div>
               </details>
@@ -476,24 +478,15 @@
                 </summary>
                 <div class="step-content">
                   <p>
-                    Allow TCP <strong>8080</strong> in your VPS firewall, then
-                    open <code>http://YOUR_VPS_IP:8080</code>. Retrieve your
-                    access token locally and paste it into the login screen:
+                    Open the desktop URL printed by the installer and paste the
+                    displayed access token into the login screen. That’s it.
                   </p>
-                  <div class="code-block">
-                    <div>
-                      <span>VPS TERMINAL</span
-                      ><button
-                        aria-label="Copy token command"
-                        data-copy="vps-token"
-                      >
-                        Copy
-                      </button>
-                    </div>
-                    <pre
-                      id="vps-token"
-                    ><code>sudo cat /var/lib/agentvps/token</code></pre>
-                  </div>
+                  <p>
+                    If the page won’t load, allow TCP <strong>8080</strong> in
+                    your cloud provider’s firewall or security group. The
+                    installer handles UFW on the VPS; your provider’s rules are
+                    managed separately.
+                  </p>
                   <p class="small">
                     Keep this token private. Public IP access uses HTTP; use
                     HTTPS or SSH forwarding for private work. Port 8081 is
