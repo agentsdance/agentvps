@@ -69,8 +69,8 @@ npm ci
 npm run check
 npm test
 npm pack
-scp agentvps-0.0.1.tgz deploy/install.sh ubuntu@YOUR_VPS:~/
-ssh ubuntu@YOUR_VPS 'sudo bash ~/install.sh ~/agentvps-0.0.1.tgz'
+scp agentsdance-agentvps-0.0.1.tgz deploy/install.sh ubuntu@YOUR_VPS:~/
+ssh ubuntu@YOUR_VPS 'sudo bash ~/install.sh ~/agentsdance-agentvps-0.0.1.tgz'
 ```
 
 The installer supports Ubuntu 22.04/24.04 on x64 or ARM64. It installs checksum-verified Node **22.23.3**, Python, the Linux desktop packages, Chromium's system dependencies, the pinned package, and a systemd service running as the unprivileged `agentvps` user. It uses separate release directories and retains the workspace/token during upgrades. Dependencies are locked by `npm-shrinkwrap.json`; browser builds follow pinned Playwright **1.64.1**.
@@ -111,20 +111,20 @@ npm ci
 npm run check
 npm test
 npm pack
-scp agentvps-0.0.1.tgz ubuntu@YOUR_VPS:~/
+scp agentsdance-agentvps-0.0.1.tgz ubuntu@YOUR_VPS:~/
 
 # VPS
-sudo agentvps upgrade ~/agentvps-0.0.1.tgz
+sudo agentvps upgrade ~/agentsdance-agentvps-0.0.1.tgz
 sudo agentvps status
 sudo agentvps call health_check '{"browser":true}'
 ```
 
 Use the new version's filename when the version changes. Upgrade extracts and runs the incoming package's installer, installs a new release and restarts the service. It preserves `/var/lib/agentvps`, the access token and `/etc/agentvps/environment`. Live commands, terminals and tabs stop during restart; previews need new links. The installer restores the previous release, CLI and service configuration if activation or the liveness check fails. Capability readiness should still be checked after upgrade.
 
-If upgrading an early installation without the system CLI, upload the new release’s `deploy/install.sh` as `~/install.sh`, then run it directly:
+If upgrading an early unscoped `agentvps` installation, or one without the system CLI, upload the new release’s `deploy/install.sh` as `~/install.sh`, then run it directly:
 
 ```sh
-sudo bash ~/install.sh ~/agentvps-0.0.1.tgz
+sudo bash ~/install.sh ~/agentsdance-agentvps-0.0.1.tgz
 ```
 
 Uninstall the runtime while retaining your data:
@@ -144,7 +144,7 @@ sudo agentvps uninstall --purge
 
 Purge additionally removes `/var/lib/agentvps`, `/etc/agentvps` and the `agentvps` OS account. Back up any needed files before using it. Neither option removes CLI installations or copied token files from your other computers.
 
-For a CLI installed with `npm install -g` on another computer, upgrade with `npm install -g ./NEW_PACKAGE.tgz` and uninstall with `npm uninstall -g agentvps`. Remove its client configuration/token separately only if no longer needed.
+For a CLI installed with `npm install -g` on another computer, upgrade with `npm install -g ./NEW_PACKAGE.tgz` and uninstall with `npm uninstall -g @agentsdance/agentvps`. Remove its client configuration/token separately only if no longer needed.
 
 ## CLI command reference
 
@@ -169,7 +169,7 @@ Each command supports `--help`; `--version` reports the installed version. Initi
 Install the release locally with Node 22 or later. The client does not need a local Chromium installation:
 
 ```sh
-npm install -g https://github.com/agentsdance/agentvps/releases/download/v0.0.1/agentvps-0.0.1.tgz
+npm install -g @agentsdance/agentvps@0.0.1
 umask 077
 mkdir -p ~/.config/agentvps
 chmod 700 ~/.config/agentvps

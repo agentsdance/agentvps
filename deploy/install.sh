@@ -75,7 +75,7 @@ export PATH="${node_dir}/bin:\$PATH"
 if [ -z "\${AGENTVPS_TOKEN_FILE:-}" ] && [ -z "\${AGENTVPS_TOKEN:-}" ] && [ -r /var/lib/agentvps/token ]; then
   export AGENTVPS_TOKEN_FILE=/var/lib/agentvps/token
 fi
-exec ${node_dir}/bin/node /opt/agentvps/current/node_modules/agentvps/dist/cli.js "\$@"
+exec ${node_dir}/bin/node /opt/agentvps/current/node_modules/.bin/agentvps "\$@"
 WRAPPER
 chmod 755 /usr/local/bin/agentvps
 cat > /etc/systemd/system/agentvps.service <<UNIT
@@ -99,7 +99,7 @@ Environment=AGENTVPS_DESKTOP=1
 Environment=PLAYWRIGHT_BROWSERS_PATH=/opt/agentvps/browsers
 Environment=PATH=${node_dir}/bin:/usr/local/bin:/usr/bin:/bin
 EnvironmentFile=-/etc/agentvps/environment
-ExecStart=${node_dir}/bin/node /opt/agentvps/current/node_modules/agentvps/dist/cli.js serve
+ExecStart=${node_dir}/bin/node /opt/agentvps/current/node_modules/.bin/agentvps serve
 Restart=on-failure
 RestartSec=3
 KillMode=control-group

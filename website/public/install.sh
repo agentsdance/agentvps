@@ -12,7 +12,7 @@ export DEBIAN_FRONTEND=noninteractive
 if ! command -v curl >/dev/null; then apt-get update -qq; apt-get install -y --no-install-recommends curl ca-certificates; fi
 version=0.0.1
 package_sha=@PACKAGE_SHA256@
-package_url=https://github.com/agentsdance/agentvps/releases/download/v${version}/agentvps-${version}.tgz
+package_url=https://github.com/agentsdance/agentvps/releases/download/v${version}/agentsdance-agentvps-${version}.tgz
 curl --fail --location --retry 3 "$package_url" -o "$task_tmp/package.tgz"
 printf '%s  %s\n' "$package_sha" "$task_tmp/package.tgz" | sha256sum --check -
 tar -xOf "$task_tmp/package.tgz" package/deploy/install.sh > "$task_tmp/install.sh"

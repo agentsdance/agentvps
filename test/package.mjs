@@ -12,10 +12,9 @@ const exec = promisify(execFile);
 const root = await fs.mkdtemp(path.join(os.tmpdir(), 'agentvps-package-'));
 let daemon;
 try {
-  const { stdout } = await exec('npm', ['pack', '--silent'], { cwd: process.cwd() });
-  const tarball = path.resolve(stdout.trim().split('\n').at(-1));
+  const tarball = process.env.AGENTVPS_PACKAGE_SPEC || path.resolve((await exec('npm', ['pack', '--silent'], { cwd: process.cwd() })).stdout.trim().split('\n').at(-1));
   await exec('npm', ['install', '--prefix', root, '--omit=dev', '--no-audit', '--no-fund', tarball], { timeout: 180000 });
-  const entry = path.join(root, 'node_modules', 'agentvps');
+  const entry = path.join(root, 'node_modules', '@agentsdance', 'agentvps');
   for (const required of ['dist/cli.js', 'public/index.html', 'public/desk.js', 'public/desktop.js', 'public/vendor/novnc/core/rfb.js', 'public/vendor/novnc/docs/LICENSE.MPL-2.0', 'deploy/desktop/openbox.xml', 'public/vendor/xterm.js', 'public/vendor/addon-fit.js', 'public/vendor/xterm-LICENSE', 'skills/agentvps/SKILL.md', 'deploy/install.sh', 'README.md', 'NOTICE', 'npm-shrinkwrap.json']) await fs.access(path.join(entry, required));
   for (const script of ['install.sh', 'upgrade.sh', 'uninstall.sh']) await exec('bash', ['-n', path.join(entry, 'deploy', script)]);
   const cli = path.join(root, 'node_modules', '.bin', 'agentvps');

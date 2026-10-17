@@ -1,5 +1,5 @@
 {
-  "name": "agentvps",
+  "name": "@agentsdance/agentvps",
   "version": "0.0.1",
   "description": "A persistent remote workspace and tool server for personal AI agents",
   "type": "module",

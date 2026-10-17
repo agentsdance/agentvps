@@ -12,6 +12,6 @@ fi
 package=$(realpath "$1")
 task_tmp=$(mktemp -d)
 trap 'rm -rf "$task_tmp"' EXIT
-tar -xOf "$package" package/package.json | python3 -c 'import json,sys; p=json.load(sys.stdin); assert p.get("name")=="agentvps", "Not an AgentVPS runtime package"'
+tar -xOf "$package" package/package.json | python3 -c 'import json,sys; p=json.load(sys.stdin); assert p.get("name") in ("@agentsdance/agentvps", "agentvps"), "Not an AgentVPS runtime package"'
 tar -xOf "$package" package/deploy/install.sh > "$task_tmp/install.sh"
 bash "$task_tmp/install.sh" "$package"
