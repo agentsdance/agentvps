@@ -3,6 +3,9 @@
 AgentVPS 0.0.1 为 AI 智能体提供一台 Ubuntu 远程电脑，包括真实的 Linux 桌面、可见的 Chromium 浏览器、Shell、代码执行、文件、MCP 和 CLI。
 内置对话与智能体循环尚在规划中。npm 包为 @agentsdance/agentvps，CLI 命令为 agentvps。
 
+复用已有 VPS 和现有智能体，无需另购托管个人智能体服务订阅。
+AgentVPS 免费开源；VPS 和所选智能体、模型服务的费用及额度仍按各自规则执行。
+
 - [智能体安装指南](https://agentvps.ai-infra.org/zh/agent-guide.md)
 - [手动安装](https://agentvps.ai-infra.org/zh/#install)
 - [English agent guide](https://agentvps.ai-infra.org/agent-guide.md)

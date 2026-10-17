@@ -2,7 +2,9 @@
 
 [Website & simple install guide](https://agentvps.ai-infra.org) · [Agent guide](https://agentvps.ai-infra.org/agent-guide.md) · [Releases](https://github.com/agentsdance/agentvps/releases)
 
-Your agent's remote computer. Install AgentVPS on a VPS, then connect Claude Code, Codex, or another MCP client to its shell, code execution, files, Chromium browser, notes, and scheduled tasks.
+**Your VPS. Your agent. No extra hosted-agent subscription.** Reuse the VPS and agent you already have. Install AgentVPS, then connect Claude Code, Codex, or another MCP client to its desktop, shell, code execution, files, Chromium browser, notes, and scheduled tasks.
+
+AgentVPS is free and open source. It does not require a subscription to OpenAI Dots, Meta Muse, Grok Bot, or Manus Cue. Your VPS and chosen agent/model provider may still charge for their services and enforce usage limits.
 
 The current release supplies tools and a persistent workspace for an agent running in your chosen client. The intended product also includes a built-in personal agent with conversations and ongoing goals; that agent layer is not implemented yet. No model API credentials are bundled.
 

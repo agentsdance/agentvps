@@ -5,7 +5,7 @@
     <meta content="width=device-width,initial-scale=1" name="viewport" />
     <title>AgentVPS — 让任何 VPS 成为你的个人智能体</title>
     <meta
-      content="让任何 VPS 成为你的个人智能体。连接 Codex 或 Claude Code，使用真实的 Linux 桌面、浏览器、终端和共享文件，实时查看工作进展。"
+      content="让任何 VPS 成为你的个人智能体。复用已有 VPS 和现有智能体，获得真实桌面、浏览器与工具，无需额外订阅 AgentVPS。"
       name="description"
     />
     <link href="https://agentvps.ai-infra.org/zh/" rel="canonical" />
@@ -14,7 +14,7 @@
       property="og:title"
     />
     <meta
-      content="让任何 VPS 成为你的个人智能体。真实的桌面与 47 个工具，连接 Codex、Claude Code 或你常用的智能体。"
+      content="已有 VPS，就不必再多买一份个人智能体服务订阅。AgentVPS 免费开源，连接你常用的智能体，把工作留在自己的服务器上。"
       property="og:description"
     />
     <meta content="website" property="og:type" />
@@ -85,15 +85,17 @@
       <section class="hero wrap">
         <div class="hero-copy">
           <span class="eyebrow"
-            ><i class="status-dot"></i>给你的智能体，一台自己的电脑</span
+            ><i class="status-dot"></i>已有 VPS，就从这里开始</span
           >
           <h1>让任何 VPS<br />成为你的<br /><em>个人智能体。</em></h1>
-          <p>
-            真正的桌面，你自己的服务器。让智能体在这里浏览、写代码、完成工作，而你始终掌握控制权。
+          <p class="hero-description">
+            <strong>个人智能体，不必再多一份订阅。</strong>
+            用你已有的 VPS，连接正在使用的 Codex、Claude Code
+            或其他智能体。桌面、浏览器、终端和文件都在自己的服务器上，控制权始终在你手中。
           </p>
           <div class="hero-actions">
             <a class="button primary" href="#install"
-              >配置你的 VPS<svg
+              >用我已有的 VPS<svg
                 aria-hidden="true"
                 fill="none"
                 stroke="currentColor"
@@ -108,12 +110,15 @@
             >
           </div>
           <div class="release-line">
-            <span>开源</span><span>自主部署</span
+            <span>免费开源</span><span>无需订阅 AgentVPS</span
             ><a
               href="https://github.com/agentsdance/agentvps/releases/tag/v0.0.1"
               >v0.0.1 · 早期版本</a
             >
           </div>
+          <p class="cost-note">
+            VPS 和你选择的智能体或模型服务，仍按各自规则计费。
+          </p>
         </div>
         <div class="hero-stage" id="computer">
           <div class="stage-index">
@@ -935,6 +940,21 @@ sudo agentvps uninstall</code></pre>
           </div>
           <div>
             <details>
+              <summary>还需要购买个人智能体服务的订阅吗？</summary>
+              <p>
+                不需要。使用 AgentVPS，无需订阅
+                <a href="https://openai.com/index/introducing-dots/"
+                  >OpenAI Dots</a
+                >、 <a href="https://ai.meta.com/muse/">Meta Muse</a>、
+                <a href="https://x.ai/news/introducing-grok-bot">Grok Bot</a> 或
+                <a href="https://manus.im/blog/introducing-manus-2-0"
+                  >Manus Cue</a
+                >。 复用已有 VPS，连接你正在使用的智能体即可。AgentVPS
+                免费开源； VPS
+                和所选智能体、模型服务的费用及额度，仍遵循各自的规则。
+              </p>
+            </details>
+            <details>
               <summary>现在已经是能自主工作的个人智能体了吗？</summary>
               <p>
                 0.0.1 版本提供远程电脑和工具层，需要连接 Codex、Claude Code
@@ -987,9 +1007,9 @@ sudo agentvps uninstall</code></pre>
       <section class="last-call">
         <div class="wrap">
           <div>
-            <span class="eyebrow">你的电脑，你的可能。</span>
-            <h2>给你的智能体<br />一个工作的地方。</h2>
-            <p>准备 VPS，连接智能体，开始下一件事。</p>
+            <span class="eyebrow">让你已有的 VPS，发挥新作用。</span>
+            <h2>你的 VPS。<br />你的个人智能体。</h2>
+            <p>连接你已有的智能体，无需再为 AgentVPS 增加一份订阅。</p>
             <a class="button light" href="#install"
               >开始使用<svg
                 aria-hidden="true"

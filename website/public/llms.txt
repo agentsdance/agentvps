@@ -4,6 +4,9 @@ AgentVPS 0.0.1 turns an Ubuntu VPS into a remote computer for an AI agent.
 It provides a real Linux desktop, visible Chromium, shell, code, files, MCP and CLI.
 The built-in conversational agent loop is planned, not implemented.
 
+Reuse an existing VPS and agent without another hosted personal-agent subscription.
+AgentVPS is free and open source. VPS and chosen agent/model provider fees and limits still apply.
+
 - [Agent installation guide](https://agentvps.ai-infra.org/agent-guide.md)
 - [中文安装指南](https://agentvps.ai-infra.org/zh/agent-guide.md)
 - [Manual installation](https://agentvps.ai-infra.org/#install)

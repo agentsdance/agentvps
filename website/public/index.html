@@ -5,7 +5,7 @@
     <meta content="width=device-width,initial-scale=1" name="viewport" />
     <title>AgentVPS — Turn any VPS into a personal agent</title>
     <meta
-      content="Turn any VPS into a personal agent. Connect Codex or Claude Code to a real Linux desktop, browser, terminal and shared files, and watch the work happen."
+      content="Turn any VPS into a personal agent. Reuse your existing VPS and agent, with a real desktop, browser and tools. No AgentVPS subscription required."
       name="description"
     />
     <link href="https://agentvps.ai-infra.org/" rel="canonical" />
@@ -14,7 +14,7 @@
       property="og:title"
     />
     <meta
-      content="Turn any VPS into a personal agent. A real desktop and 47 tools, connected to Codex, Claude Code or your preferred agent."
+      content="Your VPS. Your agent. No extra hosted-agent subscription. Free, open-source tools and a real desktop for the agent you already use."
       property="og:description"
     />
     <meta content="website" property="og:type" />
@@ -85,16 +85,18 @@
       <section class="hero wrap">
         <div class="hero-copy">
           <span class="eyebrow"
-            ><i class="status-dot"></i>YOUR AGENT’S NEXT COMPUTER</span
+            ><i class="status-dot"></i>YOUR VPS. YOUR AGENT. YOUR CHOICE.</span
           >
           <h1>Turn any VPS<br />into a personal<br /><em>agent.</em></h1>
-          <p>
-            A real desktop. Your own server. Give your agent a place to browse,
-            code, and get things done — with you in control.
+          <p class="hero-description">
+            <strong>A personal agent doesn’t need another subscription.</strong>
+            Use the VPS and agent you already have. Connect Codex, Claude Code,
+            or your preferred agent to a real desktop, browser, terminal, and
+            files on your own server.
           </p>
           <div class="hero-actions">
             <a class="button primary" href="#install"
-              >Set up your VPS<svg
+              >Use my VPS<svg
                 aria-hidden="true"
                 fill="none"
                 stroke="currentColor"
@@ -109,12 +111,16 @@
             >
           </div>
           <div class="release-line">
-            <span>Open source</span><span>Self-hosted</span
+            <span>Free &amp; open source</span
+            ><span>No AgentVPS subscription</span
             ><a
               href="https://github.com/agentsdance/agentvps/releases/tag/v0.0.1"
               >v0.0.1 · Early release</a
             >
           </div>
+          <p class="cost-note">
+            Your VPS and chosen agent or model service may have their own fees.
+          </p>
         </div>
         <div class="hero-stage" id="computer">
           <div class="stage-index">
@@ -959,6 +965,24 @@ sudo agentvps uninstall</code></pre>
           </div>
           <div>
             <details>
+              <summary>
+                Do I need a personal-agent service subscription?
+              </summary>
+              <p>
+                No. AgentVPS does not require a subscription to
+                <a href="https://openai.com/index/introducing-dots/"
+                  >OpenAI Dots</a
+                >, <a href="https://ai.meta.com/muse/">Meta Muse</a>,
+                <a href="https://x.ai/news/introducing-grok-bot">Grok Bot</a>,
+                or
+                <a href="https://manus.im/blog/introducing-manus-2-0"
+                  >Manus Cue</a
+                >. Reuse your existing VPS and connect an agent you already use.
+                AgentVPS is free and open source; your VPS and chosen agent or
+                model provider still set their own prices and usage limits.
+              </p>
+            </details>
+            <details>
               <summary>Is this already an autonomous personal agent?</summary>
               <p>
                 Version 0.0.1 supplies the remote computer and tool layer. Bring
@@ -1019,9 +1043,11 @@ sudo agentvps uninstall</code></pre>
       <section class="last-call">
         <div class="wrap">
           <div>
-            <span class="eyebrow">YOUR COMPUTER. YOUR POSSIBILITIES.</span>
-            <h2>Give your agent<br />a place to work.</h2>
-            <p>Bring a VPS. Connect an agent. See what happens next.</p>
+            <span class="eyebrow">USE WHAT YOU ALREADY HAVE.</span>
+            <h2>Your VPS.<br />Your personal agent.</h2>
+            <p>
+              Put your existing VPS to work. No extra AgentVPS subscription.
+            </p>
             <a class="button light" href="#install"
               >Get started<svg
                 aria-hidden="true"

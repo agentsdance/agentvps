@@ -305,6 +305,20 @@ svg {
   max-width: 405px;
   margin-top: 26px;
 }
+.hero-description strong {
+  display: block;
+  color: var(--ink);
+  font-size: 17px;
+  font-weight: 650;
+  line-height: 1.55;
+  margin-bottom: 9px;
+}
+.hero-copy > .cost-note {
+  font-size: 10px;
+  line-height: 1.7;
+  max-width: 410px;
+  margin-top: 12px;
+}
 .hero-actions {
   display: flex;
   align-items: center;

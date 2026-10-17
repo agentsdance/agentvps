@@ -7,6 +7,12 @@ The project name is **AgentVPS**, with `agentvps` as its lowercase identifier. U
 The npm package is **`@agentsdance/agentvps`**; the executable remains **`agentvps`**.
 The public website has English (`/`) and Simplified Chinese (`/zh/`) pages and
 installation guides. Its headline is “Turn any VPS into a personal agent”.
+Position the project around reusing an existing VPS and an existing agent, without
+buying another hosted personal-agent service subscription. AgentVPS itself is free
+and open source; VPS and agent/model provider fees and limits still apply.
+Mention Dots, Muse, Grok Bot and Cue as optional services, not required dependencies.
+Do not claim those services always require a separate paid subscription or that
+AgentVPS 0.0.1 already matches their full autonomous-agent capabilities.
 Preserve published release bytes. The original unscoped 0.0.1 GitHub tarball and
 the scoped npm tarball have distinct filenames and checksums.
 
