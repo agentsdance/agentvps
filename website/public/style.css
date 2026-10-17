@@ -478,45 +478,62 @@ svg {
     translate: 0 0;
   }
 }
+
 .compatibility {
+  border-block: 1px solid var(--line);
+  padding-block: 27px 22px;
+}
+.compatibility-heading {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-block: 1px solid var(--line);
-  padding-block: 24px;
-  gap: 30px;
+  gap: 20px;
 }
-.compatibility > span {
-  font: 9px var(--mono);
-  letter-spacing: 0.9px;
-  color: #626b5c;
+.compatibility-heading .eyebrow {
+  color: var(--muted);
+  font-size: 9px;
 }
-.compatibility > div {
+.compatibility-more {
+  color: var(--muted);
+  font: 10px var(--mono);
+  text-decoration: none;
+}
+.compatibility-more:hover {
+  color: var(--accent-dark);
+}
+.agent-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 22px 16px;
+  margin: 29px 0 24px;
+  padding: 0;
+}
+.agent-link {
   display: flex;
   align-items: center;
-  gap: 57px;
-}
-.compatibility b {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  font-size: 16px;
-  font-weight: 550;
-  letter-spacing: -0.4px;
-}
-.compatibility b > svg {
-  width: 20px;
-  height: 20px;
-  color: #737a6d;
-}
-.client-symbol {
-  font: 23px var(--mono);
+  min-height: 44px;
+  gap: 11px;
+  font-size: 14px;
   font-weight: 600;
+  letter-spacing: -0.3px;
+  text-decoration: none;
 }
-.claude-symbol {
-  font-size: 29px;
-  color: #bd785e;
-  line-height: 1;
+.agent-link img {
+  display: block;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  object-fit: contain;
+}
+.agent-link:hover span {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 6px;
+}
+.compatibility-note {
+  color: var(--muted);
+  font-size: 11px;
 }
 .benefits {
   padding-block: 88px 70px;
@@ -1315,6 +1332,9 @@ body:has(.preview-dialog[open]) {
   }
 }
 @media (max-width: 1150px) {
+  .agent-list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
   .wrap {
     width: calc(100% - 64px);
   }
@@ -1359,12 +1379,7 @@ body:has(.preview-dialog[open]) {
   .hero-copy > p {
     font-size: 13px;
   }
-  .compatibility > div {
-    gap: 36px;
-  }
-  .compatibility b {
-    font-size: 14px;
-  }
+
   .feature-grid {
     gap: 30px;
   }
@@ -1487,19 +1502,7 @@ body:has(.preview-dialog[open]) {
     font-size: 7px;
     padding-left: 10px;
   }
-  .compatibility > span {
-    font-size: 7px;
-  }
-  .compatibility > div {
-    gap: 25px;
-  }
-  .compatibility b {
-    font-size: 12px;
-  }
-  .compatibility b > svg {
-    width: 17px;
-    height: 17px;
-  }
+
   .benefits {
     padding-block: 65px 55px;
   }
@@ -1640,6 +1643,29 @@ body:has(.preview-dialog[open]) {
   }
 }
 @media (max-width: 680px) {
+  .compatibility {
+    padding-block: 24px;
+  }
+  .compatibility-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .agent-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 16px;
+    margin: 22px 0;
+  }
+  .agent-link {
+    font-size: 13px;
+    gap: 10px;
+  }
+  .agent-link img {
+    width: 26px;
+    height: 26px;
+    flex-basis: 26px;
+  }
+
   .wrap {
     width: calc(100% - 40px);
   }
@@ -1764,32 +1790,7 @@ body:has(.preview-dialog[open]) {
     font-size: 6px;
     letter-spacing: 0.8px;
   }
-  .compatibility {
-    display: block;
-    padding-block: 22px;
-  }
-  .compatibility > span {
-    font-size: 8px;
-  }
-  .compatibility > div {
-    justify-content: space-between;
-    gap: 16px;
-    margin-top: 16px;
-  }
-  .compatibility b {
-    font-size: 11px;
-    gap: 6px;
-  }
-  .client-symbol {
-    font-size: 21px;
-  }
-  .claude-symbol {
-    font-size: 24px;
-  }
-  .compatibility b > svg {
-    width: 16px;
-    height: 16px;
-  }
+
   .section-heading {
     display: block;
     margin-bottom: 28px;
@@ -2172,6 +2173,10 @@ body:has(.preview-dialog[open]) {
   }
 }
 @media (max-width: 360px) {
+  .agent-link {
+    font-size: 12px;
+    gap: 8px;
+  }
   .wrap {
     width: calc(100% - 32px);
   }
@@ -2208,13 +2213,7 @@ body:has(.preview-dialog[open]) {
     font-size: 9px;
     max-width: 114px;
   }
-  .compatibility > div {
-    gap: 12px;
-  }
-  .compatibility b {
-    font-size: 9px;
-    gap: 5px;
-  }
+
   .workflow {
     padding: 28px 20px;
   }

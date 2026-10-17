@@ -209,26 +209,233 @@
         </div>
       </section>
       <section aria-label="兼容的智能体" class="compatibility wrap">
-        <span>连接你喜欢的智能体</span>
-        <div>
-          <b><span class="client-symbol">⌘</span>Codex</b
-          ><b
-            ><span aria-hidden="true" class="claude-symbol">✳</span>Claude
-            Code</b
-          ><b
-            ><svg
-              aria-hidden="true"
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1.6"
-              viewBox="0 0 24 24"
-            >
-              <path d="M8 3v5m8-5v5M6 8h12v3a6 6 0 0 1-12 0Zm6 9v4"></path></svg
-            >任意 MCP 客户端</b
+        <div class="compatibility-heading">
+          <span class="eyebrow">连接你常用的智能体</span>
+          <a class="compatibility-more" href="#mcp"
+            >以及其他 MCP 客户端 <span aria-hidden="true">↗</span></a
           >
         </div>
+        <ul class="agent-list">
+          <li>
+            <a
+              class="agent-link"
+              href="https://developers.openai.com/codex/mcp/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Codex MCP 配置指南"
+            >
+              <img
+                src="/agents/codex.svg"
+                width="28"
+                height="28"
+                alt=""
+                decoding="async"
+              />
+              <span>Codex</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="agent-link"
+              href="https://code.claude.com/docs/en/mcp"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Claude Code MCP 配置指南"
+            >
+              <img
+                src="/agents/claude-code.svg"
+                width="28"
+                height="28"
+                alt=""
+                decoding="async"
+              />
+              <span>Claude Code</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="agent-link"
+              href="https://cursor.com/docs/context/mcp"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Cursor MCP 配置指南"
+            >
+              <img
+                src="/agents/cursor.svg"
+                width="28"
+                height="28"
+                alt=""
+                decoding="async"
+              />
+              <span>Cursor</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="agent-link"
+              href="https://geminicli.com/docs/tools/mcp-server/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Gemini CLI MCP 配置指南"
+            >
+              <img
+                src="/agents/gemini-cli.png"
+                width="28"
+                height="28"
+                alt=""
+                decoding="async"
+              />
+              <span>Gemini CLI</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="agent-link"
+              href="https://code.visualstudio.com/docs/agent-customization/mcp-servers"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub Copilot MCP 配置指南"
+            >
+              <img
+                src="/agents/github-copilot.svg"
+                width="28"
+                height="28"
+                alt=""
+                decoding="async"
+              />
+              <span>GitHub Copilot</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="agent-link"
+              href="https://docs.windsurf.com/windsurf/cascade/mcp"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Windsurf MCP 配置指南"
+            >
+              <img
+                src="/agents/windsurf.svg"
+                width="28"
+                height="28"
+                alt=""
+                decoding="async"
+              />
+              <span>Windsurf</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="agent-link"
+              href="https://docs.cline.bot/mcp/mcp-overview"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Cline MCP 配置指南"
+            >
+              <img
+                src="/agents/cline.png"
+                width="28"
+                height="28"
+                alt=""
+                decoding="async"
+              />
+              <span>Cline</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="agent-link"
+              href="https://opencode.ai/docs/mcp-servers/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="OpenCode MCP 配置指南"
+            >
+              <img
+                src="/agents/opencode.png"
+                width="28"
+                height="28"
+                alt=""
+                decoding="async"
+              />
+              <span>OpenCode</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="agent-link"
+              href="https://kiro.dev/docs/mcp/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Kiro MCP 配置指南"
+            >
+              <img
+                src="/agents/kiro.svg"
+                width="28"
+                height="28"
+                alt=""
+                decoding="async"
+              />
+              <span>Kiro</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="agent-link"
+              href="https://moonshotai.github.io/kimi-cli/en/customization/mcp.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Kimi Code MCP 配置指南"
+            >
+              <img
+                src="/agents/kimi-code.png"
+                width="28"
+                height="28"
+                alt=""
+                decoding="async"
+              />
+              <span>Kimi Code</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="agent-link"
+              href="https://qwenlm.github.io/qwen-code-docs/en/users/features/mcp/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Qwen Code MCP 配置指南"
+            >
+              <img
+                src="/agents/qwen-code.png"
+                width="28"
+                height="28"
+                alt=""
+                decoding="async"
+              />
+              <span>Qwen Code</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="agent-link"
+              href="https://docs.trae.ai/ide/model-context-protocol"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="TRAE MCP 配置指南"
+            >
+              <img
+                src="/agents/trae.png"
+                width="28"
+                height="28"
+                alt=""
+                decoding="async"
+              />
+              <span>TRAE</span>
+            </a>
+          </li>
+        </ul>
+        <p class="compatibility-note">
+          通过 MCP 接入。点击智能体，查看官方配置指南。
+        </p>
       </section>
       <section class="benefits wrap">
         <div class="section-heading">

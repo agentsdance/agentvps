@@ -1,0 +1,16 @@
+{
+  "codex.svg": "https://raw.githubusercontent.com/lobehub/lobe-icons/8a1b2821bb768c484fe8da20c5e1838b6bf551a9/packages/static-svg/icons/codex.svg",
+  "claude-code.svg": "https://raw.githubusercontent.com/lobehub/lobe-icons/8a1b2821bb768c484fe8da20c5e1838b6bf551a9/packages/static-svg/icons/claudecode-color.svg",
+  "cursor.svg": "https://cursor.com/marketing-static/favicon-light.svg",
+  "github-copilot.svg": "https://raw.githubusercontent.com/primer/octicons/main/icons/copilot-24.svg",
+  "gemini-cli.png": "https://geminicli.com/icon.png",
+  "windsurf.svg": "https://windsurf.com/favicon.svg",
+  "cline.png": "https://cline.bot/assets/branding/favicons/favicon-256x256.png",
+  "opencode.png": "https://opencode.ai/favicon-96x96-v3.png",
+  "kiro.svg": "https://kiro.dev/icon.svg?fe599162bb293ea0",
+  "kimi-code.png": "https://www.kimi.com/pwa-192.png",
+  "qwen-code.png": "https://qwenlm.github.io/qwen-code-docs/favicon.png",
+  "trae.png": "https://lf16-web-neutral.traecdn.ai/obj/trae-ai-static/trae_website/favicon.png",
+  "Lobe-Icons-LICENSE": "https://raw.githubusercontent.com/lobehub/lobe-icons/8a1b2821bb768c484fe8da20c5e1838b6bf551a9/LICENSE",
+  "Octicons-LICENSE": "https://raw.githubusercontent.com/primer/octicons/main/LICENSE"
+}
