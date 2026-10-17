@@ -12,7 +12,7 @@ npm 包：`@agentsdance/agentvps@0.0.3`，命令仍为 `agentvps`。
 
 请查看[系统兼容性表](https://agentvps.ai-infra.org/zh/linux-support.md)，区分已验证配置与待验证配置，并检查软件源要求。ARM64 有独立的 Node 安装包，但未经 ARM 硬件测试，不可宣称已实测。除非用户明确授权，不要重装系统或删除无关服务。
 
-[安装兼容性报告](https://agentvps.ai-infra.org/zh/install-compatibility-report.md)记录各环境的实测结果、问题修复和验证边界。
+[安装兼容性报告](https://agentvps.ai-infra.org/zh/compatibility/)记录各环境的实测结果、问题修复和验证边界。
 
 ## 2. 在 VPS 上安装
 

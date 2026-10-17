@@ -746,6 +746,18 @@ svg {
   font-size: 12px;
   max-width: 295px;
 }
+.install-heading > .compatibility-note {
+  font-size: 11px;
+  line-height: 1.9;
+  margin: 22px 0 16px;
+  padding-left: 14px;
+  border-left: 2px solid #8b9b7e;
+}
+.compatibility-note strong {
+  display: block;
+  color: var(--ink);
+  margin-bottom: 5px;
+}
 .system-note {
   display: flex;
   align-items: start;

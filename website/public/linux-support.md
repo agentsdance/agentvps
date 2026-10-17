@@ -30,4 +30,4 @@ The installer preserves SELinux enforcement and does not disable a firewall. The
 
 All platforms run the same unprivileged `agentvps` systemd service and keep files, browser profile and credentials in `/var/lib/agentvps`. This is one OS user on the VPS, not tenant or hostile-code isolation. Upgrades preserve data; live processes end on restart. Uninstall retains data unless `--purge` is explicitly requested.
 
-See the [installation compatibility report](https://agentvps.ai-infra.org/install-compatibility-report.md) for failures found, fixes, reproduction commands and test limitations.
+See the [installation compatibility report](https://agentvps.ai-infra.org/compatibility/) for failures found, fixes, reproduction commands and test limitations.

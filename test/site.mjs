@@ -162,10 +162,35 @@ try {
     );
     await page.goto(url + route + "#agents");
     assert.equal(await page.locator("#agent-guide").isVisible(), true);
+    // Follow the public entry point and check the distinction users rely on.
+    await page.locator('.install-heading a[href$="/compatibility/"]').click();
+    await page.waitForURL(url + route + "compatibility/");
+    assert.equal(await page.locator('link[rel="canonical"]').getAttribute('href'),
+      "https://agentvps.ai-infra.org" + route + "compatibility/");
+    const vps = page.locator('[data-verification="vps"]');
+    assert.equal(await vps.count(), 1);
+    assert.match(await vps.innerText(), /Debian 12/);
+    assert.equal(await page.locator('[data-verification="container"]').count(), 7);
+    assert.equal(await page.locator('[data-verification="pending"]').count(), 2);
+    assert.match(await page.locator('.report-scope').innerText(), /SELinux/);
+    for (const href of await page.locator('.report-sidebar nav a').evaluateAll(links => links.map(link => link.getAttribute('href')))) {
+      assert.equal(await page.locator(href).count(), 1, 'Report section ' + href);
+    }
+    for (const width of [1440, 1024, 768, 390, 320]) {
+      await page.setViewportSize({ width, height: 900 });
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, locale + ' report overflow at ' + width);
+      await page.screenshot({ path: path.join(output, locale + '-compatibility-' + width + '.png'), fullPage: true });
+    }
+    for (const href of await page.locator('a[href^="/"]').evaluateAll(links => [...new Set(links.map(link => link.getAttribute('href')))])) {
+      assert.equal((await fetch(url + href)).status, 200, href);
+    }
+    await page.locator('.language-link').click();
+    await page.waitForURL(url + (chinese ? '/' : '/zh/') + 'compatibility/');
+    assert.equal(await page.locator('html').getAttribute('lang'), chinese ? 'en' : 'zh-Hans');
   }
   assert.deepEqual(errors, []);
   console.log(
-    "PASS: English/Chinese desktop/mobile layouts, language switch, translated copy actions, guide tabs/deep links, keyboard access, metadata, links and pinned installer.",
+    "PASS: English/Chinese desktop/mobile layouts, language switch, translated copy actions, guide tabs/deep links, keyboard access, metadata, links, pinned installer and compatibility report verification tiers.",
   );
 } finally {
   await browser.close();

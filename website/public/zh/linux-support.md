@@ -30,4 +30,4 @@ Debian 和 Ubuntu 使用 APT，以及随固定 Playwright 版本下载的 Chromi
 
 所有系统使用同一个非特权 `agentvps` systemd 服务，数据、浏览器配置和令牌保存在 `/var/lib/agentvps`。这是 VPS 上的独立系统用户，不提供多租户或恶意代码隔离。升级保留数据，但重启会结束进程；卸载默认保留数据，只有明确指定 `--purge` 才会删除。
 
-[安装兼容性报告](https://agentvps.ai-infra.org/zh/install-compatibility-report.md)包含发现的问题、修复方式、复现命令及验证边界。
+[安装兼容性报告](https://agentvps.ai-infra.org/zh/compatibility/)包含发现的问题、修复方式、复现命令及验证边界。

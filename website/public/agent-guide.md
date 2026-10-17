@@ -16,7 +16,7 @@ Allow at least 2 GB RAM and 5 GB free disk. CPU: x64 or ARM64.
 See [the compatibility matrix](https://agentvps.ai-infra.org/linux-support.md) for
 actual verification status and repository prerequisites. ARM64 has a separate
 Node download but must not be described as live-tested without ARM hardware evidence.
-The [installation compatibility report](https://agentvps.ai-infra.org/install-compatibility-report.md)
+The [installation compatibility report](https://agentvps.ai-infra.org/compatibility/)
 records the tested environments, fixes and remaining limits.
 Do not reinstall the OS or remove unrelated services unless explicitly authorized.
 

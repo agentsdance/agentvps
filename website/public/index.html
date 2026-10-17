@@ -66,7 +66,7 @@
       >
       <nav aria-label="Main">
         <a href="#computer">The computer</a><a href="#install">Get started</a
-        ><a href="#reference">Documentation</a>
+        ><a href="#reference">Documentation</a><a href="/compatibility/">Compatibility</a>
       </nav>
       <div class="header-actions">
         <a
@@ -613,8 +613,12 @@
                   free disk<br />Sudo access required</span
                 >
               </div>
-              <a class="text-link" href="/linux-support.md"
-                >Linux compatibility
+              <p class="compatibility-note"><strong>Verified on Debian 12 VPS.</strong>
+                Debian 13, Ubuntu 22.04 / 24.04 / 26.04, Rocky Linux 9.3,
+                AlmaLinux 9.8 and CentOS Stream 9 passed container tests.
+                All tested on x64; ARM64 is not yet verified.</p>
+              <a class="text-link" href="/compatibility/"
+                >Tested systems &amp; compatibility report
                 <svg
                   aria-hidden="true"
                   fill="none"
@@ -698,7 +702,7 @@
                   <p>
                     If the page won’t load, allow TCP <strong>8080</strong> in
                     your cloud provider’s firewall or security group. The
-                    installer handles UFW on the VPS; your provider’s rules are
+                    installer handles active UFW or firewalld on the VPS; your provider’s rules are
                     managed separately.
                   </p>
                   <p class="small">
@@ -1116,6 +1120,7 @@ sudo agentvps uninstall</code></pre>
         <p>A computer of your own, for an agent of your choice.</p>
       </div>
       <div class="footer-links">
+        <a href="/compatibility/">Compatibility report</a>
         <a href="https://github.com/agentsdance/agentvps">Source code ↗</a
         ><a href="https://github.com/agentsdance/agentvps/releases/tag/v0.0.3"
           >Release 0.0.3</a

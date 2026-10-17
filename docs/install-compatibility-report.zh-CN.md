@@ -18,7 +18,9 @@ Debian 12 使用真实 VPS、systemd 服务、公网 MCP 和原生 Linux 桌面�
 | Debian 13 x64 | 固定摘要容器 | 依赖安装、MCP、PTY、原生桌面、四种分辨率及 CSV 工作流通过 |
 | Rocky Linux 9.3 x64 | 固定摘要容器 | DNF 依赖安装、MCP、PTY、原生桌面、四种分辨率及 CSV 工作流通过 |
 | AlmaLinux 9.8 x64 | 固定摘要容器 | DNF 依赖安装、MCP、PTY、原生桌面、四种分辨率及 CSV 工作流通过 |
-| Ubuntu 22.04、24.04、26.04 x64 | 固定摘要容器 | 三个版本均通过 0.0.3 依赖、MCP、PTY、桌面、四种分辨率及 CSV 工作流；22.04 曾通过 0.0.2 实机验证 |
+| Ubuntu 22.04 x64 | 固定摘要容器 | 0.0.3 依赖、MCP、PTY、桌面、四种分辨率及 CSV 工作流通过；曾通过 0.0.2 实机验证 |
+| Ubuntu 24.04 x64 | 固定摘要容器 | 依赖、MCP、PTY、桌面、四种分辨率及 CSV 工作流通过 |
+| Ubuntu 26.04 x64 | 固定摘要容器 | 依赖、MCP、PTY、桌面、四种分辨率及 CSV 工作流通过 |
 | CentOS Stream 9 x64 | 固定摘要容器 | DNF 依赖、MCP、PTY、桌面、四种分辨率及 CSV 工作流通过 |
 | RHEL 9 | 需要已有订阅及 CodeReady Builder | 已实现安装路径，尚未实测 |
 | ARM64 | 独立 Node 安装包及固定校验值 | 尚无 ARM 硬件测试，不能宣称已实测 |

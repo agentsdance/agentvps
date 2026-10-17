@@ -19,7 +19,8 @@ The acceptance checks cover authentication, workspace identity, Python/Node/Bash
 | Debian 12 x64 | Fresh Tencent VPS, systemd | Fresh install, browser/desktop readiness, real Codex MCP, CSV workflow, restored-state checks and automatic startup after a real reboot passed |
 | Debian 13 x64 | Pinned container | Native dependency build, MCP/PTY/desktop/four resolutions and CSV workflow passed |
 | Ubuntu 22.04 x64 | Pinned container; previous VPS baseline | 0.0.3 native dependencies, MCP/PTY/desktop/four resolutions and CSV workflow passed; earlier 0.0.2 also passed on the real VPS |
-| Ubuntu 24.04 / 26.04 x64 | Separate pinned containers | Both versions passed native dependencies, MCP/PTY/desktop/four resolutions and CSV workflow |
+| Ubuntu 24.04 x64 | Pinned container | Native dependencies, MCP/PTY/desktop/four resolutions and CSV workflow passed |
+| Ubuntu 26.04 x64 | Pinned container | Native dependencies, MCP/PTY/desktop/four resolutions and CSV workflow passed |
 | Rocky Linux 9.3 x64 | Pinned container | Native DNF dependency build, MCP/PTY/desktop/four resolutions and CSV workflow passed |
 | AlmaLinux 9.8 x64 | Pinned container | Native DNF dependencies, MCP/PTY/desktop/four resolutions and CSV workflow passed |
 | CentOS Stream 9 x64 | Pinned container | Native DNF dependencies, MCP/PTY/desktop/four resolutions and CSV workflow passed |

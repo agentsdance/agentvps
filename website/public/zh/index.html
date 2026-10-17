@@ -66,7 +66,7 @@
       >
       <nav aria-label="主导航">
         <a href="#computer">远程电脑</a><a href="#install">开始使用</a
-        ><a href="#reference">使用文档</a>
+        ><a href="#reference">使用文档</a><a href="/zh/compatibility/">系统兼容性</a>
       </nav>
       <div class="header-actions">
         <a
@@ -607,8 +607,12 @@
                   可用磁盘 5 GB<br />需要 sudo 权限</span
                 >
               </div>
-              <a class="text-link" href="/zh/linux-support.md"
-                >系统兼容性
+              <p class="compatibility-note"><strong>Debian 12 已通过 VPS 实机验证。</strong>
+                Debian 13、Ubuntu 22.04 / 24.04 / 26.04、Rocky Linux 9.3、
+                AlmaLinux 9.8 和 CentOS Stream 9 已通过容器测试。
+                均为 x64；ARM64 尚未实测。</p>
+              <a class="text-link" href="/zh/compatibility/"
+                >查看已验证系统与兼容性报告
                 <svg
                   aria-hidden="true"
                   fill="none"
@@ -685,7 +689,7 @@
                   <p>
                     如果页面无法打开，请在云服务商的防火墙或安全组中放行 TCP
                     <strong>8080</strong>。安装脚本会处理 VPS 上的
-                    UFW；云端防火墙需在服务商控制台单独设置。
+                    已启用的 UFW 或 firewalld；云端防火墙需在服务商控制台单独设置。
                   </p>
                   <p class="small">
                     请妥善保管令牌。公网 IP 访问使用
@@ -1054,6 +1058,7 @@ sudo agentvps uninstall</code></pre>
         <p>你自己的电脑，你喜欢的智能体。</p>
       </div>
       <div class="footer-links">
+        <a href="/zh/compatibility/">系统兼容性报告</a>
         <a href="https://github.com/agentsdance/agentvps">源代码 ↗</a
         ><a href="https://github.com/agentsdance/agentvps/releases/tag/v0.0.3"
           >0.0.3 版本</a
