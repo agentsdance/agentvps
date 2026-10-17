@@ -1,6 +1,7 @@
 import { spawn, execFile, type ChildProcess } from 'node:child_process';
 import { promisify } from 'node:util';
 import fs from 'node:fs/promises';
+import { constants } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { randomBytes, randomUUID } from 'node:crypto';
@@ -15,6 +16,17 @@ type Mode = 'watch' | 'control';
 type Ticket = { mode: Mode; expires: number; session: string };
 const assets = fileURLToPath(new URL('../deploy/desktop/', import.meta.url));
 const run = promisify(execFile);
+
+// Debian and RPM distributions use different names for the same TigerVNC tools.
+async function desktopBinary(names: string[]) {
+  for (const name of names) {
+    for (const directory of (process.env.PATH || '/usr/bin:/bin').split(path.delimiter)) {
+      const candidate = path.join(directory, name);
+      try { await fs.access(candidate, constants.X_OK); return candidate; } catch { /* try next */ }
+    }
+  }
+  throw new Error(`Missing desktop dependency: ${names.join(' or ')}. Rerun the Linux installer.`);
+}
 
 /** One owner, one X display. VNC ports are loopback-only; the public stream uses one-use tickets. */
 export class Desktop {
@@ -43,7 +55,7 @@ export class Desktop {
       note: 'Take over blocks new browser and desktop tool mutations. Already running actions, shell jobs and schedules continue.' };
   }
   assertAgentControl() { this.prune(); if (this.controller) throw new ToolError('A person has taken over the desktop. Wait until they return control before sending browser or desktop input.', 409); }
-  private requireReady() { if (!this.ready) throw new ToolError(this.enabled ? 'The Linux desktop is not ready.' : 'The Linux desktop is disabled. Use the Ubuntu installer or AGENTVPS_DESKTOP=1.', 503); }
+  private requireReady() { if (!this.ready) throw new ToolError(this.enabled ? 'The Linux desktop is not ready.' : 'The Linux desktop is disabled. Use the Linux installer or AGENTVPS_DESKTOP=1.', 503); }
   private start(command: string, args: string[]) {
     const child = spawn(command, args, { env: workloadEnv(this.config.workspace), cwd: this.config.workspace, stdio: ['ignore', 'pipe', 'pipe'] });
     this.children.push(child);
@@ -54,6 +66,21 @@ export class Desktop {
     return child;
   }
   private async command(command: string, args: string[]) { return run(command, args, { env: workloadEnv(this.config.workspace), timeout: 10000, maxBuffer: 1024 * 1024 }); }
+  private async wallpaper(width: number, height: number) {
+    const file = path.join(this.config.state, 'desktop', 'wallpaper.png');
+    const binary = await desktopBinary(['feh', 'display']);
+    if (path.basename(binary) === 'feh') {
+      await this.command(binary, ['--no-fehbg', '--bg-fill', file]);
+    } else {
+      try { await this.command(binary, ['-window', 'root', '-resize', `${width}x${height}!`, file]); }
+      catch (error) {
+        // EPEL ImageMagick 6 returns 1 after a successful root-window update
+        // with no diagnostic. Pixel comparison verified this on Rocky 9.
+        const result = error as { code?: number; stderr?: string; killed?: boolean; signal?: string };
+        if (result.code !== 1 || result.killed || result.signal || result.stderr?.trim()) throw error;
+      }
+    }
+  }
   async init() {
     if (!this.enabled) return;
     if (process.platform !== 'linux') throw new Error('The graphical desktop requires Linux.');
@@ -62,7 +89,7 @@ export class Desktop {
     process.env.XDG_RUNTIME_DIR = path.join(state, 'run'); await fs.mkdir(process.env.XDG_RUNTIME_DIR, { recursive: true, mode: 0o700 });
     try {
       await this.command('xauth', ['-f', process.env.XAUTHORITY, 'add', ':99', '.', randomBytes(16).toString('hex')]);
-      this.start('Xtigervnc', [':99', '-geometry', `${this.width}x${this.height}`, '-depth', '24', '-nolisten', 'tcp', '-auth', process.env.XAUTHORITY, '-localhost', 'yes', '-rfbport', '5900', '-SecurityTypes', 'None', '-AlwaysShared', '-AcceptSetDesktopSize=0', '-desktop', 'AgentVPS']);
+      this.start(await desktopBinary(['Xtigervnc', 'Xvnc']), [':99', '-geometry', `${this.width}x${this.height}`, '-depth', '24', '-nolisten', 'tcp', '-auth', process.env.XAUTHORITY, '-localhost', 'yes', '-rfbport', '5900', '-SecurityTypes', 'None', '-AlwaysShared', '-AcceptSetDesktopSize=0', '-desktop', 'AgentVPS']);
       let displayReady = false;
       for (let i = 0; i < 40; i++) { try { await this.command('xdpyinfo', []); displayReady = true; break; } catch { await delay(100); } }
       if (!displayReady) throw new Error('The Linux display did not become ready.');
@@ -73,13 +100,13 @@ export class Desktop {
         bus.once('error', error => { clearTimeout(timeout); reject(error); });
       });
       await this.command('rsvg-convert', ['-o', path.join(state, 'wallpaper.png'), path.join(assets, 'wallpaper.svg')]);
-      await this.command('feh', ['--no-fehbg', '--bg-fill', path.join(state, 'wallpaper.png')]);
+      await this.wallpaper(this.width, this.height);
       const theme = path.join(process.env.HOME || this.config.home, '.themes', 'AgentVPS', 'openbox-3');
       await fs.mkdir(theme, { recursive: true }); await fs.copyFile(path.join(assets, 'themerc'), path.join(theme, 'themerc'));
       const terminal = path.join(process.env.HOME || this.config.home, '.config', 'xfce4', 'terminal'); await fs.mkdir(terminal, { recursive: true });
       try { await fs.writeFile(path.join(terminal, 'terminalrc'), '[Configuration]\nFontName=DejaVu Sans Mono 12\nColorForeground=#d8e1cd\nColorBackground=#202a23\nColorCursor=#d8e1cd\nMiscMenubarDefault=FALSE\nMiscToolbarDefault=FALSE\nScrollingBar=TERMINAL_SCROLLBAR_NONE\n', { flag: 'wx' }); } catch (error) { if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error; }
       this.start('openbox', ['--config-file', path.join(assets, 'openbox.xml')]);
-      this.start('tigervncconfig', ['-nowin']);
+      this.start(await desktopBinary(['tigervncconfig', 'vncconfig']), ['-nowin']);
       const tint = (await fs.readFile(path.join(assets, 'tint2rc'), 'utf8')).replaceAll('@ASSETS@', assets);
       await fs.writeFile(path.join(state, 'tint2rc'), tint);
       this.start('tint2', ['-c', path.join(state, 'tint2rc')]);
@@ -148,6 +175,8 @@ export class Desktop {
     const { stdout } = await this.command('xrandr', ['--query']);
     const output = stdout.match(/^(\S+) connected/m)?.[1]; if (!output) throw new ToolError('No resizable display found.');
     await this.command('xrandr', ['--output', output, '--mode', `${width}x${height}`]);
+    // X11 otherwise tiles the old-size root pixmap after a resolution change.
+    await this.wallpaper(width, height);
     this.width = width; this.height = height;
     return this.status();
   }
@@ -155,7 +184,11 @@ export class Desktop {
     this.requireReady();
     const relative = file || `artifacts/desktop-${Date.now()}-${randomUUID().slice(0, 6)}.png`;
     const temporary = path.join(this.config.state, `desktop-${randomUUID()}.png`);
-    try { await this.command('scrot', [temporary]); const buffer = await fs.readFile(temporary); return { ...await this.workspace.write(relative, buffer), mimeType: 'image/png', image: buffer.toString('base64') }; }
+    try {
+      const binary = await desktopBinary(['scrot', 'import']);
+      await this.command(binary, path.basename(binary) === 'scrot' ? [temporary] : ['-window', 'root', temporary]);
+      const buffer = await fs.readFile(temporary); return { ...await this.workspace.write(relative, buffer), mimeType: 'image/png', image: buffer.toString('base64') };
+    }
     finally { await fs.rm(temporary, { force: true }); }
   }
   async input(args: { action: string; x?: number; y?: number; button?: number; key?: string; text?: string; amount?: number }) {

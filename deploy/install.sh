@@ -1,17 +1,20 @@
 #!/usr/bin/env bash
-# Install a built AgentVPS npm tarball on Ubuntu 22.04/24.04. Run with sudo.
+# Install a built AgentVPS npm tarball on a supported Linux VPS. Run with sudo.
 set -euo pipefail
 if [[ ${EUID} -ne 0 || $# -ne 1 ]]; then
-  echo 'Usage: sudo bash deploy/install.sh /absolute/path/agentvps-0.0.2.tgz' >&2
+  echo 'Usage: sudo bash deploy/install.sh /absolute/path/agentsdance-agentvps-VERSION.tgz' >&2
   exit 1
 fi
 package=$(realpath "$1")
 test -f "$package"
-source /etc/os-release
-if [[ ${ID} != ubuntu || ( ${VERSION_ID} != 22.04 && ${VERSION_ID} != 24.04 ) ]]; then
-  echo 'This installer supports Ubuntu 22.04 and 24.04. See README for a manual installation.' >&2
-  exit 1
-fi
+# Older AgentVPS upgraders extract only install.sh. Load support files from the
+# incoming archive so upgrades from 0.0.1/0.0.2 still work.
+task_tmp=$(mktemp -d)
+trap 'rm -rf "$task_tmp"' EXIT
+tar -xOf "$package" package/deploy/platform.sh > "$task_tmp/platform.sh"
+source "$task_tmp/platform.sh"
+agentvps_detect_platform
+[[ -d /run/systemd/system ]] || { echo 'AgentVPS requires a VPS booted with systemd.' >&2; exit 1; }
 if [[ -e /usr/local/bin/agentvps ]] && ! grep -q 'AgentVPS managed wrapper' /usr/local/bin/agentvps; then
   echo 'An existing /usr/local/bin/agentvps was not installed by this installer; move it aside before installing.' >&2
   exit 1
@@ -23,15 +26,10 @@ case $(uname -m) in
 esac
 node_version=22.23.3
 node_dir=/opt/agentvps/node-v${node_version}
-export DEBIAN_FRONTEND=noninteractive
-apt-get update -qq
-apt-get install -y --no-install-recommends ca-certificates curl xz-utils python3 python3-venv build-essential
-apt-get install -y --no-install-recommends tigervnc-standalone-server openbox tint2 thunar xfce4-terminal x11vnc xdotool wmctrl x11-utils x11-xserver-utils xauth feh dbus-x11 scrot librsvg2-bin adwaita-icon-theme-full fonts-dejavu-core
+agentvps_install_system_packages
 if ! id agentvps >/dev/null 2>&1; then useradd --system --create-home --home-dir /var/lib/agentvps --shell /bin/bash agentvps; fi
 install -d -o agentvps -g agentvps -m 700 /var/lib/agentvps /var/lib/agentvps/workspace
 install -d -o root -g root /opt/agentvps
-task_tmp=$(mktemp -d)
-trap 'rm -rf "$task_tmp"' EXIT
 if [[ ! -x ${node_dir}/bin/node ]]; then
   archive=node-v${node_version}-linux-${arch}.tar.xz
   curl --fail --location --retry 3 "https://nodejs.org/dist/v${node_version}/${archive}" -o "${task_tmp}/${archive}"
@@ -44,8 +42,15 @@ release=/opt/agentvps/releases/$(date -u +%Y%m%dT%H%M%SZ)-$$
 install -d -o agentvps -g agentvps "$release" /opt/agentvps/browsers
 install -o agentvps -g agentvps -m 600 "$package" "$release/runtime.tgz"
 runuser -u agentvps -- env HOME=/var/lib/agentvps PATH="$PATH" npm install --prefix "$release" --omit=dev --no-audit --no-fund "$release/runtime.tgz"
-PLAYWRIGHT_BROWSERS_PATH=/opt/agentvps/browsers "$release/node_modules/.bin/playwright" install-deps chromium
-runuser -u agentvps -- env HOME=/var/lib/agentvps PATH="$PATH" PLAYWRIGHT_BROWSERS_PATH=/opt/agentvps/browsers "$release/node_modules/.bin/playwright" install chromium
+browser_environment=''
+if [[ $agentvps_package_manager == apt ]]; then
+  PLAYWRIGHT_BROWSERS_PATH=/opt/agentvps/browsers "$release/node_modules/.bin/playwright" install-deps chromium
+  runuser -u agentvps -- env HOME=/var/lib/agentvps PATH="$PATH" PLAYWRIGHT_BROWSERS_PATH=/opt/agentvps/browsers "$release/node_modules/.bin/playwright" install chromium
+else
+  # Use the distribution's Chromium build and dependencies on RPM systems.
+  browser_binary=$(command -v chromium-browser || command -v chromium)
+  browser_environment="Environment=AGENTVPS_BROWSER_EXECUTABLE=${browser_binary}"
+fi
 previous_release=$(readlink -f /opt/agentvps/current || true)
 if [[ -f /etc/systemd/system/agentvps.service ]]; then cp /etc/systemd/system/agentvps.service "$task_tmp/previous.service"; fi
 if [[ -f /usr/local/bin/agentvps ]]; then cp -p /usr/local/bin/agentvps "$task_tmp/previous.cli"; fi
@@ -72,7 +77,10 @@ cat > /usr/local/bin/agentvps <<WRAPPER
 #!/bin/sh
 # AgentVPS managed wrapper
 export PATH="${node_dir}/bin:\$PATH"
-exec ${node_dir}/bin/node --env-file-if-exists=/etc/agentvps/environment /opt/agentvps/current/node_modules/.bin/agentvps "\$@"
+if [ -r /etc/agentvps/environment ]; then
+  exec ${node_dir}/bin/node --env-file=/etc/agentvps/environment /opt/agentvps/current/node_modules/.bin/agentvps "\$@"
+fi
+exec ${node_dir}/bin/node /opt/agentvps/current/node_modules/.bin/agentvps "\$@"
 WRAPPER
 chmod 755 /usr/local/bin/agentvps
 cat > /etc/systemd/system/agentvps.service <<UNIT
@@ -94,6 +102,7 @@ Environment=AGENTVPS_PORT=8080
 Environment=AGENTVPS_PREVIEW_PORT=8081
 Environment=AGENTVPS_DESKTOP=1
 Environment=PLAYWRIGHT_BROWSERS_PATH=/opt/agentvps/browsers
+${browser_environment:-}
 Environment=PATH=${node_dir}/bin:/usr/local/bin:/usr/bin:/bin
 EnvironmentFile=-/etc/agentvps/environment
 ExecStart=${node_dir}/bin/node /opt/agentvps/current/node_modules/.bin/agentvps serve

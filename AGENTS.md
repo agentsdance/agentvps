@@ -4,6 +4,8 @@
 
 The project name is **AgentVPS**, with `agentvps` as its lowercase identifier. Use this name in new documentation, packages, commands, and configuration.
 
+In Chinese product copy, translate **personal agent** as **个人助理**. Keep technical references to an agent or MCP client as **智能体** where appropriate.
+
 The npm package is **`@agentsdance/agentvps`**; the executable remains **`agentvps`**.
 The public website has English (`/`) and Simplified Chinese (`/zh/`) pages and
 installation guides. Its headline is “Turn any VPS into a personal agent”.
@@ -108,9 +110,9 @@ Keep lifecycle management separate from tool execution so a direct VPS deploymen
 
 Current deployment:
 
-1. **Target:** the user provided a Tencent Lighthouse VPS and authorized installation/testing, including OS reinstall if necessary. Keep connection details outside this public repository. Ubuntu 22.04 x64 was retained.
+1. **Target:** the user provided a Tencent Lighthouse VPS and authorized installation/testing, including OS reinstall if necessary. Keep connection details outside this public repository. The user requested broader Linux support and an alternate-OS test. The test VPS was reinstalled from Ubuntu 22.04 to Debian 12 x64 with a provider system-disk snapshot and a private local AgentVPS backup. Keep capability verification current; OS reinstall alone does not prove runtime readiness.
 2. **Runtime:** systemd service `agentvps`, unprivileged OS user `agentvps`, data in `/var/lib/agentvps`, releases under `/opt/agentvps`. This is direct OS-user execution, not per-task container isolation.
-3. **Network:** API/console/MCP on `0.0.0.0:8080`; separate preview gateway on `0.0.0.0:8081`. Tencent's firewall allows those TCP ports. The existing Nginx HTTPS site was disabled with a configuration backup under `/var/backups/agentvps`.
+3. **Network:** API/console/MCP on `0.0.0.0:8080`; separate preview gateway on `0.0.0.0:8081`. Tencent's firewall allows those TCP ports. The old Nginx HTTPS configuration was backed up before reinstall; the Debian host uses the requested direct public-IP access.
 4. **Connections:** direct authenticated Streamable HTTP MCP. Version 0.0.2 removes the local stdio bridge and remote-client commands. VPS administrative commands use the local service. The current runtime does not call a model API or run its own agent loop. Do not describe that missing agent layer as implemented.
 5. **Durability:** files, notes, schedules, browser profile and completed receipts persist. Live jobs, PTYs, browser tabs and preview links do not survive daemon restart. Browser downloads persist as files.
 
@@ -148,10 +150,16 @@ Use controlled fixture data for repeatable testing. Verify that all steps use th
 
 ## Implementation status
 
-The runtime, VPS CLI, remote HTTP MCP, web console, Ubuntu installer and bundled `skills/agentvps` instructions are implemented. Dependencies are pinned in `npm-shrinkwrap.json`. Local integration checks cover authentication, process lifecycle, binary files, path restrictions, code, real PTYs, remote HTTP MCP, preview access and restart recovery. The browser-download → Python → dashboard → screenshot acceptance workflow has passed on the actual VPS through its public IP, including intact file and MCP image return paths. A real recurring task has also produced a successful execution receipt on the VPS.
+The runtime, VPS CLI, remote HTTP MCP, web console, Linux installer and bundled `skills/agentvps` instructions are implemented. Dependencies are pinned in `npm-shrinkwrap.json`. Local integration checks cover authentication, process lifecycle, binary files, path restrictions, code, real PTYs, remote HTTP MCP, preview access and restart recovery. The browser-download → Python → dashboard → screenshot acceptance workflow has passed on the actual VPS through its public IP, including intact file and MCP image return paths. A real recurring task has also produced a successful execution receipt on the VPS.
 
 The public MCP endpoint has returned 47 tools and executed a remote shell command through the official MCP client; unauthenticated requests are rejected. The system-wide VPS CLI and its upgrade command have been exercised on the VPS. Service restart checks confirmed persistent workspace identity, files, notes, schedules and browser storage, with live terminals ending as documented. Built-in conversational sessions, model-driven background goals and notifications remain unfinished requirements.
 
 Run `npm run check`, `npm run build`, `npm test`, `npm run test:e2e`, and `npm run test:package` as appropriate to changes. Remote acceptance uses `AGENTVPS_URL`, `AGENTVPS_TOKEN_FILE`, and `AGENTVPS_EXPECT_PLATFORM=linux`. Test evidence is under ignored `test-results/`; keep credentials out of the repository. Do not claim that reference runtimes themselves were deployed: this installation runs AgentVPS's original implementation.
 
 Release 0.0.1 adds a real streamed Linux desktop with visible shared Chromium, native terminal and file manager, four live resolutions, fullscreen, clipboard and watch/takeover coordination. Server-side watch-only input rejection and exclusive takeover were verified. Codex's registered app-server MCP connection operated that desktop and created a shared file in the visible native terminal; this did not start a model turn. The original release had 11 CLI commands; 0.0.2 retains seven VPS-side commands and removes connect, mcp, upload and download. All retained commands must be package-tested; destructive uninstall and failed-upgrade recovery checks run only in disposable containers. The public website source is under `website/`, with manual and agent installation guides. Keep public documentation separate from the authenticated VPS console.
+
+## Linux compatibility requirements
+
+The installer must support mainstream Linux server distributions, rather than requiring users to switch to Ubuntu. Keep native APT and DNF paths, exact supported versions, architecture limits, and verification tiers explicit. Read `docs/linux-support.md` before claiming compatibility. Repository availability, systemd service startup, the real desktop/browser and restart behavior all need verification. Never label a container test as a full VPS/SELinux test. Preserve already published package bytes; release OS support changes as a new version.
+
+Release 0.0.3 adds native Debian/Ubuntu APT and RHEL-family DNF installation paths. Debian 12 passed a fresh real-VPS installation, restore, real reboot, legacy upgrade and registered Codex MCP checks. Debian 13, Ubuntu 22.04/24.04/26.04, Rocky 9.3, AlmaLinux 9.8 and CentOS Stream 9 passed dependency and desktop/workflow checks in pinned x64 containers. RHEL subscription hosts, ARM64 hardware and full RPM VM/SELinux behavior remain unverified. See `docs/install-compatibility-report.md` and its Chinese companion for failures, fixes and boundaries.

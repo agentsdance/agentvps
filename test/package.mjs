@@ -15,11 +15,11 @@ try {
   await exec('npm', ['install', '--prefix', root, '--omit=dev', '--no-audit', '--no-fund', tarball], { timeout: 180000 });
   const entry = path.join(root, 'node_modules', '@agentsdance', 'agentvps');
   for (const required of ['dist/cli.js', 'public/index.html', 'public/desk.js', 'public/desktop.js', 'public/vendor/novnc/core/rfb.js', 'public/vendor/novnc/docs/LICENSE.MPL-2.0', 'deploy/desktop/openbox.xml', 'public/vendor/xterm.js', 'public/vendor/addon-fit.js', 'public/vendor/xterm-LICENSE', 'skills/agentvps/SKILL.md', 'deploy/install.sh', 'README.md', 'NOTICE', 'npm-shrinkwrap.json']) await fs.access(path.join(entry, required));
-  for (const script of ['install.sh', 'upgrade.sh', 'uninstall.sh']) await exec('bash', ['-n', path.join(entry, 'deploy', script)]);
+  for (const script of ['install.sh', 'platform.sh', 'upgrade.sh', 'uninstall.sh']) await exec('bash', ['-n', path.join(entry, 'deploy', script)]);
   const cli = path.join(root, 'node_modules', '.bin', 'agentvps');
   assert.match((await exec(cli, ['help'])).stdout, /remote computer/);
   for (const command of ['serve', 'status', 'tools', 'call', 'exec', 'upgrade', 'uninstall']) assert.match((await exec(cli, [command, '--help'])).stdout, new RegExp(command));
-  assert.equal((await exec(cli, ['--version'])).stdout.trim(), '0.0.2');
+  assert.equal((await exec(cli, ['--version'])).stdout.trim(), '0.0.3');
   await assert.rejects(exec(cli, ['typo'], { env: { PATH: process.env.PATH } }), /Unknown command/);
   await assert.rejects(exec(cli, ['status', 'junk'], { env: { PATH: process.env.PATH } }), /Identify this VPS/);
   const dataHome = path.join(root, 'data');

@@ -1,6 +1,6 @@
 # AgentVPS
 
-AgentVPS 0.0.2 turns an Ubuntu VPS into a remote computer for an AI agent.
+AgentVPS 0.0.3 turns a Linux VPS into a remote computer for an AI agent.
 It provides a real Linux desktop, visible Chromium, shell, code, files, MCP and CLI.
 The built-in conversational agent loop is planned, not implemented.
 
@@ -13,7 +13,7 @@ Agents connect directly to authenticated Streamable HTTP MCP at /mcp. No local A
 - [中文安装指南](https://agentvps.ai-infra.org/zh/agent-guide.md)
 - [Manual installation](https://agentvps.ai-infra.org/#install)
 - [Source and complete reference](https://github.com/agentsdance/agentvps)
-- [Release 0.0.2](https://github.com/agentsdance/agentvps/releases/tag/v0.0.2)
+- [Release 0.0.3](https://github.com/agentsdance/agentvps/releases/tag/v0.0.3)
 - [Agent skill](https://raw.githubusercontent.com/agentsdance/agentvps/main/skills/agentvps/SKILL.md)
 
 All tool paths refer to the VPS. Call workspace_info first.

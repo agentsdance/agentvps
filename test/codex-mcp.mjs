@@ -19,22 +19,22 @@ const rpc = (method, params) => new Promise((resolve, reject) => {
 });
 const output = path.resolve('test-results/codex-desktop'); await fs.mkdir(output, { recursive: true });
 try {
-  await rpc('initialize', { clientInfo: { name: 'agentvps-desktop-acceptance', version: '0.0.2' }, capabilities: { experimentalApi: true } });
+  await rpc('initialize', { clientInfo: { name: 'agentvps-desktop-acceptance', version: '0.0.3' }, capabilities: { experimentalApi: true } });
   child.stdin.write(JSON.stringify({ jsonrpc: '2.0', method: 'initialized' }) + '\n');
   const { thread } = await rpc('thread/start', { cwd: process.cwd(), ephemeral: true });
   const inventory = await rpc('mcpServerStatus/list', { threadId: thread.id, serverName: 'agentvps', detail: 'toolsAndAuthOnly' });
   assert.ok(JSON.stringify(inventory).includes('desktop_input'), 'Codex must discover the desktop tools');
   const raw = (tool, args = {}) => rpc('mcpServer/tool/call', { threadId: thread.id, server: 'agentvps', tool, arguments: args });
   const call = async (tool, args = {}) => { const result = await raw(tool, args); const text = result.content.find(c => c.type === 'text')?.text; if (result.isError) throw new Error(text); return JSON.parse(text); };
-  const identity = await call('workspace_info'); assert.equal(identity.version, '0.0.2'); assert.equal(identity.platform, 'linux'); assert.equal(identity.desktop.ready, true);
-  await call('file_write', { path: 'Welcome/README.md', content: '# Welcome to AgentVPS 0.0.2\n\nThis is your real Linux computer. Browser, Terminal and Files share this workspace.\n\nWatch the desktop or choose Take over to use its mouse and keyboard. Return control when finished.\n\nYour agent can connect through MCP and operate this same computer. The file codex-mcp.txt was created in a native terminal through Codex’s actual MCP connection.\n\nScreen resolutions and fullscreen are available in the toolbar. Background jobs remain visible under Commands.\n' });
+  const identity = await call('workspace_info'); assert.equal(identity.version, '0.0.3'); assert.equal(identity.platform, 'linux'); assert.equal(identity.desktop.ready, true);
+  await call('file_write', { path: 'Welcome/README.md', content: '# Welcome to AgentVPS 0.0.3\n\nThis is your real Linux computer. Browser, Terminal and Files share this workspace.\n\nWatch the desktop or choose Take over to use its mouse and keyboard. Return control when finished.\n\nYour agent can connect through MCP and operate this same computer. The file codex-mcp.txt was created in a native terminal through Codex’s actual MCP connection.\n\nScreen resolutions and fullscreen are available in the toolbar. Background jobs remain visible under Commands.\n' });
   await call('desktop_resize', { width: 1440, height: 900 });
   await call('desktop_launch', { app: 'terminal' }); await new Promise(r => setTimeout(r, 1000));
-  await call('desktop_input', { action: 'text', text: "export PS1='agentvps → '; clear; printf 'AgentVPS 0.0.2 — connected through Codex MCP\n\n'; printf 'Remote user: '; whoami; printf 'Workspace: '; pwd; printf '\nMCP → native terminal → shared file: verified\n' | tee Welcome/codex-mcp.txt" });
+  await call('desktop_input', { action: 'text', text: "export PS1='agentvps → '; clear; printf 'AgentVPS 0.0.3 — connected through Codex MCP\n\n'; printf 'Remote user: '; whoami; printf 'Workspace: '; pwd; printf '\nMCP → native terminal → shared file: verified\n' | tee Welcome/codex-mcp.txt" });
   await call('desktop_input', { action: 'key', key: 'Return' }); await new Promise(r => setTimeout(r, 600));
   const file = await call('file_read', { path: 'Welcome/codex-mcp.txt' }); assert.match(file.content, /verified/);
   const tab = await call('browser_open', { url: 'http://127.0.0.1:8080/desktop-home.html' });
-  await call('browser_evaluate', { id: tab.id, expression: `document.querySelector('h1').innerHTML='Your computer.<br>Ready to work.'; document.querySelector('.label').textContent='AGENTVPS 0.0.2 · CONNECTED THROUGH CODEX'; document.querySelector('.intro').innerHTML='This browser, terminal and file manager are running on your VPS.<br>Codex operated them through MCP while the desktop streamed live.'; document.title='Your computer · AgentVPS 0.0.2'` });
+  await call('browser_evaluate', { id: tab.id, expression: `document.querySelector('h1').innerHTML='Your computer.<br>Ready to work.'; document.querySelector('.label').textContent='AGENTVPS 0.0.3 · CONNECTED THROUGH CODEX'; document.querySelector('.intro').innerHTML='This browser, terminal and file manager are running on your VPS.<br>Codex operated them through MCP while the desktop streamed live.'; document.title='Your computer · AgentVPS 0.0.3'` });
   await call('desktop_launch', { app: 'files' }); await new Promise(r => setTimeout(r, 800));
   await call('desktop_input', { action: 'key', key: 'ctrl+l' });
   await call('desktop_input', { action: 'text', text: identity.workspace + '/Welcome' });

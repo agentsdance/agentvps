@@ -1,6 +1,6 @@
 {
   "name": "@agentsdance/agentvps",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A persistent remote workspace and tool server for personal AI agents",
   "type": "module",
   "bin": {
@@ -35,7 +35,8 @@
     "postinstall": "node scripts/fix-pty.mjs",
     "site:build": "node scripts/build-site.mjs",
     "test:site": "node test/site.mjs",
-    "test:codex": "node test/codex-mcp.mjs"
+    "test:codex": "node test/codex-mcp.mjs",
+    "test:linux": "node test/linux-mcp.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/node": "2.1.1",

@@ -62,8 +62,19 @@ PY
       else
         printf 'Host firewall: could not inspect UFW; check TCP %s access.\n' "$service_port" >&2
       fi
-    else
-      printf 'Host firewall: UFW is not installed; if you use another firewall, allow TCP %s.\n' "$service_port"
+    fi
+    if command -v firewall-cmd >/dev/null 2>&1; then
+      if firewall-cmd --state >/dev/null 2>&1; then
+        if firewall-cmd --add-port="${service_port}/tcp" && firewall-cmd --permanent --add-port="${service_port}/tcp"; then
+          printf 'Host firewall: TCP %s allowed in the default firewalld zone.\n' "$service_port"
+        else
+          printf 'Host firewall: could not save TCP %s in firewalld; inspect the active zone before connecting.\n' "$service_port" >&2
+        fi
+      else
+        echo 'Host firewall: firewalld is inactive; its state was preserved.'
+      fi
+    elif ! command -v ufw >/dev/null 2>&1; then
+      printf 'Host firewall: no UFW/firewalld detected; if you use another firewall, allow TCP %s.\n' "$service_port"
     fi
     if [[ -z $public_url ]]; then
       # Detect the egress address. Cloud NAT or proxy setups may need their own public URL.
@@ -128,21 +139,29 @@ agentvps_install() {
   if [[ ${EUID} -ne 0 ]]; then echo 'Run: sudo bash install-agentvps.sh' >&2; exit 1; fi
   local show_token=auto
   if [[ ${1:-} == --no-show-token ]]; then show_token=never; shift; fi
-  if [[ $# -gt 0 ]]; then echo 'Usage: sudo bash install-agentvps.sh [--no-show-token] (installs AgentVPS 0.0.2)' >&2; return 1; fi
+  if [[ $# -gt 0 ]]; then echo 'Usage: sudo bash install-agentvps.sh [--no-show-token] (installs AgentVPS 0.0.3)' >&2; return 1; fi
   source /etc/os-release
-  if [[ ${ID} != ubuntu || ( ${VERSION_ID} != 22.04 && ${VERSION_ID} != 24.04 ) ]]; then echo 'AgentVPS supports Ubuntu 22.04 and 24.04.' >&2; exit 1; fi
+  # The checksum-verified package performs the authoritative version check.
+  case ${ID:-} in
+    ubuntu|debian) package_manager=apt ;;
+    rocky|almalinux|centos|rhel) package_manager=dnf ;;
+    *) echo "Unsupported Linux distribution: ${ID:-unknown}. See the supported versions on the website." >&2; return 1 ;;
+  esac
   case $(uname -m) in x86_64|aarch64) ;; *) echo 'Use a 64-bit x64 or ARM64 VPS.' >&2; exit 1 ;; esac
   task_tmp=$(mktemp -d)
   trap 'rm -rf "$task_tmp"' EXIT
   export DEBIAN_FRONTEND=noninteractive
-  if ! command -v curl >/dev/null; then apt-get update -qq; apt-get install -y --no-install-recommends curl ca-certificates; fi
-  version=0.0.2
+  if ! command -v curl >/dev/null; then
+    if [[ $package_manager == apt ]]; then apt-get update -qq; apt-get install -y --no-install-recommends curl ca-certificates;
+    else dnf install -y curl ca-certificates; fi
+  fi
+  version=0.0.3
   package_sha=@PACKAGE_SHA256@
   package_url=https://github.com/agentsdance/agentvps/releases/download/v${version}/agentsdance-agentvps-${version}.tgz
   curl --fail --location --retry 3 "$package_url" -o "$task_tmp/package.tgz"
   printf '%s  %s\n' "$package_sha" "$task_tmp/package.tgz" | sha256sum --check -
-  tar -xOf "$task_tmp/package.tgz" package/deploy/install.sh > "$task_tmp/install.sh"
-  bash "$task_tmp/install.sh" "$task_tmp/package.tgz"
+  tar -xf "$task_tmp/package.tgz" -C "$task_tmp" package/deploy
+  bash "$task_tmp/package/deploy/install.sh" "$task_tmp/package.tgz"
   agentvps_finish_setup "$show_token"
 }
 

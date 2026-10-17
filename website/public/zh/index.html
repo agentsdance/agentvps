@@ -3,18 +3,18 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width,initial-scale=1" name="viewport" />
-    <title>AgentVPS — 让任何 VPS 成为你的个人智能体</title>
+    <title>AgentVPS — 让任何 VPS 成为你的个人助理</title>
     <meta
-      content="让任何 VPS 成为你的个人智能体。复用已有 VPS 和现有智能体，获得真实桌面、浏览器与工具，无需额外订阅 AgentVPS。"
+      content="让任何 VPS 成为你的个人助理。复用已有 VPS 和现有智能体，获得真实桌面、浏览器与工具，无需额外订阅 AgentVPS。"
       name="description"
     />
     <link href="https://agentvps.ai-infra.org/zh/" rel="canonical" />
     <meta
-      content="AgentVPS — 让任何 VPS 成为你的个人智能体"
+      content="AgentVPS — 让任何 VPS 成为你的个人助理"
       property="og:title"
     />
     <meta
-      content="已有 VPS，就不必再多买一份个人智能体服务订阅。AgentVPS 免费开源，连接你常用的智能体，把工作留在自己的服务器上。"
+      content="已有 VPS，就不必再多买一份个人助理服务订阅。AgentVPS 免费开源，连接你常用的智能体，把工作留在自己的服务器上。"
       property="og:description"
     />
     <meta content="website" property="og:type" />
@@ -87,9 +87,9 @@
           <span class="eyebrow"
             ><i class="status-dot"></i>已有 VPS，就从这里开始</span
           >
-          <h1>让任何 VPS<br />成为你的<br /><em>个人智能体。</em></h1>
+          <h1>让任何 VPS<br />成为你的<br /><em>个人助理。</em></h1>
           <p class="hero-description">
-            <strong>个人智能体，不必再多一份订阅。</strong>
+            <strong>个人助理，不必再多一份订阅。</strong>
             用你已有的 VPS，连接正在使用的 Codex、Claude Code
             或其他智能体。桌面、浏览器、终端和文件都在自己的服务器上，控制权始终在你手中。
           </p>
@@ -112,8 +112,8 @@
           <div class="release-line">
             <span>免费开源</span><span>无需订阅 AgentVPS</span
             ><a
-              href="https://github.com/agentsdance/agentvps/releases/tag/v0.0.2"
-              >v0.0.2 · 早期版本</a
+              href="https://github.com/agentsdance/agentvps/releases/tag/v0.0.3"
+              >v0.0.3 · 早期版本</a
             >
           </div>
           <p class="cost-note">
@@ -603,12 +603,12 @@
                   <rect height="13" rx="2" width="18" x="3" y="4"></rect>
                   <path d="M8 21h8m-4-4v4M7 8l3 2-3 2m6 0h4"></path></svg
                 ><span
-                  >Ubuntu 22.04 / 24.04<br />x64 或 ARM64 · 内存 2 GB 以上 ·
+                  >Linux · Debian / Ubuntu / Rocky / AlmaLinux<br />x64 或 ARM64 · 内存 2 GB 以上 ·
                   可用磁盘 5 GB<br />需要 sudo 权限</span
                 >
               </div>
-              <a class="text-link" href="/zh/agent-guide.md"
-                >使用文档
+              <a class="text-link" href="/zh/linux-support.md"
+                >系统兼容性
                 <svg
                   aria-hidden="true"
                   fill="none"
@@ -665,8 +665,8 @@
                     ><code>curl -fsSL https://agentvps.ai-infra.org/install.sh -o install-agentvps.sh &amp;&amp; sudo bash install-agentvps.sh</code></pre>
                   </div>
                   <p class="small">
-                    安装 0.0.2 版本，包含 CLI、后台服务、Chromium 和 Linux
-                    桌面。自动在已启用的 UFW 中放行桌面端口，并在当前终端显示
+                    安装 0.0.3 版本，包含 CLI、后台服务、Chromium 和 Linux
+                    桌面。自动在已启用的 UFW 或 firewalld 中放行桌面端口，并在当前终端显示
                     桌面地址和访问令牌。下载的安装包会通过预设 SHA-256 校验。
                     <a href="/install.sh">查看安装脚本 ↗</a>
                   </p>
@@ -934,7 +934,7 @@ sudo agentvps uninstall</code></pre>
           </div>
           <div>
             <details>
-              <summary>还需要购买个人智能体服务的订阅吗？</summary>
+              <summary>还需要购买个人助理服务的订阅吗？</summary>
               <p>
                 不需要。使用 AgentVPS，无需订阅
                 <a href="https://openai.com/index/introducing-dots/"
@@ -949,9 +949,9 @@ sudo agentvps uninstall</code></pre>
               </p>
             </details>
             <details>
-              <summary>现在已经是能自主工作的个人智能体了吗？</summary>
+              <summary>现在已经是能自主工作的个人助理了吗？</summary>
               <p>
-                0.0.2 版本提供远程电脑和工具层，需要连接 Codex、Claude Code
+                0.0.3 版本提供远程电脑和工具层，需要连接 Codex、Claude Code
                 或其他智能体来操作。内置对话和模型驱动的智能体循环仍在规划中。
               </p>
             </details>
@@ -1002,7 +1002,7 @@ sudo agentvps uninstall</code></pre>
         <div class="wrap">
           <div>
             <span class="eyebrow">让你已有的 VPS，发挥新作用。</span>
-            <h2>你的 VPS。<br />你的个人智能体。</h2>
+            <h2>你的 VPS。<br />你的个人助理。</h2>
             <p>连接你已有的智能体，无需再为 AgentVPS 增加一份订阅。</p>
             <a class="button light" href="#install"
               >开始使用<svg
@@ -1055,8 +1055,8 @@ sudo agentvps uninstall</code></pre>
       </div>
       <div class="footer-links">
         <a href="https://github.com/agentsdance/agentvps">源代码 ↗</a
-        ><a href="https://github.com/agentsdance/agentvps/releases/tag/v0.0.2"
-          >0.0.2 版本</a
+        ><a href="https://github.com/agentsdance/agentvps/releases/tag/v0.0.3"
+          >0.0.3 版本</a
         ><a href="/zh/llms.txt">llms.txt</a>
       </div>
       <div class="footer-bottom">

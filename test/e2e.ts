@@ -62,6 +62,17 @@ Path(${JSON.stringify(folder + '/dashboard.html')}).write_text(html)\nprint(json
   const dashboard = Buffer.from(await (await client.request(`/api/files?path=${encodeURIComponent(folder + '/dashboard.html')}`)).arrayBuffer());
   await fs.writeFile(path.join(output, 'dashboard.html'), dashboard);
   const preview = await call('preview_open', { port, ttlSeconds: 86400 });
+  const apiOnly = process.env.AGENTVPS_TEST_API_ONLY === '1';
+  if (apiOnly) {
+    const previewUrl = new URL(preview.path + 'dashboard.html', process.env.AGENTVPS_TEST_PREVIEW_URL || (local ? `http://127.0.0.1:${local.runtime.config.previewPort}` : preview.url)).href;
+    const grant = await fetch(previewUrl, { redirect: 'manual' });
+    assert.equal(grant.status, 302);
+    const target = new URL(grant.headers.get('location')!, previewUrl);
+    assert.equal(target.origin, new URL(previewUrl).origin);
+    const response = await fetch(target, { headers: { Cookie: grant.headers.get('set-cookie')!.split(';')[0] } });
+    assert.equal(response.status, 200);
+    assert.match(await response.text(), /\$108/);
+  } else {
   const browser = await chromium.launch({ headless: true });
   try {
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
@@ -82,13 +93,14 @@ Path(${JSON.stringify(folder + '/dashboard.html')}).write_text(html)\nprint(json
     assert.equal(await page.evaluate('document.documentElement.scrollWidth > window.innerWidth'), false);
     assert.deepEqual(errors, []);
   } finally { await browser.close(); }
+  }
   // Check that screenshots traverse the real MCP image return path, too.
   const token = process.env.AGENTVPS_TOKEN || (await fs.readFile(process.env.AGENTVPS_TOKEN_FILE!, 'utf8')).trim();
   const mcp = new Client({ name: 'acceptance-test', version: '1' });
   await mcp.connect(new StreamableHTTPClientTransport(new URL(client.url + '/mcp'), { requestInit: { headers: { Authorization: `Bearer ${token}` } } }));
   try { const result = await mcp.callTool({ name: 'browser_screenshot', arguments: { id: tab.id, path: `${folder}/mcp-screenshot.png` } }); assert.ok((result.content as any[]).some(c => c.type === 'image' && c.mimeType === 'image/png')); }
   finally { await mcp.close(); }
-  const receipt = { testedAt: new Date().toISOString(), identity, source: download.path, total: 108, dashboard: folder + '/dashboard.html', screenshot: shot.path, serverJob: serverJob.id, preview: preview.url + 'dashboard.html', checks: ['browser download', 'shared CSV', 'Python processing', 'browser upload', 'dashboard rendering', 'PNG transfer integrity', 'MCP image content', 'preview access', 'desktop and mobile console'] };
+  const receipt = { testedAt: new Date().toISOString(), identity, source: download.path, total: 108, dashboard: folder + '/dashboard.html', screenshot: shot.path, serverJob: serverJob.id, preview: preview.url + 'dashboard.html', checks: ['browser download', 'shared CSV', 'Python processing', 'browser upload', 'dashboard rendering', 'PNG transfer integrity', 'MCP image content', 'preview access', ...(apiOnly ? [] : ['desktop and mobile console'])] };
   await fs.writeFile(path.join(output, 'acceptance.json'), JSON.stringify(receipt, null, 2));
   console.log(`PASS: browser → CSV → Python → dashboard → screenshot. Evidence: ${output}`);
   if (process.env.AGENTVPS_KEEP_DEMO === '1') { serverJob = undefined; console.log('Demo retained on the VPS; preview link is recorded in acceptance.json.'); }

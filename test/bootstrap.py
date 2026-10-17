@@ -106,6 +106,30 @@ fi
         self.env['TEST_UFW'] = 'status-error'
         self.assertIn('could not inspect UFW', self.run_setup())
 
+    def test_firewalld_uses_runtime_and_persistent_rules(self):
+        self.env['TEST_UFW'] = 'inactive'
+        self.stub('firewall-cmd', '''printf 'firewalld %s\\n' "$*" >> "$TEST_CALLS"
+[[ $1 != --state || ${TEST_FIREWALLD:-active} == active ]]
+''')
+        self.config.write_text('AGENTVPS_PORT=9090\n')
+        self.assertIn('allowed in the default firewalld zone', self.run_setup())
+        self.assertEqual(self.calls.read_text().splitlines(), [
+            'status', 'firewalld --state', 'firewalld --add-port=9090/tcp',
+            'firewalld --permanent --add-port=9090/tcp'])
+        self.calls.write_text('')
+        self.env['TEST_FIREWALLD'] = 'inactive'
+        self.assertIn('firewalld is inactive', self.run_setup())
+        self.assertEqual(self.calls.read_text().splitlines(), ['status', 'firewalld --state'])
+
+    def test_firewalld_failure_is_reported_without_disabling_firewall(self):
+        self.stub('firewall-cmd', '''printf 'firewalld %s\\n' "$*" >> "$TEST_CALLS"
+[[ $1 == --state ]]
+''')
+        output = self.run_setup()
+        self.assertIn('could not save TCP 8080 in firewalld', output)
+        self.assertNotIn('allowed in the default firewalld zone', output)
+        self.assertNotIn('--reload', self.calls.read_text())
+
     def test_invalid_ip_response_is_not_displayed_or_executed(self):
         for address in ['', '10.0.0.1', '<html>unavailable</html>', 'bad; echo injected']:
             self.env['TEST_IP'] = address

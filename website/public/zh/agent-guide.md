@@ -1,14 +1,18 @@
-# 为用户安装 AgentVPS 0.0.2
+# 为用户安装 AgentVPS 0.0.3
 
 源代码：https://github.com/agentsdance/agentvps
 手动安装指南：https://agentvps.ai-infra.org/zh/#install
-npm 包：`@agentsdance/agentvps@0.0.2`，命令仍为 `agentvps`。
+npm 包：`@agentsdance/agentvps@0.0.3`，命令仍为 `agentvps`。
 
 ## 1. 确认目标 VPS
 
 使用用户提供的 VPS 地址、SSH 用户名和现有密钥。如果缺少连接信息，先询问用户；不要让用户在聊天中发送私钥。检查主机名、`/etc/os-release`、CPU 架构、可用内存与磁盘，以及 sudo 权限。
 
-安装脚本支持 Ubuntu 22.04/24.04，x64/ARM64。桌面、Chromium 和运行环境需要至少 2 GB 内存和 5 GB 可用磁盘。已在真实 VPS 上验证的配置是 Ubuntu 22.04 x64。不要重装系统或删除无关服务。
+使用运行 systemd 的 Linux VPS。原生安装路径覆盖 Debian 12/13、Ubuntu 22.04/24.04/26.04，以及 Rocky Linux、AlmaLinux、CentOS Stream、RHEL 9。需要至少 2 GB 内存和 5 GB 可用磁盘，CPU 为 x64 或 ARM64。
+
+请查看[系统兼容性表](https://agentvps.ai-infra.org/zh/linux-support.md)，区分已验证配置与待验证配置，并检查软件源要求。ARM64 有独立的 Node 安装包，但未经 ARM 硬件测试，不可宣称已实测。除非用户明确授权，不要重装系统或删除无关服务。
+
+[安装兼容性报告](https://agentvps.ai-infra.org/zh/install-compatibility-report.md)记录各环境的实测结果、问题修复和验证边界。
 
 ## 2. 在 VPS 上安装
 
@@ -22,7 +26,7 @@ sudo agentvps call health_check '{"browser":true}'
 
 引导脚本会先校验安装包的预设 SHA-256，再运行安装程序。服务以 `agentvps` 用户运行，监听 `0.0.0.0:8080`，工作空间为 `/var/lib/agentvps/workspace`。独立的网页预览网关使用 8081 端口。
 
-安装脚本会在已启用的 UFW 中放行桌面端口，并输出桌面地址；不会启用或关闭防火墙。若无法从外部访问，在云服务商防火墙或安全组中放行 TCP 8080；需要预览链接时再开放 8081。其他主机防火墙需按实际配置处理。也可以使用 SSH 隧道。公网 IP 直连使用 HTTP，处理私人内容时应使用 TLS 或 SSH。
+安装脚本会在已启用的 UFW 或 firewalld 中放行桌面端口，并输出桌面地址；不会启用或关闭防火墙。若无法从外部访问，在云服务商防火墙或安全组中放行 TCP 8080；需要预览链接时再开放 8081。其他主机防火墙需按实际配置处理。也可以使用 SSH 隧道。公网 IP 直连使用 HTTP，处理私人内容时应使用 TLS 或 SSH。
 
 ## 3. 妥善处理认证信息
 

@@ -16,6 +16,7 @@ function element(tag, text, className) { const el = document.createElement(tag);
 function empty(container, text) { container.replaceChildren(element('p', text, 'empty')); }
 async function refreshStatus() {
   const info = await call('workspace_info'); put('workspace-name', info.name); put('sidebar-host', info.hostname);
+  put('runtime-version', `v${info.version}`);
   desktopEnabled = !!info.desktop?.enabled;
   desk?.identity(info);
   put('stat-jobs', info.jobs); put('stat-terminals', info.terminals); put('stat-schedules', info.schedules); put('stat-browser', info.browserStarted ? 'Ready' : 'Standby');

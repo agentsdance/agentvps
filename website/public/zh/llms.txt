@@ -1,9 +1,9 @@
 # AgentVPS
 
-AgentVPS 0.0.2 为 AI 智能体提供一台 Ubuntu 远程电脑，包括真实的 Linux 桌面、可见的 Chromium 浏览器、Shell、代码执行、文件、MCP 和 CLI。
+AgentVPS 0.0.3 为 AI 智能体提供一台 Linux 远程电脑，包括真实的 Linux 桌面、可见的 Chromium 浏览器、Shell、代码执行、文件、MCP 和 CLI。
 内置对话与智能体循环尚在规划中。npm 包为 @agentsdance/agentvps，CLI 命令为 agentvps。
 
-复用已有 VPS 和现有智能体，无需另购托管个人智能体服务订阅。
+复用已有 VPS 和现有智能体，无需另购托管个人助理服务订阅。
 AgentVPS 免费开源；VPS 和所选智能体、模型服务的费用及额度仍按各自规则执行。
 
 智能体通过 /mcp 直接连接经过认证的 Streamable HTTP MCP，无需在本机安装 AgentVPS 客户端或 Node.js。CLI 仅用于 VPS 运维。
@@ -12,7 +12,7 @@ AgentVPS 免费开源；VPS 和所选智能体、模型服务的费用及额度�
 - [手动安装](https://agentvps.ai-infra.org/zh/#install)
 - [English agent guide](https://agentvps.ai-infra.org/agent-guide.md)
 - [源代码与完整参考](https://github.com/agentsdance/agentvps)
-- [0.0.2 版本](https://github.com/agentsdance/agentvps/releases/tag/v0.0.2)
+- [0.0.3 版本](https://github.com/agentsdance/agentvps/releases/tag/v0.0.3)
 - [智能体 Skill](https://raw.githubusercontent.com/agentsdance/agentvps/main/skills/agentvps/SKILL.md)
 
 所有工具路径均指向 VPS。先调用 workspace_info 确认目标。不要输出或提交访问令牌，尊重用户对桌面的接管。

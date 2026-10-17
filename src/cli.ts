@@ -19,7 +19,7 @@ async function main() {
     upgrade: 'sudo agentvps upgrade PACKAGE.tgz — Upgrade the systemd VPS installation with the new package installer.',
     uninstall: 'sudo agentvps uninstall [--purge] [--dry-run] — Remove the VPS runtime; keep data unless --purge is explicit.',
   };
-  if (command === '--version' || command === '-v') { console.log('0.0.2'); return; }
+  if (command === '--version' || command === '-v') { console.log('0.0.3'); return; }
   if (command !== 'help' && command !== '--help' && command !== '-h' && !usage[command]) throw new Error(`Unknown command: ${command}. Run agentvps help.`);
   if (usage[command] && args.length === 1 && ['--help', '-h'].includes(args[0])) { console.log(usage[command]); return; }
   if (['serve', 'status', 'tools'].includes(command) && args.length) throw new Error(usage[command]);

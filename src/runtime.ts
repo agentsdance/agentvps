@@ -32,7 +32,7 @@ export class Runtime {
     await this.desktop.init(); await this.jobs.init(); await this.personal.init();
   }
   info() {
-    return { name: this.config.name, version: '0.0.2', workspaceId: this.identity.id, workspace: this.config.workspace,
+    return { name: this.config.name, version: '0.0.3', workspaceId: this.identity.id, workspace: this.config.workspace,
       hostname: os.hostname(), platform: process.platform, arch: process.arch, uptime: Math.floor(process.uptime()),
       desktop: this.desktop.status(), browserStarted: this.browser.ready, jobs: this.jobs.list().filter(j => j.status === 'running').length,
       terminals: this.terminals.list().filter(t => !t.exited).length, schedules: this.personal.listSchedules().filter(s => s.enabled).length,

@@ -1,18 +1,24 @@
-# Install AgentVPS 0.0.2 for your user
+# Install AgentVPS 0.0.3 for your user
 
 Source: https://github.com/agentsdance/agentvps
 Human guide: https://agentvps.ai-infra.org/#install
 Chinese guide: https://agentvps.ai-infra.org/zh/agent-guide.md
-Package: `@agentsdance/agentvps@0.0.2`; the CLI command remains `agentvps`.
+Package: `@agentsdance/agentvps@0.0.3`; the CLI command remains `agentvps`.
 
 ## 1. Confirm the target
 
 Use the VPS hostname, SSH user and existing key supplied by the user. If missing,
 ask for those connection details. Never request a private key in chat. Inspect
 hostname, /etc/os-release, architecture, available memory/disk and sudo access.
-The installer supports Ubuntu 22.04/24.04, x64/ARM64. Allow at least 2 GB RAM and
-5 GB free disk for the desktop, Chromium and runtime. Ubuntu 22.04 x64 is the
-live-tested configuration. Do not reinstall the OS or remove unrelated services.
+Use a supported systemd Linux VPS. The native installer covers Debian 12/13,
+Ubuntu 22.04/24.04/26.04, and Rocky Linux/AlmaLinux/CentOS Stream/RHEL 9.
+Allow at least 2 GB RAM and 5 GB free disk. CPU: x64 or ARM64.
+See [the compatibility matrix](https://agentvps.ai-infra.org/linux-support.md) for
+actual verification status and repository prerequisites. ARM64 has a separate
+Node download but must not be described as live-tested without ARM hardware evidence.
+The [installation compatibility report](https://agentvps.ai-infra.org/install-compatibility-report.md)
+records the tested environments, fixes and remaining limits.
+Do not reinstall the OS or remove unrelated services unless explicitly authorized.
 
 ## 2. Install on the VPS
 
@@ -27,7 +33,7 @@ sudo agentvps call health_check '{"browser":true}'
 The bootstrap verifies the pinned package's SHA-256 before running its installer.
 The service runs as agentvps, binds 0.0.0.0:8080, and keeps its workspace at
 /var/lib/agentvps/workspace. The separate preview gateway uses port 8081.
-The bootstrap opens the desktop port in active UFW and prints the desktop URL;
+The bootstrap opens the desktop port in active UFW or firewalld and prints the desktop URL;
 it does not enable or disable a firewall. If external access is blocked, allow
 TCP 8080 in the provider firewall/security group; allow 8081 only for preview
 links. Other host firewalls need configuration appropriate to that system. Alternatively use an

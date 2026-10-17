@@ -28,7 +28,7 @@ All execution happens on the connected VPS. Browser downloads, Python inputs, pr
 
 ## Open the Linux desktop
 
-Visit `http://YOUR_VPS:8080` and unlock with the existing workspace token. The Ubuntu installation opens a real Linux desktop by default. Chromium runs visibly on this desktop, and its tabs/profile are the same ones exposed through MCP.
+Visit `http://YOUR_VPS:8080` and unlock with the existing workspace token. The Linux installation opens a real Linux desktop by default. Chromium runs visibly on this desktop, and its tabs/profile are the same ones exposed through MCP.
 
 - **Watch / Take over:** watch is enforced read-only by the VNC server. Take over enables mouse and keyboard input, and blocks new mutating browser/desktop tool calls. Return control or leave the view to release it. Shell jobs, schedules and actions already in progress continue; takeover is coordination for browser/desktop tools, not an OS security boundary.
 - **Browser / Terminal / Files:** launch native applications from the toolbar or dock. GUI terminals start in the shared workspace. Shell jobs and API PTYs remain available separately in Commands and Remote desk; they are not mirrored into GUI terminal windows.
@@ -50,16 +50,16 @@ The **Remote desk** navigation item retains a web workspace alongside the full d
 
 The same token protects desktop, desk APIs and MCP; no additional public ports are needed. Token values are kept in tab memory only. Reloading or locking requires unlocking again; files and live sessions stay on the VPS as documented below.
 
-## Install on Ubuntu
+## Install on Linux
 
-On your Ubuntu VPS:
+On your Linux VPS:
 
 ```sh
 curl -fsSL https://agentvps.ai-infra.org/install.sh -o install-agentvps.sh && sudo bash install-agentvps.sh
 sudo agentvps call health_check '{"browser":true}'
 ```
 
-The same command opens the desktop port in active UFW, detects your public IP (or uses your configured public URL), and displays the desktop URL and access token in your terminal. Open that URL and paste the token to log in. If the page is unreachable, allow TCP 8080 in your cloud provider’s firewall/security group. The installer does not enable or disable a firewall or change cloud rules. For a saved token, run `sudo cat /var/lib/agentvps/token` locally; keep it private. Captured output omits the token; agents should pass `--no-show-token` even when using a PTY. The [agent guide](https://agentvps.ai-infra.org/agent-guide.md) provides the same workflow for an agent using your SSH access.
+The same command opens the desktop port in active UFW or firewalld, detects your public IP (or uses your configured public URL), and displays the desktop URL and access token in your terminal. Open that URL and paste the token to log in. If the page is unreachable, allow TCP 8080 in your cloud provider’s firewall/security group. The installer does not enable or disable a firewall or change cloud rules. For a saved token, run `sudo cat /var/lib/agentvps/token` locally; keep it private. Captured output omits the token; agents should pass `--no-show-token` even when using a PTY. The [agent guide](https://agentvps.ai-infra.org/agent-guide.md) provides the same workflow for an agent using your SSH access.
 
 To build and install from source instead:
 
@@ -70,13 +70,16 @@ npm ci
 npm run check
 npm test
 npm pack
-scp agentsdance-agentvps-0.0.2.tgz deploy/install.sh ubuntu@YOUR_VPS:~/
-ssh ubuntu@YOUR_VPS 'sudo bash ~/install.sh ~/agentsdance-agentvps-0.0.2.tgz'
+scp agentsdance-agentvps-0.0.3.tgz YOUR_SSH_USER@YOUR_VPS:~/
+ssh YOUR_SSH_USER@YOUR_VPS
+mkdir -p agentvps-install
+tar -xf agentsdance-agentvps-0.0.3.tgz -C agentvps-install package/deploy
+sudo bash agentvps-install/package/deploy/install.sh "$PWD/agentsdance-agentvps-0.0.3.tgz"
 ```
 
-The installer supports Ubuntu 22.04/24.04 on x64 or ARM64. It installs checksum-verified Node **22.23.3**, Python, the Linux desktop packages, Chromium's system dependencies, the pinned package, and a systemd service running as the unprivileged `agentvps` user. It uses separate release directories and retains the workspace/token during upgrades. Dependencies are locked by `npm-shrinkwrap.json`; browser builds follow pinned Playwright **1.64.1**.
+The installer has native APT and DNF paths. See the [Linux compatibility matrix](docs/linux-support.md) for versions and verification status. A systemd VPS, x64 or ARM64 CPU, at least 2 GB RAM and 5 GB free disk are required. It installs checksum-verified Node **22.23.3**, Python, the Linux desktop packages, Chromium's system dependencies, the pinned package, and a systemd service running as the unprivileged `agentvps` user. It uses separate release directories and retains the workspace/token during upgrades. Dependencies are locked by `npm-shrinkwrap.json`; Debian/Ubuntu browser builds follow pinned Playwright **1.64.1**. RPM systems use their distribution Chromium package; its version follows signed distribution updates.
 
-The service binds **0.0.0.0:8080**, with the preview gateway on **0.0.0.0:8081**. The website installer allows the desktop port in active UFW. Cloud firewall rules are separate; allow TCP 8080 there if needed, and 8081 only when using preview links. `/healthz` and the login page are public; all execution/file/MCP endpoints require a bearer token. The generated token is stored in `/var/lib/agentvps/token`, mode `0600`.
+The service binds **0.0.0.0:8080**, with the preview gateway on **0.0.0.0:8081**. The website installer allows the desktop port in active UFW or firewalld. Cloud firewall rules are separate; allow TCP 8080 there if needed, and 8081 only when using preview links. `/healthz` and the login page are public; all execution/file/MCP endpoints require a bearer token. The generated token is stored in `/var/lib/agentvps/token`, mode `0600`.
 
 Direct public-IP access uses HTTP. Authentication does not encrypt network traffic. For confidential workloads, add a TLS reverse proxy or use SSH forwarding. Set `AGENTVPS_HOST=127.0.0.1` if you want tunnel-only access.
 
@@ -112,20 +115,22 @@ npm ci
 npm run check
 npm test
 npm pack
-scp agentsdance-agentvps-0.0.2.tgz ubuntu@YOUR_VPS:~/
+scp agentsdance-agentvps-0.0.3.tgz YOUR_SSH_USER@YOUR_VPS:~/
 
 # VPS
-sudo agentvps upgrade ~/agentsdance-agentvps-0.0.2.tgz
+sudo agentvps upgrade ~/agentsdance-agentvps-0.0.3.tgz
 sudo agentvps status
 sudo agentvps call health_check '{"browser":true}'
 ```
 
 Use the new version's filename when the version changes. Upgrade extracts and runs the incoming package's installer, installs a new release and restarts the service. It preserves `/var/lib/agentvps`, the access token and `/etc/agentvps/environment`. Live commands, terminals and tabs stop during restart; previews need new links. The installer restores the previous release, CLI and service configuration if activation or the liveness check fails. Capability readiness should still be checked after upgrade.
 
-If upgrading an early unscoped `agentvps` installation, or one without the system CLI, upload the new release’s `deploy/install.sh` as `~/install.sh`, then run it directly:
+If upgrading an early unscoped `agentvps` installation, or one without the system CLI, rerun the website installer above. For a manually downloaded package, extract and run its installer:
 
 ```sh
-sudo bash ~/install.sh ~/agentsdance-agentvps-0.0.2.tgz
+mkdir -p agentvps-install
+tar -xf agentsdance-agentvps-0.0.3.tgz -C agentvps-install package/deploy
+sudo bash agentvps-install/package/deploy/install.sh "$PWD/agentsdance-agentvps-0.0.3.tgz"
 ```
 
 Uninstall the runtime while retaining your data:
@@ -174,7 +179,7 @@ Use a client that supports authenticated Streamable HTTP. OAuth and legacy SSE a
 For agents with a connection settings screen, enter the URL and token there. For the CLI examples below, read the token over SSH into the agent's environment without printing it or putting the secret in shell history:
 
 ```sh
-export AGENTVPS_TOKEN="$(ssh ubuntu@YOUR_VPS_IP 'sudo cat /var/lib/agentvps/token')"
+export AGENTVPS_TOKEN="$(ssh YOUR_SSH_USER@YOUR_VPS_IP 'sudo cat /var/lib/agentvps/token')"
 ```
 
 Replace the SSH username and IP as needed. Launch the agent from the same terminal so it inherits the variable. Do not paste the token into chat or commit it to a repository.
@@ -220,7 +225,7 @@ After connecting, start a new session and ask:
 
 The hostname must match your VPS. The default workspace is `/var/lib/agentvps/workspace` and the OS user is `agentvps`. Unrelated tools in the agent keep their own execution locations.
 
-For SSH forwarding, keep `ssh -N -L 18080:127.0.0.1:8080 ubuntu@YOUR_VPS_IP` running and use `http://127.0.0.1:18080/mcp` in the agent instead. The desktop is available at `http://127.0.0.1:18080`. This uses your existing SSH program; no AgentVPS client is needed.
+For SSH forwarding, keep `ssh -N -L 18080:127.0.0.1:8080 YOUR_SSH_USER@YOUR_VPS_IP` running and use `http://127.0.0.1:18080/mcp` in the agent instead. The desktop is available at `http://127.0.0.1:18080`. This uses your existing SSH program; no AgentVPS client is needed.
 
 See the official [Codex MCP documentation](https://learn.chatgpt.com/docs/extend/mcp?surface=cli) and [Claude Code MCP documentation](https://code.claude.com/docs/en/mcp) for client-specific configuration.
 
@@ -295,7 +300,7 @@ npm run site:build
 npm run test:site
 ```
 
-On Linux, `npx playwright install --with-deps chromium` also installs system dependencies. The development server is `npm run dev`; set `AGENTVPS_HOME` to an isolated directory and `AGENTVPS_HOST=127.0.0.1` when testing locally. Node, Python and Bash must be installed. On macOS the package repairs the executable bit on node-pty 1.1.0's packaged spawn helper during installation.
+On supported Debian/Ubuntu versions, `npx playwright install --with-deps chromium` also installs system dependencies. RPM systems use native Chromium and the dependencies in `deploy/platform.sh`. The development server is `npm run dev`; set `AGENTVPS_HOME` to an isolated directory and `AGENTVPS_HOST=127.0.0.1` when testing locally. Node, Python and Bash must be installed. On macOS the package repairs the executable bit on node-pty 1.1.0's packaged spawn helper during installation.
 
 To run acceptance against a real VPS:
 
@@ -308,6 +313,8 @@ npm run test:e2e
 ```
 
 This creates controlled CSV data through remote HTTP MCP, downloads it with the VPS browser, processes it with remote Python, serves a dashboard, captures a screenshot, checks binary/MCP image integrity, opens the preview from the client, and tests the desktop/mobile console. Results go into the ignored `test-results` directory. Set `AGENTVPS_KEEP_DEMO=1` to retain the demo server for up to a day.
+
+For distribution testing, `npm run test:linux` checks native terminal input, PTYs and all four desktop resolutions through MCP. `test/linux-matrix.sh` runs the dependency and workflow checks serially in pinned Linux containers. See the [installation compatibility report](docs/install-compatibility-report.md) for observed results, fixes, reproduction commands and the limits of container verification.
 
 ## References and provenance
 
